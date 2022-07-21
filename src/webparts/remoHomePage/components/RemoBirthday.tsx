@@ -19,7 +19,7 @@ export interface IBirthdayState {
   UpcomingBirthday: any[];
   FirstBdayDate: any;
   LastBdayDate: any;
-
+  Dates: any;
   TotalBirthday: number;
 }
 
@@ -33,7 +33,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
       UpcomingBirthday: [],
       FirstBdayDate: "",
       LastBdayDate: "",
-
+      Dates:[],
       TotalBirthday: 0
     };
 
@@ -42,7 +42,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
   public componentDidMount() {
 
     this.GetBirthday();
-    
+
   }
 
   public async GetBirthday() {
@@ -64,7 +64,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           $("#upcoming-bday").show();
         }
       });
-      reactHandler.GetUpcomingBirthday();
+    reactHandler.GetUpcomingBirthday();
   }
 
   public async GetUpcomingBirthday() {
@@ -132,9 +132,9 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           return (
             <div className="sec">
               <div className="heading clearfix" id="spotlight-title" >
-                
-                  <span id="highlights-type" > Birthday </span>
-                
+
+                <span id="highlights-type" > Birthday </span>
+
               </div>
               <div className="section-part clearfix">
                 <div className="birthday-image relative">
@@ -160,9 +160,9 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           return (
             <div className="sec">
               <div className="heading clearfix" id="spotlight-title" >
-                
-                  <span id="highlights-type" > Birthday </span>
-                
+
+                <span id="highlights-type" > Birthday </span>
+
               </div>
               <div className="section-part clearfix">
                 <div className="birthday-image relative">
@@ -194,7 +194,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
       let RawImageTxt = item.Picture;
       let Bdaydate = moment(item.DOB).format("MM/DD");
       if (item.Name != "") {
-      
+
         if (Bdaydate > Tday1Bday && moment(Bdaydate, 'MM/DD') <= moment(reactHandler.state.LastBdayDate, 'MM/DD') && moment(Bdaydate, 'MM/DD') >= moment(reactHandler.state.FirstBdayDate, 'MM/DD')) {           //&& Bdaydate <= moment(reactHandler.state.LastBdayDate,"MM/DD").format("MM/DD")     
           Name = item.Name;
           if (RawImageTxt != "" && RawImageTxt != null) {
@@ -202,10 +202,10 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
             return (
               <div className="sec">
                 <div className="heading" id="spotlight-title">
-                 
-                    <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
-                    {/* <span className="bday-date-cls" title={BdayDt}>{BdayDt}</span> */}
-                
+
+                  <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
+                  {/* <span className="bday-date-cls" title={BdayDt}>{BdayDt}</span> */}
+
                 </div>
                 <div className="section-part clearfix">
                   <div className="birthday-image relative">
@@ -233,10 +233,10 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
             return (
               <div className="sec">
                 <div className="heading" id="spotlight-title">
-                  
-                    <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
-                    {/* <span className="bday-date-cls" title={BdayDt}>{BdayDt}</span> */}
-                  
+
+                  <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
+                  {/* <span className="bday-date-cls" title={BdayDt}>{BdayDt}</span> */}
+
                 </div>
                 <div className="section-part clearfix">
                   <div className="birthday-image relative">
