@@ -1,0 +1,40 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.app {
+ 
+ 
+
+.footer li{
+   float: left;
+   margin-right: 30px;
+   position: relative;
+   left: 35%;
+   bottom: 0; } 
+     
+  .footer {
+  //  height:40px;
+    // text-align:center;
+     // line-height:2.5; 
+     // font-weight:bold;
+       display: flex;
+       align-items: center;
+         justify-content: center; 
+        
+  //position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  color: #333333;
+  text-align: center;}
+  
+  .footer li a{
+  text-decoration: none;
+  color: #333333;}
+.footer ul{
+  list-style: initial;
+  padding:10px 0px;
+}
+.footer i {
+  display:none;}
+}

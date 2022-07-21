@@ -1,0 +1,217 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "remo-home-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/remoHomePage/RemoHomePageWebPart.js",
+          "manifest": "./src/webparts/remoHomePage/RemoHomePageWebPart.manifest.json"
+        }
+      ]
+    },
+    "hero-banner-readmore-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/heroBannerReadmore/HeroBannerReadmoreWebPart.js",
+          "manifest": "./src/webparts/heroBannerReadmore/HeroBannerReadmoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "hero-banner-view-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/heroBannerViewMore/HeroBannerViewMoreWebPart.js",
+          "manifest": "./src/webparts/heroBannerViewMore/HeroBannerViewMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "ceo-message-read-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/ceoMessageReadMore/CeoMessageReadMoreWebPart.js",
+          "manifest": "./src/webparts/ceoMessageReadMore/CeoMessageReadMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "announcements-rm-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/announcementsRm/AnnouncementsRmWebPart.js",
+          "manifest": "./src/webparts/announcementsRm/AnnouncementsRmWebPart.manifest.json"
+        }
+      ]
+    },
+    "announcements-vm-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/announcementsVm/AnnouncementsVmWebPart.js",
+          "manifest": "./src/webparts/announcementsVm/AnnouncementsVmWebPart.manifest.json"
+        }
+      ]
+    },
+    "content-editor-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/contentEditor/ContentEditorWebPart.js",
+          "manifest": "./src/webparts/contentEditor/ContentEditorWebPart.manifest.json"
+        }
+      ]
+    },
+    "events-view-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/eventsViewMore/EventsViewMoreWebPart.js",
+          "manifest": "./src/webparts/eventsViewMore/EventsViewMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "gallery-grid-view-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/galleryGridView/GalleryGridViewWebPart.js",
+          "manifest": "./src/webparts/galleryGridView/GalleryGridViewWebPart.manifest.json"
+        }
+      ]
+    },
+    "gallery-view-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/galleryViewMore/GalleryViewMoreWebPart.js",
+          "manifest": "./src/webparts/galleryViewMore/GalleryViewMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "manage-quick-links-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/manageQuickLinks/ManageQuickLinksWebPart.js",
+          "manifest": "./src/webparts/manageQuickLinks/ManageQuickLinksWebPart.manifest.json"
+        }
+      ]
+    },
+    "news-read-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/newsReadMore/NewsReadMoreWebPart.js",
+          "manifest": "./src/webparts/newsReadMore/NewsReadMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "news-view-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/newsViewMore/NewsViewMoreWebPart.js",
+          "manifest": "./src/webparts/newsViewMore/NewsViewMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "organization-chart-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/organizationChart/OrganizationChartWebPart.js",
+          "manifest": "./src/webparts/organizationChart/OrganizationChartWebPart.manifest.json"
+        }
+      ]
+    },
+    "policies-procedures-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/policiesProcedures/PoliciesProceduresWebPart.js",
+          "manifest": "./src/webparts/policiesProcedures/PoliciesProceduresWebPart.manifest.json"
+        }
+      ]
+    },
+    "global-custom-features-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/globalCustomFeatures/GlobalCustomFeaturesApplicationCustomizer.js",
+          "manifest": "./src/extensions/globalCustomFeatures/GlobalCustomFeaturesApplicationCustomizer.manifest.json"
+        }
+      ]
+    },
+    "birthday-rm-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/birthdayRm/BirthdayRmWebPart.js",
+          "manifest": "./src/webparts/birthdayRm/BirthdayRmWebPart.manifest.json"
+        }
+      ]
+    },
+    "jobs-master-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/jobsMaster/JobsMasterWebPart.js",
+          "manifest": "./src/webparts/jobsMaster/JobsMasterWebPart.manifest.json"
+        }
+      ]
+    },
+    "jobs-rm-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/jobsRm/JobsRmWebPart.js",
+          "manifest": "./src/webparts/jobsRm/JobsRmWebPart.manifest.json"
+        }
+      ]
+    },
+    "remo-dept-landing-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/remoDeptLandingPage/RemoDeptLandingPageWebPart.js",
+          "manifest": "./src/webparts/remoDeptLandingPage/RemoDeptLandingPageWebPart.manifest.json"
+        }
+      ]
+    },
+    "dept-gallery-grid-view-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/deptGalleryGridView/DeptGalleryGridViewWebPart.js",
+          "manifest": "./src/webparts/deptGalleryGridView/DeptGalleryGridViewWebPart.manifest.json"
+        }
+      ]
+    },
+    "dept-gallery-view-more-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/deptGalleryViewMore/DeptGalleryViewMoreWebPart.js",
+          "manifest": "./src/webparts/deptGalleryViewMore/DeptGalleryViewMoreWebPart.manifest.json"
+        }
+      ]
+    },
+    "news-category-based-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/newsCategoryBased/NewsCategoryBasedWebPart.js",
+          "manifest": "./src/webparts/newsCategoryBased/NewsCategoryBasedWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "RemoHomePageWebPartStrings": "lib/webparts/remoHomePage/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
+    "HeroBannerReadmoreWebPartStrings": "lib/webparts/heroBannerReadmore/loc/{locale}.js",
+    "HeroBannerViewMoreWebPartStrings": "lib/webparts/heroBannerViewMore/loc/{locale}.js",
+    "CeoMessageReadMoreWebPartStrings": "lib/webparts/ceoMessageReadMore/loc/{locale}.js",
+    "AnnouncementsRmWebPartStrings": "lib/webparts/announcementsRm/loc/{locale}.js",
+    "AnnouncementsVmWebPartStrings": "lib/webparts/announcementsVm/loc/{locale}.js",
+    "ContentEditorWebPartStrings": "lib/webparts/contentEditor/loc/{locale}.js",
+    "EventsViewMoreWebPartStrings": "lib/webparts/eventsViewMore/loc/{locale}.js",
+    "GalleryGridViewWebPartStrings": "lib/webparts/galleryGridView/loc/{locale}.js",
+    "GalleryViewMoreWebPartStrings": "lib/webparts/galleryViewMore/loc/{locale}.js",
+    "ManageQuickLinksWebPartStrings": "lib/webparts/manageQuickLinks/loc/{locale}.js",
+    "NewsReadMoreWebPartStrings": "lib/webparts/newsReadMore/loc/{locale}.js",
+    "NewsViewMoreWebPartStrings": "lib/webparts/newsViewMore/loc/{locale}.js",
+    "OrganizationChartWebPartStrings": "lib/webparts/organizationChart/loc/{locale}.js",
+    "PoliciesProceduresWebPartStrings": "lib/webparts/policiesProcedures/loc/{locale}.js",
+    "GlobalCustomFeaturesApplicationCustomizerStrings": "lib/extensions/globalCustomFeatures/loc/{locale}.js",
+    "BirthdayRmWebPartStrings": "lib/webparts/birthdayRm/loc/{locale}.js",
+    "JobsMasterWebPartStrings": "lib/webparts/jobsMaster/loc/{locale}.js",
+    "JobsRmWebPartStrings": "lib/webparts/jobsRm/loc/{locale}.js",
+    "RemoDeptLandingPageWebPartStrings": "lib/webparts/remoDeptLandingPage/loc/{locale}.js",
+    "DeptGalleryGridViewWebPartStrings": "lib/webparts/deptGalleryGridView/loc/{locale}.js",
+    "DeptGalleryViewMoreWebPartStrings": "lib/webparts/deptGalleryViewMore/loc/{locale}.js",
+    "NewsCategoryBasedWebPartStrings": "lib/webparts/newsCategoryBased/loc/{locale}.js"
+  }
+}
