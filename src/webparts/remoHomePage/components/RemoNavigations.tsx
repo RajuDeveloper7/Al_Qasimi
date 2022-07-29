@@ -101,7 +101,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     var reactHandler = this;
     try {
       await sp.web.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).top(1000).get().then((items) => {
-        //  url: `${reactHandler.props.siteurl}/_api/web/lists/getbytitle('Quick Links')/items?$select=Title,Image,ImageHover,OpenInNewTab,Order,URL&$filter=IsActive eq 1&$orderby=Order0 asc&$top=1000`,
+       
         reactHandler.setState({
           MyLinks: items
         });
@@ -164,7 +164,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     $(".main-mavigation").addClass("submenu");
     try {
       NewWeb.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).get().then((items) => {
-        //url: `${reactHandler.props.siteurl}/_api/web/lists/getbytitle('Quick Links')/items?$select=Title,OpenInNewPage,URL,Image,ImageHover,centernavigationicon&$filter=IsActive eq 1&$orderby=Order0 asc`,
+        
         reactHandler.setState({
           QuickLinkItems: items
         });
@@ -348,7 +348,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
         var ImgObjforON = JSON.parse(RawImageTxtOn);
         var ImgObjforOFF = JSON.parse(RawImageTxtOff);
         
-        if(item.LinkMasterID == undefined){}else{var LinkMasterIDTitle = item.LinkMasterID.Title}
+        if(item.LinkMasterID != undefined){var LinkMasterIDTitle = item.LinkMasterID.Title}
 
         if (item.OpenInNewTab == true) {
           if (LinkMasterIDTitle == "DEPT_00001") {

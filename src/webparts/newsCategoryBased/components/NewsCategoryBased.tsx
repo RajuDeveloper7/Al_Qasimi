@@ -232,17 +232,13 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
         } else {
           Dt = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-        if (item.SitePageID == undefined) {
-
-        } else {
-        var sitepageid = item.SitePageID.Id
-        }
-  
-        if (item.Dept == undefined) {
-  
-        } else {
+         if (item.Dept != undefined) {
         var depttitle = item.Dept.Title
-        }
+      }
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
+      }     
+
         return (
           <li>
             <div className="top-img-wrap">

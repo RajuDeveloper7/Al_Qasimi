@@ -203,7 +203,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
         sp.web.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
           var like = items.length;
           var newspan = like.toString()
-          document.getElementById("likes").textContent = newspan;
+          document.getElementById("likescount").textContent = newspan;
         });
       })
     } else {
@@ -215,7 +215,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
           sp.web.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
             var like = items.length;
             var newspan = like.toString()
-            document.getElementById("likes").textContent = newspan;
+            document.getElementById("likescount").textContent = newspan;
            
           });
         })
@@ -225,8 +225,14 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
   }
   public showComments() {
     $(".all-commets").toggle();
+    sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
+      
+      this.setState({
+        commentitems: items,
+      });
+    });  
   }
-  public saveComments(ItemID) {
+  public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
     if(comments.toString().length == 0){
@@ -243,14 +249,19 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
       Title: title,
       ContentID: ID,
       UserComments: comments
-    });
-    location.reload();
-    $(".reply-tothe-post").remove();
-    setTimeout(() => {
-      handler.commentsCount();
-    }, 1000);
+    }).then(() => {
+      $("#commentedpost").hide();
+      $(".reply-tothe-post").hide();
+       sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => {
+      
+         commentscount = items.length;
+         var newspan = commentscount.toString()
+         document.getElementById("commentscount").textContent = newspan;
+       })
+    })
+
   }
-  }
+}
   public render(): React.ReactElement<IHeroBannerReadMoreProps> {
     var handler = this;
     var Dte = "";
@@ -347,7 +358,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
                     {HeroBannerDetails}
                   </div>
                   <div>
-                    <div className="comments-like-view">
+                  <div className="comments-like-view">
                       <div className="comments-like-view-block">
                         <ul className="comments-like-view-block">
                         {this.state.IsLikeEnabled == true ?
@@ -356,14 +367,14 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
                                 <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
                               
                                 <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
-                                <span id="likes"> {likes} </span>
+                                <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
                           }
                           {this.state.IsCommentEnabled == true &&
                             <li>
-                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={this.showComments} /> <span> {commentscount} </span>
+                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={() => this.showComments()} /> <span id="commentscount"> {commentscount} </span>
                             </li>
                           }
                           <li>
@@ -374,14 +385,14 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
                       <div className="reply-tothe-post all-commets">
                         <h2> All Comments </h2>
                         <ul>
-                          {pagecomments}
+                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
                         </ul>
                       </div>
                       {this.state.IsUserAlreadyCommented == false ?
-                        <div className="reply-tothe-post">
+                        <div className="reply-tothe-post" id="commentedpost">
                           <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" className="form-control"></textarea>
-                          <input type="button" className="btn btn-primary" value="Submit" onClick={this.saveComments} />
+                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
                         </div>
                         :
                         <></>

@@ -24,7 +24,7 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
         this.state = {
             Items: [],
         }
-       
+
     }
 
     public componentDidMount() {
@@ -34,16 +34,16 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
         $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
 
         this.GetJobsMaster();
-       
+
     }
     public async GetJobsMaster() {
-        
+
         await sp.web.lists.getByTitle("JobsMaster").items.select("Title", "EmploymentType", "ExperienceLevel", "EmailID", "DateOfSubmission", "JobSummary", "Status", "ID", "Created").filter(`IsActive eq '1'`).getAll().then((items) => { // //orderby is false -> decending          
             this.setState({
                 Items: items,
             });
         });
-       
+
     }
 
     public render(): React.ReactElement<IJobsMasterProps> {
@@ -85,54 +85,56 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
 
         return (
             <div id="jobsmaster">
-            <section>
-                <div id="Global-Top-Header-Navigation">
-                    <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
-                </div>
-                <div className="container relative">
+                <section>
+                    <div id="Global-Top-Header-Navigation">
+                        <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+                    </div>
+                    <div className="container relative">
 
-                    <div className="section-rigth">
+                        <div className="section-rigth">
 
-                        <div className="inner-banner-header jobs-banner relative m-b-20">
+                            <div className="inner-banner-header jobs-banner relative m-b-20">
 
-                            <div className="inner-banner-overlay"></div>
-                            <div className="inner-banner-contents">
-                                <h1> We are hiring </h1>
-                                <ul className="breadcums">
-                                    <li> <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`}> Home </a> </li>
-                                    <li> <a href="#"> Jobs </a> </li>
-                                </ul>
+                                <div className="inner-banner-overlay"></div>
+                                <div className="inner-banner-contents">
+                                    <h1> We are hiring </h1>
+                                    <ul className="breadcums">
+                                        <li> <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`}> Home </a> </li>
+                                        <li> <a href="#"> Jobs </a> </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div className="inner-page-contents ">
-                            <div className="sec">
-                                <div className="contact-table-info">
-                                    <table className="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Job Title</th>
-                                                <th>Employment Type</th>
-                                                <th>Experience Level</th>
-                                                <th>Date Of Submission</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                            <div className="inner-page-contents ">
+                                <div className="sec">
+                                    <div className="contact-table-info">
+                                        <div className='table-responsive'>
+                                            <table className="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S.No</th>
+                                                        <th>Job Title</th>
+                                                        <th>Employment Type</th>
+                                                        <th>Experience Level</th>
+                                                        <th className='th_dos'>Date Of Submission</th>
+                                                        <th className='th_status'>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                            {JobsMaster}
+                                                    {JobsMaster}
 
-                                        </tbody>
-                                    </table>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
 
-            </section>
+                </section>
             </div>
         );
     }

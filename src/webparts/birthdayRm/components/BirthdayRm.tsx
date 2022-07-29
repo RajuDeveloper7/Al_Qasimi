@@ -22,9 +22,7 @@ var likes: number;
 var commentscount: number;
 var views: number;
 var CurrentDate = new Date()  //moment().format("DD/MM/YYYY");
-var ItemID
-
-
+var ItemID;
 
 export interface IBirthdayState {
   Items: any[];
@@ -54,7 +52,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
       $('#CommentsWrapper').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     }, 2000);
-    
+
     var reactHandler = this;
     reactHandler.GetCurrentUser();
     const url: any = new URL(window.location.href);
@@ -171,8 +169,9 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
     this.getusercomments();
   }
   public getusercomments() {
-    sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
-      console.log(items);
+    
+    sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
+      
       this.setState({
         commentitems: items,
       });
@@ -180,8 +179,8 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
   }
   public async liked(mode) {
     var handler = this;
+    
     if (mode == "like") {
-     
       sp.web.lists.getByTitle("LikesCountMaster").items.add({
         EmployeeNameId: User,
         LikedOn: CurrentDate,
@@ -195,57 +194,68 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
         sp.web.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
           var like = items.length;
           var newspan = like.toString()
-          document.getElementById("likes").textContent = newspan;
+          document.getElementById("likescount").textContent = newspan;
         });
       })
     } else {
       $(".like-selected").hide();
       $(".like-default").show();
       sp.web.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID} and EmployeeName/Id eq ${User}`).get().then((data) => {
+
         sp.web.lists.getByTitle("LikesCountMaster").items.getById(data[0].Id).delete().then(() => {
 
           sp.web.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
             var like = items.length;
             var newspan = like.toString()
-            document.getElementById("likes").textContent = newspan;
-           
+            document.getElementById("likescount").textContent = newspan;
+
           });
-        })
+      })
       })
     }
 
   }
-  public showComments() {
+   public showComments() {
     $(".all-commets").toggle();
-  }
-  public saveComments(ItemID) {
+    sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
+      
+      this.setState({
+        commentitems: items,
+      });
+    });  
+    
+   }
+  public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
-    if(comments.toString().length == 0){
+    if (comments.toString().length == 0) {
       swal({
         title: "Your comment is less than 1 characters!",
         icon: "warning",
       } as any)
-    }else{
-    const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
-      EmployeeNameId: User,
-      CommentedOn: CurrentDate,
-      EmployeeEmail: UserEmail,
-      ContentPage: "Birthday",
-      Title: title,
-      ContentID: ID,
-      UserComments: comments
-    });
-    location.reload();
-    $(".reply-tothe-post").remove();
-    setTimeout(() => {
-      handler.commentsCount();
-    }, 1000);
-  }
-  }
-  public deletecomment(){
+    } else {
+      const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
+        EmployeeNameId: User,
+        CommentedOn: CurrentDate,
+        EmployeeEmail: UserEmail,
+        ContentPage: "Birthday",
+        Title: title,
+        ContentID: ID,
+        UserComments: comments
+      }).then(() => {
+        $("#commentedpost").hide();
+        $(".reply-tothe-post").hide();
+         sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => {
+        
+           commentscount = items.length;
+           var newspan = commentscount.toString()
+           document.getElementById("commentscount").textContent = newspan;
+         })
+      })
 
+    }
   }
+
   public render(): React.ReactElement<IBirthdayRmProps> {
     var handler = this;
     const Birthday: JSX.Element[] = this.state.Items.map(function (item, key) {
@@ -303,9 +313,12 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
       }
     });
     const pagecomments: JSX.Element[] = this.state.commentitems.map(function (item, key) {
+      
       var EmpName = item.EmployeeName.Title;
       var dated = moment(item.CommentedOn).format("DD/MM/YYYY");
       var comment = item.UserComments;
+      
+      
       return (
         <li>
           <div className="commentor-desc clearfix">
@@ -319,6 +332,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
           </div>
         </li>
       );
+    
     });
     return (<>
       <div id="Birthday">
@@ -354,23 +368,23 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
                 </div> */}
 
                   <div>
-                    <div className="comments-like-view">
+                  <div className="comments-like-view">
                       <div className="comments-like-view-block">
                         <ul className="comments-like-view-block">
-                          {this.state.IsLikeEnabled == true ?
+                        {this.state.IsLikeEnabled == true ?
                             <li>
 
-                              <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")} />
-
-                              <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image" onClick={() => this.liked("like")} />
-                              <span id="likes"> {likes} </span>
+                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
+                              
+                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
+                                <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
                           }
                           {this.state.IsCommentEnabled == true &&
                             <li>
-                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={this.showComments} /> <span> {commentscount} </span>
+                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={() => this.showComments()} /> <span id="commentscount"> {commentscount} </span>
                             </li>
                           }
                           <li>
@@ -381,14 +395,14 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
                       <div className="reply-tothe-post all-commets">
                         <h2> All Comments </h2>
                         <ul>
-                          {pagecomments}
+                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
                         </ul>
                       </div>
                       {this.state.IsUserAlreadyCommented == false ?
-                        <div className="reply-tothe-post">
+                        <div className="reply-tothe-post" id="commentedpost">
                           <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" className="form-control"></textarea>
-                          <input type="button" className="btn btn-primary" value="Submit" onClick={this.saveComments} />
+                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
                         </div>
                         :
                         <></>

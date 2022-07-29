@@ -67,7 +67,7 @@ export default class AboutDepartment extends React.Component<IRemoDeptLandingPag
     });
     return (        
         <div className="relative">    
-          <div className="section-rigth">
+          <div className="section-rigth section_hr">
             <div className="inner-banner-header relative m-b-20">
               <div className="inner-banner-overlay"></div>
               <div className="inner-banner-contents">
@@ -79,7 +79,7 @@ export default class AboutDepartment extends React.Component<IRemoDeptLandingPag
               </div>
             </div>
             <div className="inner-page-contents">
-              <div className="sec m-b-20"> 
+              <div className="sec"> 
                 <div className="row" style={{display:"none"}} id="if-about-present">
                   {AboutDept}
                 </div>

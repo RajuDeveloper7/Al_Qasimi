@@ -68,7 +68,8 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps,I
   public componentDidMount(){ 
     var reacthandler = this;     
     reacthandler.getmytodaysroutines();
-    reacthandler.getmytodaysPastroutines();      
+    reacthandler.getmytodaysPastroutines();   
+    
   }
   
   public getmytodaysroutines(){     
@@ -744,6 +745,7 @@ const AllMyEventsFuture: JSX.Element[] = this.state.myfutureroutineDatas.map(fun
                                     value={this.state.SelectedDate}
                                     formatDate={this._onFormatDate}
                                     isMonthPickerVisible={false}
+                                    //showMonthPickerAsOverlay={true}
                                 />
                             </div>
 

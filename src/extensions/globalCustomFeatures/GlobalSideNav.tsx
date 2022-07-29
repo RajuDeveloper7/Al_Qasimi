@@ -104,7 +104,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
 
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/SP-NativeStyle-Overriding.css?v=3.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=9.5.1`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=10.0`);
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=3.4`);
 
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css");
@@ -811,7 +811,7 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
     const MainNavigations: JSX.Element[] = handler.state.MainNavItems.map(function (item, key) {
 
       if (item.OpenInNewTab == true) {
-        if (item.LinkMasterID == undefined) { } else { var LinkMasterIDTitle = item.LinkMasterID.Title }
+        if (item.LinkMasterID != undefined) { var LinkMasterIDTitle = item.LinkMasterID.Title} 
         if (LinkMasterIDTitle == "DEPT_00001") {
 
           return (

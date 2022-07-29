@@ -65,7 +65,7 @@ export default class DepartmentQuickLink extends React.Component<IRemoDeptLandin
     return (
      
            <div className="relative">    
-          <div className="section-rigth">
+          <div className="section-rigth section_hr">
             <div className="quicklinks-wrap personal-qlinks-wrap m-b-20">
               <div className="sec">
                 <div className="heading">

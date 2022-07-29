@@ -42,6 +42,7 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
     $('#spCommandBar').attr('style', 'display: none !important');
     $('#CommentsWrapper').attr('style', 'display: none !important');
     $('#RecommendedItems').attr('style', 'display: none !important');
+    $('.ms-CommandBar').attr('style', 'display: none !important');
 
     var handler = this;
     $('#calendar').on('selectDate', function (event, newDate, oldDate) {
@@ -70,10 +71,9 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
     var result
     if (Mode == "EvRM") {
 
-      //   ApiUrl = `${this.props.siteurl}/_api/web/lists/getbytitle('Events')/items?$select=ID,Title,Image,Description,EventDate,Location,EndDate&$orderby=EventDate asc&$filter=filter=EventDate gt '${Date}'`;
       result = await NewWeb.lists.getByTitle("Events").items.select("ID", "Title", "Image", "Description", "EventDate", "Location", "EndDate").orderBy("EventDate", true).filter(`EndDate gt '${Date}'`).get()
     } else {
-      //ApiUrl = `${this.props.siteurl}/_api/web/lists/getbytitle('Events')/items?$select=ID,Title,Image,Description,EventDate,Location,EndDate&$orderby=EventDate asc&$filter=filter=EndDate gt '${moment().format('YYYY-MM-DD')}'`;
+
       result = await NewWeb.lists.getByTitle("Events").items.select("ID", "Title", "Image", "Description", "EventDate", "Location", "EndDate").orderBy("EventDate", true).filter(`EndDate gt '${moment().format('YYYY-MM-DD')}'`).get()
     }
     this.GetEventsForDots(Date, Mode);
@@ -95,10 +95,8 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
     var handler = this;
     if (Mode == "EvVM") {
       await NewWeb.lists.getByTitle("Events").items.select("Title", "Description", "Location", "Image", "Location", "EventDate", "EndDate", "ID").orderBy("Created", false).getAll().then((items) => { // //orderby is false -> decending                  
-        //  console.log(items);
-
+       
         for (var i = 0; i < items.length; i++) {
-          // console.log(moment(items[i].EventDate).format("MMMM/D/YYYY") + "  " + items[i].Title)
           eventList.push(
             { id: "" + items[i].ID + "", name: "" + items[i].Title + "", date: "" + moment(items[i].EventDate).format("MMMM/D/YYYY") + "", type: "holiday", description: "" + items[i].Description + "" }
           );

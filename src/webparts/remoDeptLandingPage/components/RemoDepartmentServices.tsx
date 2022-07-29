@@ -83,7 +83,7 @@ export default class DepartmentServices extends React.Component<IRemoDeptLanding
     return (
       
         <div className="relative">
-          <div className="section-rigth">
+          <div className="section-rigth section_hr">
             <div className="depat-key-people m-b-20">
               <div className="sec">
                 <div className="heading">

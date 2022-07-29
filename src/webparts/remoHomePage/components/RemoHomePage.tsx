@@ -29,8 +29,8 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
     $('#CommentsWrapper').attr('style', 'display: none !important');
     $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     $(".inner-pages-nav").remove();
-
   }
+  
   public render(): React.ReactElement<IRemoHomePageProps> {
 
     return (
@@ -51,9 +51,9 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
               </div>
               <RemoNavigations siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
 
-              <div className="row">
+              <div className="row section_bottom">
                 <div className="col-md-8">
-                  <div className="events-calender m-b-20">
+                  <div className="events-calender">
                     <RemoMyMeetings siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
 
                   </div>

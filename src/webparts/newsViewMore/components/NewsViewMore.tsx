@@ -250,6 +250,13 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dt = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
+         if (item.Dept != undefined) {
+        var depttitle = item.Dept.Title
+      }
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
+      }     
+
         return (
           <div className="view-all-news-recent-left">
             <div className="view-all-news-recent-img-cont">
@@ -263,7 +270,7 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
                 <img src={`${reactHandler.props.siteurl}/SiteAssets/img/clock.svg`} alt="image" />  {Dt}
               </div>
             </div>
-            <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+            <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
           </div>
         );
       } else {
@@ -280,7 +287,7 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
                 <img src={`${reactHandler.props.siteurl}/SiteAssets/img/clock.svg`} alt="image" />  {Dt}
               </div>
             </div>
-            <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+            <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
           </div>
         );
       }
@@ -297,13 +304,20 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dte = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
+         if (item.Dept != undefined) {
+        var depttitle = item.Dept.Title
+      }
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
+      }     
+
         return (
           <li className="clearfix">
             <div className="list-li-recent-news-img">
               <img src={`${ImgObj.serverRelativeUrl}`} alt="image" />
             </div>
             <div className="list-li-recent-news-desc">
-              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
               <div className="ns-tag-duration ">
                 <a href={`${reactHandler.props.siteurl}/SitePages/News-CategoryBased.aspx?Mode=TagBased&Tag=${item.Tag}`} data-interception='off' className="tags"> {item.Tag} </a> <p> {Dte} </p>
               </div>
@@ -317,7 +331,7 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
               <img src={`${reactHandler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/home_news_noimage.png`} alt="image" />
             </div>
             <div className="list-li-recent-news-desc">
-              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
               <div className="ns-tag-duration ">
                 <a href={`${reactHandler.props.siteurl}/SitePages/News-CategoryBased.aspx?Mode=TagBased&Tag=${item.Tag}`} data-interception='off' className="tags"> {item.Tag} </a> <p> {Dte} </p>
               </div>
@@ -338,17 +352,13 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dte = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-        if (item.SitePageID == undefined) {
-
-        } else {
-        var sitepageid = item.SitePageID.Id
-        }
-  
-        if (item.Dept == undefined) {
-  
-        } else {
+         if (item.Dept != undefined) {
         var depttitle = item.Dept.Title
-        }
+      }
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
+      }     
+
         return (
           <li>
             <div className="top-img-wrap">
@@ -379,17 +389,13 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
       let RawImageTxt = item.Image;
       if (RawImageTxt != "" && RawImageTxt != null) {
         var ImgObj = JSON.parse(RawImageTxt);
-        if (item.SitePageID == undefined) {
-
-        } else {
-        var sitepageid = item.SitePageID.Id
-        }
-  
-        if (item.Dept == undefined) {
-  
-        } else {
+         if (item.Dept != undefined) {
         var depttitle = item.Dept.Title
-        }
+      }
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
+      }     
+
         return (
           <li>
             <div className="top-img-wrap">

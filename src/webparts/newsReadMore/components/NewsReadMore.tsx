@@ -73,6 +73,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
     $('#spCommandBar').attr('style', 'display: none !important');
     $('#spLeftNav').attr('style', 'display: none !important');
     $('#CommentsWrapper').attr('style', 'display: none !important');
+   
 
     var reactHandler = this;
     reactHandler.GetCurrentUser();
@@ -287,7 +288,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         NewWeb.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
           var like = items.length;
           var newspan = like.toString()
-          document.getElementById("likes").textContent = newspan;
+          document.getElementById("likescount").textContent = newspan;
         });
       })
     } else {
@@ -299,7 +300,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
           NewWeb.lists.getByTitle("LikesCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
             var like = items.length;
             var newspan = like.toString()
-            document.getElementById("likes").textContent = newspan;
+            document.getElementById("likescount").textContent = newspan;
            
           });
         })
@@ -309,8 +310,14 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
   }
   public showComments() {
     $(".all-commets").toggle();
+    NewWeb.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
+      
+      this.setState({
+        commentitems: items,
+      });
+    });  
   }
-  public saveComments(ItemID) {
+  public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
     if(comments.toString().length == 0){
@@ -328,16 +335,18 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       ContentID: ID,
       UserComments: comments
     }).then(() => {
-      //handler.commentsCount();
+      $("#commentedpost").hide();
+      $(".reply-tothe-post").hide();
+       NewWeb.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => {
+      
+         commentscount = items.length;
+         var newspan = commentscount.toString()
+         document.getElementById("commentscount").textContent = newspan;
+       })
+    })
 
-      location.reload();
-      $(".reply-tothe-post").remove();
-    });
-    setTimeout(() => {
-      handler.commentsCount();
-    }, 1000);
   }
-  }
+}
   public async pageviewscount(views) {
 
      await NewWeb.lists.getByTitle("News").items.getById(ID).update({
@@ -422,13 +431,20 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         } else {
           Dt = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }     
+  
         return (
           <li className="clearfix">
             <div className="list-li-recent-news-img">
               <img src={`${ImgObj.serverRelativeUrl}`} alt="image" />
             </div>
             <div className="list-li-recent-news-desc">
-              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
               <div className="ns-tag-duration ">
                 <p> {Dt} </p>
               </div>
@@ -442,7 +458,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
               <img src={`${reactHandler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/home_news_noimage.png`} alt="image" />
             </div>
             <div className="list-li-recent-news-desc">
-              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${item.Dept.Title}&SitePageID=${item.SitePageID.Id}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
+              <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off" className="nw-list-main"> {item.Title} </a>
               <div className="ns-tag-duration ">
                 <p> {Dt} </p>
               </div>
@@ -495,45 +511,45 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
 
                       {NewsDetails}
                       <div className="comments-like-view">
-                        <div className="comments-like-view-block">
-                          <ul className="comments-like-view-block">
-                          {this.state.IsLikeEnabled == true ?
+                      <div className="comments-like-view-block">
+                        <ul className="comments-like-view-block">
+                        {this.state.IsLikeEnabled == true ?
                             <li>
 
                                 <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
                               
                                 <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
-                                <span id="likes"> {likes} </span>
+                                <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
                           }
-                            {this.state.IsCommentEnabled == true &&
-                              <li>
-                                <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={this.showComments} /> <span> {commentscount} </span>
-                              </li>
-                            }
+                          {this.state.IsCommentEnabled == true &&
                             <li>
-                              <img className="nopointer" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_view.svg`} alt="image" /> <span> {views} </span>
+                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={() => this.showComments()} /> <span id="commentscount"> {commentscount} </span>
                             </li>
-                          </ul>
-                        </div>
-                        <div className="reply-tothe-post all-commets">
-                          <h2> All Comments </h2>
-                          <ul>
-                            {pagecomments}
-                          </ul>
-                        </div>
-                        {this.state.IsUserAlreadyCommented == false ?
-                          <div className="reply-tothe-post">
-                            <h2> Comment to this post </h2>
-                            <textarea id="comments" placeholder="Message Here" className="form-control"></textarea>
-                            <input type="button" className="btn btn-primary" value="Submit" onClick={this.saveComments} />
-                          </div>
-                          :
-                          <></>
-                        }
+                          }
+                          <li>
+                            <img className="nopointer" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_view.svg`} alt="image" /> <span> {views} </span>
+                          </li>
+                        </ul>
                       </div>
+                      <div className="reply-tothe-post all-commets">
+                        <h2> All Comments </h2>
+                        <ul>
+                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
+                        </ul>
+                      </div>
+                      {this.state.IsUserAlreadyCommented == false ?
+                        <div className="reply-tothe-post" id="commentedpost">
+                          <h2> Comment to this post </h2>
+                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
+                        </div>
+                        :
+                        <></>
+                      }
+                    </div>
                     </div>
 
                     <div className='col-md-4 sub-news-section'>

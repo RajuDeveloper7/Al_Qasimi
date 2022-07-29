@@ -143,7 +143,7 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
           <div className="row">
             <div className="col-md-6" id="if-gallery-present">
               <div className="sec event-cal image-videos">
-                <div className="heading clearfix">
+                <div className="heading clearfix hr_gallery">
                   <h3> <a href={`${this.props.siteurl}/SitePages/Gallery-ViewMore.aspx`} data-interception="off"> Gallery </a> </h3>
                   {/*<h3 className=""><a href="#" onClick={()=> this.ShowVideos()}>Videos</a> </h3>*/}
                 </div>

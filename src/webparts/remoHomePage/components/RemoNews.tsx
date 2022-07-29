@@ -41,10 +41,10 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
   }
   private async GetNews() {
     var reactHandler = this;
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter("IsActive eq 1").orderBy("Created",false).expand("Dept", "SitePageID").get().then((items) => {
-      
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter("IsActive eq 1").orderBy("Created", false).expand("Dept", "SitePageID").get().then((items) => {
+
       //   url: `${reactHandler.props.siteurl}/_api/web/lists/getbytitle('News')/items?$select=ID,Title,Description,Created,Dept/Title,Image,Tag,DetailsPageUrl,SitePageID/Id&$filter=IsActive eq 1&$orderby=Created desc&$expand=SitePageID,Dept`, 
-      
+
       if (items.length == 0) {
         $("#if-news-present").hide();
         $("#if-no-news-present").show();
@@ -106,19 +106,16 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
         Dt = "Today";
       } else {
         Dt = "" + RawPublishedDt + "";
+      } 
+      if (item.Dept != undefined) {
+        var depttitle = item.Dept.Title
       }
-      if (item.SitePageID == undefined) {
-
-      } else {
-      var sitepageid = item.SitePageID.Id
+      if (item.SitePageID != undefined) {
+        var sitepageid = item.SitePageID.Id
       }
 
-      if (item.Dept == undefined) {
 
-      } else {
-      var depttitle = item.Dept.Title
-      }
-    
+
 
       if (RawImageTxt != "" && RawImageTxt != null) {
         var ImgObj = JSON.parse(RawImageTxt);
@@ -153,9 +150,9 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
           <div className="sec event-cal">
             <div className="heading clearfix ">
               <h4>
-              <a href={viewall}>
-                News
-              </a>
+                <a href={viewall}>
+                  News
+                </a>
               </h4>
               <div className="prev-next">
                 <a href="#" onClick={this.previous} ><img src={`${this.props.siteurl}/SiteAssets/img/previous.svg`} alt="image" className="prev-img" /> </a>
