@@ -49,7 +49,7 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
       updateCount: 0,
       Type: ""
     };
-    NewWeb= Web(this.props.siteurl)
+    NewWeb = Web(this.props.siteurl)
   }
 
 
@@ -61,7 +61,7 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
       $('#CommentsWrapper').attr('style', 'display: none !important');
       $('#spLeftNav').attr('style', 'display: none !important');
     }, 2000);
- 
+
     const url: any = new URL(window.location.href);
     const Type = url.searchParams.get("Type");
     this.setState({
@@ -86,7 +86,7 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
     });
   }
 
-  public GetGalleryFilesFolder(triggeredFrom) {
+  public async GetGalleryFilesFolder(triggeredFrom) {
     var reactHandler = this;
     var APIUrl;
     var result: any;
@@ -101,32 +101,33 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
     if (triggeredFrom == "Main") {
       if (Type == "Img") {
         result = NewWeb.getFolderByServerRelativeUrl(folderurl).expand("Folders", "Files")
-       
+
       } else {
         result = NewWeb.getFolderByServerRelativeUrl(`${folderurl}Videos`).expand("Folders", "Files")
-       
+
       }
     } else {
       if (reactHandler.state.type == "Img") {
         result = NewWeb.getFolderByServerRelativeUrl(folderurl).expand("Folders", "Files")
-       
+
       } else {
         var string = FolderUrl.split('/');
         var str2 = "Videos";
         if (string.indexOf(str2) != -1) {
           result = NewWeb.getFolderByServerRelativeUrl(folderurl).expand("Folders", "Files")
-       
+
 
         }
         else {
           var FolderPath = url.searchParams.get("FolderName").replace(/[']/g, '');
           var FolderServerRelativeUrl = "" + FolderPath + "/Videos";
           result = NewWeb.getFolderByServerRelativeUrl(FolderServerRelativeUrl).expand("Folders", "Files")
-         
+
         }
       }
     }
-    result.get().then((items) => {
+    try {
+      await result.get().then((items) => {
 
         if (reactHandler.state.type == "Img") {
           $(".image-gallery-allimg-block").show();
@@ -163,9 +164,12 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
 
 
         }
-     
-    });
 
+      });
+    } catch (err) {
+      $("#no-video").show();
+      console.log(err)
+    }
   }
 
   public async ShowImages() {
@@ -249,7 +253,7 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
     var str2 = "Videos";
 
     if (string.indexOf(str2) != -1) {
-      
+
       siteurl = "" + reactHandler.props.siteurl + "/_api/Web/GetFolderByServerRelativeUrl(" + FolderURL + ")?$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,File/ServerRelativeUrl,File/Name&$expand=Folders,Files";
 
     }

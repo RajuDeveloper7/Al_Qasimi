@@ -309,12 +309,12 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
                       <div className="header-right drap-drop-p">
                         {this.state.IsEditModeisON == false ?
                           <a href="#" className='editor-mode-enabler mode-edit-on' onClick={() => this.EnableEditMode(this.state.CurrentlyOpened)} >
-                            <img src={`${this.props.siteurl}/SiteAssets/img/newdrap_drop.png`} alt="image" data-themekey="#" />
+                            <img src={`${this.props.siteurl}/SiteAssets/img/add_quick.png`} alt="image" data-themekey="#" />
                             Edit Mode</a>
                           :
                           <a href="#" className='editor-mode-enabler mode-edit-off' onClick={() => this.ExitEditMode(this.state.CurrentlyOpened)}>
                             <img src={`${this.props.siteurl}/SiteAssets/img/newdrap_drop.png`} alt="image" data-themekey="#" />
-                            Exit Edit Mode</a>
+                            Exit</a>
                         }
 
 

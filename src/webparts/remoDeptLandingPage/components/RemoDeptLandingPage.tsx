@@ -16,6 +16,7 @@ export default class RemoHomePage extends React.Component<IRemoDeptLandingPagePr
     $('#spCommandBar').attr('style', 'display: none !important');
     $('#spLeftNav').attr('style', 'display: none !important');
     $('#CommentsWrapper').attr('style', 'display: none !important');
+    $('.ms-CommandBar').attr('style', 'display: none !important');
   }
   public render(): React.ReactElement<IRemoDeptLandingPageProps> {
 

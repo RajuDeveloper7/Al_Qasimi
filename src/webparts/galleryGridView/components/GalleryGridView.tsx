@@ -10,7 +10,7 @@ import * as $ from 'jquery';
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import Slider from "react-slick";
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
-import { sp } from '@pnp/sp/presets/all';
+import { sp } from "@pnp/sp/presets/all";
 
 export interface IRemoGalleryGridViewState {
   Images: any[];
@@ -82,7 +82,7 @@ export default class RemoGalleryGridView extends React.Component<IGalleryGridVie
     });
   }
 
-  public GetGalleryFilesFolder(triggeredFrom) {
+  public async GetGalleryFilesFolder(triggeredFrom) {
     var reactHandler = this;
     var result: any;
     const url: any = new URL(window.location.href);
@@ -121,46 +121,50 @@ export default class RemoGalleryGridView extends React.Component<IGalleryGridVie
         }
       }
     }
-    result.get().then((items) => {
+    try {
+      await result.get().then((items) => {
 
-      if (reactHandler.state.type == "Img") {
-        $(".image-gallery-allimg-block").show();
-        if (items.Files.length != 0) {
-          $("#no-video").hide();
-          reactHandler.setState({
-            Images: items.Files
-          });
-        }
-        var string = FolderUrl.split('/');
-        var str2 = "Videos";
-        if (string.indexOf(str2) != -1) {
-          $("#no-video").show();
-        }
-
-
-      }
-      else {
+        if (reactHandler.state.type == "Img") {
+          $(".image-gallery-allimg-block").show();
+          if (items.Files.length != 0) {
+            $("#no-video").hide();
+            reactHandler.setState({
+              Images: items.Files
+            });
+          }
+          var string = FolderUrl.split('/');
+          var str2 = "Videos";
+          if (string.indexOf(str2) != -1) {
+            $("#no-video").show();
+          }
 
 
-        $(".video-gallery-allimg-block").show();
-
-
-        reactHandler.setState({
-          Videos: items.Files
-        });
-
-        if (items.Files.length == 0) {
-          $("#no-video").show();
         }
         else {
-          $("#no-video").hide();
+
+
+          $(".video-gallery-allimg-block").show();
+
+
+          reactHandler.setState({
+            Videos: items.Files
+          });
+
+          if (items.Files.length == 0) {
+            $("#no-video").show();
+          }
+          else {
+            $("#no-video").hide();
+          }
+
+
         }
+      });
+    } catch (err) {
+      $("#no-video").show();
+      console.log(err);
 
-
-      }
-    });
-
-
+    }
   }
 
   public async ShowImages() {

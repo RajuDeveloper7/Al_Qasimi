@@ -48,7 +48,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
       IsAdminForContentEditor: false,
       MyLinks: [],
     };
-    NewWeb = Web(""+this.props.siteurl+"");
+    NewWeb = Web("" + this.props.siteurl + "");
   }
 
   public componentDidMount() {
@@ -85,23 +85,23 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   }
   public async GetMainNavItems() {
     var reactHandler = this;
-    
-      await NewWeb.lists.getByTitle("Navigations").items.select("Title","URL","OpenInNewTab","LinkMasterID/Title","LinkMasterID/Id","HoverOnIcon","HoverOffIcon").filter("IsActive eq 1").orderBy("Order0",true).top(10).expand("LinkMasterID").get().then((items) => {
-  
-          reactHandler.setState({
-            MainNavItems: items
-          });
-          $('#root-nav-links ul li').on('click', function () {
-            $(this).siblings().removeClass('active');
-            $(this).addClass('active');
-          });
+
+    await NewWeb.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(10).expand("LinkMasterID").get().then((items) => {
+
+      reactHandler.setState({
+        MainNavItems: items
       });
+      $('#root-nav-links ul li').on('click', function () {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+      });
+    });
   }
   public async GetMyLinks() {
     var reactHandler = this;
     try {
       await sp.web.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).top(1000).get().then((items) => {
-       
+
         reactHandler.setState({
           MyLinks: items
         });
@@ -117,7 +117,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   }
   public GetDepartments() {
     $('.clears-subnav').show();
-   
+
     $('.floating-content-editor-home').addClass('active')
     $('.breadcrum-block').addClass('open');
     $(".breadcrum-block").show();
@@ -127,29 +127,29 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     $(".main-mavigation").siblings().removeClass("submenu");
     $(".main-mavigation").addClass("submenu");
     $('#meetingroom').off('click');
-      try {
-        NewWeb.lists.getByTitle("DepartmentsMaster").items.select("Title", "ID", "URL", "HasSubDepartment", "OpenInNewTab", "PlaceDepartmentUnder/Title", "PlaceDepartmentUnder/Id").filter(`IsActive eq '1'`).orderBy("Order0", true).expand("PlaceDepartmentUnder/Id", "PlaceDepartmentUnder").get().then((items) => {
-          reactHandler.setState({
-            DeptandQuickLinksItems: items
-          });
-          for (var i = 0; i < items.length; i++) {
-          
-          
-          //  if (items[i].PlaceDepartmentUnder.Title == undefined) {
-              let ID = items[i].Id;
+    try {
+      NewWeb.lists.getByTitle("DepartmentsMaster").items.select("Title", "ID", "URL", "HasSubDepartment", "OpenInNewTab", "PlaceDepartmentUnder/Title", "PlaceDepartmentUnder/Id").filter(`IsActive eq '1'`).orderBy("Order0", true).expand("PlaceDepartmentUnder/Id", "PlaceDepartmentUnder").get().then((items) => {
+        reactHandler.setState({
+          DeptandQuickLinksItems: items
+        });
+        for (var i = 0; i < items.length; i++) {
 
-              var Title = items[i].Title;
-              var Url = items[i].URL.Url;
-              let OpenInNewTab = items[i].OpenInNewTab;
-              let HasSubDept = items[i].HasSubDepartment;
-              reactHandler.appendData(ID, Title, OpenInNewTab, HasSubDept, Url);
-         //   }
-          }
-          $(".submenu-clear-wrap").show()
-          $(".submenu-wrap-lists ul li").on("click", function () {
-            $(this).siblings().removeClass('active');
-            $(this).addClass('active');
-          });
+
+          //  if (items[i].PlaceDepartmentUnder.Title == undefined) {
+          let ID = items[i].Id;
+
+          var Title = items[i].Title;
+          var Url = items[i].URL.Url;
+          let OpenInNewTab = items[i].OpenInNewTab;
+          let HasSubDept = items[i].HasSubDepartment;
+          reactHandler.appendData(ID, Title, OpenInNewTab, HasSubDept, Url);
+          //   }
+        }
+        $(".submenu-clear-wrap").show()
+        $(".submenu-wrap-lists ul li").on("click", function () {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+        });
       });
     } catch (err) {
       console.log("Navigation Department Link : " + err);
@@ -164,7 +164,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     $(".main-mavigation").addClass("submenu");
     try {
       NewWeb.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).get().then((items) => {
-        
+
         reactHandler.setState({
           QuickLinkItems: items
         });
@@ -188,7 +188,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
 
 
 
-  public  GetSubNodes(ID, Title, ClickFrom, key) {
+  public GetSubNodes(ID, Title, ClickFrom, key) {
     $(".breadcrum-block").show();
     if (ClickFrom == "Breadcrumb") {
       var IndexValue = key;
@@ -212,14 +212,14 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
 
       for (var i = 0; i < items.length; i++) {
         //  if (items[i].PlaceDepartmentUnder.Title == undefined) {
-            let ItemID = items[i].Id;
-            var Title = items[i].Title;
-            var Url = items[i].URL.Url;
-            let OpenInNewTab = items[i].OpenInNewTab;
-            let HasSubDept = items[i].HasSubDepartment;
+        let ItemID = items[i].Id;
+        var Title = items[i].Title;
+        var Url = items[i].URL.Url;
+        let OpenInNewTab = items[i].OpenInNewTab;
+        let HasSubDept = items[i].HasSubDepartment;
         reactHandler.appendData(ItemID, Title, OpenInNewTab, HasSubDept, Url);
       }
-      });
+    });
 
   }
 
@@ -347,8 +347,8 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
       if (RawImageTxtOn != null || RawImageTxtOn != undefined && RawImageTxtOff != null || RawImageTxtOff != undefined) {
         var ImgObjforON = JSON.parse(RawImageTxtOn);
         var ImgObjforOFF = JSON.parse(RawImageTxtOff);
-        
-        if(item.LinkMasterID != undefined){var LinkMasterIDTitle = item.LinkMasterID.Title}
+
+        if (item.LinkMasterID != undefined) { var LinkMasterIDTitle = item.LinkMasterID.Title }
 
         if (item.OpenInNewTab == true) {
           if (LinkMasterIDTitle == "DEPT_00001") {
@@ -507,7 +507,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
       }
     });
     return (
-      <><div>
+      <div className='tab-view-content'>
         <div className="tab-view">
           <ul className="nav nav-tabs" id="myTab" role="tablist">
             <li className="nav-item active tab-1-data" role="presentation">
@@ -526,7 +526,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
             <div className="main-mavigation m-b-20">
               <nav className="sec" id="root-nav-links">
                 <div className="breadcrum-block">
-                <a href='#'   className="clears-subnav" onClick={() => handler.ClearNavigation()}>All Menu<img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} alt="nav" data-interception="off"></img></a>
+                  <a href='#' className="clears-subnav" onClick={() => handler.ClearNavigation()}>All Menu<img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} alt="nav" data-interception="off"></img></a>
                   {BreadCrumb.map((item, key) => (
                     <a href="#" id="b-d-crumb" data-index={key} onClick={() => handler.GetSubNodes(item.ID, item.Title, "Breadcrumb", key)}>{item.Title}<img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} alt="nav" data-interception="off"></img></a>
                   ))}
@@ -556,7 +556,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
           </div>
         </div>
       </div>
-      </>
+
     );
   }
 }
