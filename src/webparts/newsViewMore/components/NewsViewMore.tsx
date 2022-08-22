@@ -12,6 +12,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 import Slider from "react-slick";
 import { Items } from '@pnp/sp/items';
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 
 export interface INewsVmState {
@@ -55,7 +56,7 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $('#RecommendedItems').attr('style', 'display: none !important');
     }, 2000);
-   
+
     var reactHandler = this;
     reactHandler.GetAllNews();
     reactHandler.GetAllTopNews();
@@ -65,23 +66,23 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
 
   private async GetAllNews() {
     var reactHandler = this;
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id","TransactionItemID/Id").filter("IsActive eq 1").orderBy("Created",false).expand("Dept", "SitePageID","TransactionItemID").top(1).get().then((items) => {
-  
-        reactHandler.setState({
-          Items: items
-        });
-        let ItemID = items[0].Id;
-        reactHandler.GetAllRecentNews(ItemID);
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter("IsActive eq 1").orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").top(1).get().then((items) => {
+
+      reactHandler.setState({
+        Items: items
+      });
+      let ItemID = items[0].Id;
+      reactHandler.GetAllRecentNews(ItemID);
     });
   }
 
   private async GetAllRecentNews(ID) {
     var reactHandler = this;
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id","TransactionItemID/Id").filter(`IsActive eq '1' and ID ne '${ID}'`).orderBy("Created",false).expand("Dept", "SitePageID","TransactionItemID").top(4).get().then((items) => {
-    
-        reactHandler.setState({
-          RecentNewsItems: items
-        });
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and ID ne '${ID}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").top(4).get().then((items) => {
+
+      reactHandler.setState({
+        RecentNewsItems: items
+      });
     });
   }
 
@@ -90,16 +91,16 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
     var today = moment().format('YYYY-MM-DD');
     var dateFrom = moment(today, 'YYYY-MM-DD').subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
 
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id","TransactionItemID/Id","PageViewCount").filter(`IsActive eq '1'`).orderBy("PageViewCount",false).expand("Dept", "SitePageID","TransactionItemID").get().then((items) => {
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id", "PageViewCount").filter(`IsActive eq '1'`).orderBy("PageViewCount", false).expand("Dept", "SitePageID", "TransactionItemID").get().then((items) => {
 
-        if (items.length != 0) {
-          $(".top-news-block-current-month").show();
-          reactHandler.setState({
-            ViewBasedTopNews: items
-          });
-        } else {
-          $(".top-news-block-current-month").hide();
-        }
+      if (items.length != 0) {
+        $(".top-news-block-current-month").show();
+        reactHandler.setState({
+          ViewBasedTopNews: items
+        });
+      } else {
+        $(".top-news-block-current-month").hide();
+      }
     });
   }
 
@@ -107,16 +108,16 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
     var reactHandler = this;
     let today = moment().format("YYYY-MM-DD");
     let WkDate = moment(today, "YYYY-MM-DD").subtract(1, "week").format("YYYY-MM-DD");
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id","TransactionItemID/Id",).filter(`IsActive eq '1' and Created lt '${WkDate}'`).orderBy("Created",false).expand("Dept", "SitePageID","TransactionItemID").top(20).get().then((items) => {
-  
-        if (items.length != 0) {
-          $(".PastNewsData").show();
-          reactHandler.setState({
-            OneWkOldNews: items
-          });
-        } else {
-          $(".PastNewsData").hide();
-        }
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id",).filter(`IsActive eq '1' and Created lt '${WkDate}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").top(20).get().then((items) => {
+
+      if (items.length != 0) {
+        $(".PastNewsData").show();
+        reactHandler.setState({
+          OneWkOldNews: items
+        });
+      } else {
+        $(".PastNewsData").hide();
+      }
     });
   }
 
@@ -126,37 +127,37 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
     DeptNames = [];
     DeptNamesExitsUnique = [];
     var reactHandler = this;
-    await NewWeb.lists.getByTitle("News").items.select("ID","Dept/Id","Dept/Title","Image",).filter(`IsActive eq '1'`).orderBy("Created",false).expand("Dept").get().then((items) => {
+    await NewWeb.lists.getByTitle("News").items.select("ID", "Dept/Id", "Dept/Title", "Image",).filter(`IsActive eq '1'`).orderBy("Created", false).expand("Dept").get().then((items) => {
 
-        for (var i = 0; i < items.length; i++) {
-          if (items[i].Dept == undefined) {
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].Dept == undefined) {
 
-          } else {
-            var DeptName = items[i].Dept.Title;
-            var DeptID = items[i].Dept.Title;
-            
-          }    
+        } else {
+          var DeptName = items[i].Dept.Title;
+          var DeptID = items[i].Dept.Title;
 
-          DeptNames.push(DeptName);
-          if (reactHandler.findValueInArray(DeptName, DeptNamesExitsUnique)) {
-          }
-          else {
-            if (reactHandler.findValueInArray(DeptName, DeptNames)) {
-              DeptNamesExitsUnique.push(DeptName);
-              let RawImageTxt = items[i].Image;
-              if (RawImageTxt != "" && RawImageTxt != null) {
+        }
 
-                var ImgObj = JSON.parse(RawImageTxt);
-                var PicUrl = ImgObj.serverRelativeUrl;
-                NewsAvailableDepts.push({ "ID": DeptID, "Title": DeptName, "URL": PicUrl });
-              }
+        DeptNames.push(DeptName);
+        if (reactHandler.findValueInArray(DeptName, DeptNamesExitsUnique)) {
+        }
+        else {
+          if (reactHandler.findValueInArray(DeptName, DeptNames)) {
+            DeptNamesExitsUnique.push(DeptName);
+            let RawImageTxt = items[i].Image;
+            if (RawImageTxt != "" && RawImageTxt != null) {
+
+              var ImgObj = JSON.parse(RawImageTxt);
+              var PicUrl = ImgObj.serverRelativeUrl;
+              NewsAvailableDepts.push({ "ID": DeptID, "Title": DeptName, "URL": PicUrl });
             }
           }
         }
-        reactHandler.setState({ AvailableDepts: NewsAvailableDepts });
-        console.log(reactHandler.state.AvailableDepts);
-        reactHandler.GetDeptNews();
-   
+      }
+      reactHandler.setState({ AvailableDepts: NewsAvailableDepts });
+      console.log(reactHandler.state.AvailableDepts);
+      reactHandler.GetDeptNews();
+
     });
   }
 
@@ -170,13 +171,13 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
       var DeptID = this.state.AvailableDepts[j].ID;
       if (DeptID != "" || DeptID != undefined || DeptID != null) {
 
-        await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id","TransactionItemID/Id").filter(`IsActive eq '1' and Dept/Id eq '${DeptID}'`).orderBy("Created",false).expand("Dept", "SitePageID","TransactionItemID").top(4).get().then((items) => {
-      
-            for (var i = 0; i < items.length;) {
-              $("#" + CustomID + "").append(`<li><a href="${items[i].DetailsPageUrl}?ItemID=${items[i].ID}&AppliedTag=${items[i].Tag}&Dept=${items[i].Dept.Title}&SitePageID=${items[i].SitePageID.Id}&env=WebView" data-interception="off"><p>${items[i].Title}</p></a></li>`);
-              i++;
-            }
-            j++;
+        await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Dept/Id eq '${DeptID}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").top(4).get().then((items) => {
+
+          for (var i = 0; i < items.length;) {
+            $("#" + CustomID + "").append(`<li><a href="${items[i].DetailsPageUrl}?ItemID=${items[i].ID}&AppliedTag=${items[i].Tag}&Dept=${items[i].Dept.Title}&SitePageID=${items[i].SitePageID.Id}&env=WebView" data-interception="off"><p>${items[i].Title}</p></a></li>`);
+            i++;
+          }
+          j++;
         });
       }
     }
@@ -250,12 +251,12 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dt = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-         if (item.Dept != undefined) {
-        var depttitle = item.Dept.Title
-      }
-      if (item.SitePageID != undefined) {
-        var sitepageid = item.SitePageID.Id
-      }     
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }
 
         return (
           <div className="view-all-news-recent-left">
@@ -304,12 +305,12 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dte = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-         if (item.Dept != undefined) {
-        var depttitle = item.Dept.Title
-      }
-      if (item.SitePageID != undefined) {
-        var sitepageid = item.SitePageID.Id
-      }     
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }
 
         return (
           <li className="clearfix">
@@ -352,12 +353,12 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
         } else {
           Dte = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-         if (item.Dept != undefined) {
-        var depttitle = item.Dept.Title
-      }
-      if (item.SitePageID != undefined) {
-        var sitepageid = item.SitePageID.Id
-      }     
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }
 
         return (
           <li>
@@ -389,12 +390,12 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
       let RawImageTxt = item.Image;
       if (RawImageTxt != "" && RawImageTxt != null) {
         var ImgObj = JSON.parse(RawImageTxt);
-         if (item.Dept != undefined) {
-        var depttitle = item.Dept.Title
-      }
-      if (item.SitePageID != undefined) {
-        var sitepageid = item.SitePageID.Id
-      }     
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }
 
         return (
           <li>
@@ -525,6 +526,7 @@ export default class NewsVm extends React.Component<INewsViewMoreProps, INewsVmS
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

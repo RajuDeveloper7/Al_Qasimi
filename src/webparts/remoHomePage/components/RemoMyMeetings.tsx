@@ -12,6 +12,9 @@ import "@pnp/sp/site-users/web";
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
 import ReactTooltip from "react-tooltip";
 
+import { initializeIcons } from 'office-ui-fabric-react';
+initializeIcons();
+
 export interface IMyDayRoutineState {
     myroutineDatas: any[];
     mypastroutineDatas: any[];
@@ -62,6 +65,7 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
             IsCuurentMeetingPresent: "",
             FirstLoop: true,
         };
+
     }
 
 
@@ -180,6 +184,7 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
                         $("#dt-upcoming").text("Upcoming Events");
                         $(".fut-dt").hide();
                     }
+
                 }
             );
         var dywidth = $(".dynamic-innerwidth-calc").width() - 6;
@@ -213,7 +218,7 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
 
     public openoutlookcal = () => {
         window.open(
-            'https://outlook.office365.com/calendar/view/month',
+            'https://outlook.office.com/calendar/view/month',
             '_blank'
         );
     }
@@ -687,12 +692,12 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
 
         return (
 
-            <div className="m-b-20 m-b-50 m-b-routine clearfix" >
+            <div className={[styles.remoMyDayRoutine, "m-b-20 m-b-50 m-b-routine clearfix"].join(' ')}>
                 <div className="routine-wrap">
                     <div className="sec dynamic-innerwidth-calc shadoww">
                         <div className="Ssec-wrapper">
                             {/*For Present*/}
-                            <div className="today-routine-blockk present" style={{ display: "none" }}>
+                            <div className="today-routine-blockk present" >
                                 <div className="routine-Heading clearfix" id="current-date">
                                     <span id="dt-current"> My Meetings </span>
                                     <DatePicker placeholder="Select a date..."
@@ -701,6 +706,7 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
                                         formatDate={this._onFormatDate}
                                         isMonthPickerVisible={false}
                                     />
+
                                 </div>
 
                                 <div className="routine-time-wrap scroller">
@@ -747,6 +753,7 @@ export default class RemoMyMeetings extends React.Component<IRemoHomePageProps, 
                                         isMonthPickerVisible={false}
                                     //showMonthPickerAsOverlay={true}
                                     />
+
                                 </div>
 
                                 <div className="routine-time-wrap scroller">

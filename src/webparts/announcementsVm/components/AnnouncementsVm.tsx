@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNav";
 import { sp } from '@pnp/sp';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IAnnouncementsVmState {
   Items: any[];
@@ -26,7 +27,7 @@ export default class AnnouncementsVm extends React.Component<IAnnouncementsVmPro
   public componentDidMount() {
     var reactHandler = this;
 
-   setTimeout(function () {
+    setTimeout(function () {
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $('#spCommandBar').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
@@ -39,7 +40,6 @@ export default class AnnouncementsVm extends React.Component<IAnnouncementsVmPro
   private async GetAllAnnouncements() {
     var reactHandler = this;
     await sp.web.lists.getByTitle("Announcement").items.select("Title", "Image", "ID", "Created").filter("IsActive eq 1").getAll().then((items) => {
-      //var APIUrl = `${reactHandler.props.siteurl}/_api/web/lists/getbytitle('Announcement')/items?$select=Title,Image,ID,Created&$filter=IsActive eq 1`;
       reactHandler.setState({
         Items: items
       });
@@ -129,6 +129,7 @@ export default class AnnouncementsVm extends React.Component<IAnnouncementsVmPro
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

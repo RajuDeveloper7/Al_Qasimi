@@ -86,7 +86,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   public async GetMainNavItems() {
     var reactHandler = this;
 
-    await NewWeb.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(10).expand("LinkMasterID").get().then((items) => {
+    await NewWeb.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(6).expand("LinkMasterID").get().then((items) => {
 
       reactHandler.setState({
         MainNavItems: items
@@ -100,7 +100,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   public async GetMyLinks() {
     var reactHandler = this;
     try {
-      await sp.web.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).top(1000).get().then((items) => {
+      await sp.web.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).top(5).get().then((items) => {
 
         reactHandler.setState({
           MyLinks: items
@@ -540,7 +540,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
           </div>
 
           <div className="nav-item tab-2-data" id="meetingroom">
-            <div className="main-mavigation m-b-20">
+            <div className="main-mavigation quick m-b-20">
               <nav className="sec" id="root-nav-links">
                 {/* <div className="breadcrum-block">
                   {BreadCrumb.map((item, key) => (

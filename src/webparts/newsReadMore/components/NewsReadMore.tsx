@@ -15,6 +15,7 @@ import { sp } from '@pnp/sp';
 import pnp from 'sp-pnp-js';
 import "@pnp/sp/site-users/web";
 import swal from 'sweetalert';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 var User = "";
 var UserEmail = "";
@@ -46,9 +47,13 @@ var NewWeb
 export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmState, {}> {
   constructor(props: INewsReadMoreProps, state: INewsRmState) {
     super(props);
-    pnp.setup({  
+    pnp.setup({
       spfxContext: this.props.context
-    });   
+    });
+
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.0`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.0`);
+
     this.state = {
       Items: [],
       TagBasedMoreNews: [],
@@ -68,12 +73,12 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
   }
 
   public componentDidMount() {
-    
+
     $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     $('#spCommandBar').attr('style', 'display: none !important');
     $('#spLeftNav').attr('style', 'display: none !important');
     $('#CommentsWrapper').attr('style', 'display: none !important');
-   
+
 
     var reactHandler = this;
     reactHandler.GetCurrentUser();
@@ -85,7 +90,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
     reactHandler.setState({ Tag: "" + AppliedTage + "", Department: "" + Dept + "", SitePageID: SitePageID, ActiveMainNewsID: ItemID });
     reactHandler.GetNews(ItemID);
     reactHandler.GetTagBasedNews(AppliedTage, Dept, ItemID);
-    
+
   }
   public pagereload() {
     // // const nextURL = '' + this.props.siteurl + '/SitePages/News-Read-More.aspx?ItemID=' + ID + '&mode=reload';
@@ -156,28 +161,28 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       reactHandler.commentsCount();
       var SiteUrl = items[0].DetailsPageUrl;
       var temp = SiteUrl.split("/").pop();
-     // var TransID = items[0].TransactionItemID.Id;
+      // var TransID = items[0].TransactionItemID.Id;
       //reactHandler.GetNewsViewCount(temp, TransID);
     });
   }
 
   public async GetTagBasedNews(AppliedTage, Dept, ItemID) {
     var reactHandler = this;
-     await NewWeb.lists.getByTitle('News').items.select("ID","Title","Description","Created","Dept/Title","Image","Tag","DetailsPageUrl","SitePageID/Id").filter(`Tag eq '${AppliedTage}' and IsActive eq 1 and Id ne ${ItemID} `).orderBy("Created",false).expand("SitePageID","Dept").getAll().then((items)=>{
-   
-        reactHandler.setState({
-          TagBasedMoreNews: items
-        });
-        if (items.length == 0) {
-          $('.view-all-news-l-col').addClass('col-md-12').removeClass('col-md-8');
-          $(".sub-news-section").hide();
-        } else {
-          $('.view-all-news-l-col').addClass('col-md-8').removeClass('col-md-12');
-          $(".sub-news-section").show();
-        }
-    
+    await NewWeb.lists.getByTitle('News').items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter(`Tag eq '${AppliedTage}' and IsActive eq 1 and Id ne ${ItemID} `).orderBy("Created", false).expand("SitePageID", "Dept").getAll().then((items) => {
+
+      reactHandler.setState({
+        TagBasedMoreNews: items
+      });
+      if (items.length == 0) {
+        $('.view-all-news-l-col').addClass('col-md-12').removeClass('col-md-8');
+        $(".sub-news-section").hide();
+      } else {
+        $('.view-all-news-l-col').addClass('col-md-8').removeClass('col-md-12');
+        $(".sub-news-section").show();
+      }
+
     });
-    
+
   }
 
 
@@ -229,7 +234,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         this.setState({
           IsUserAlreadyLiked: true
         });
-       
+
       }
     });
   }
@@ -251,7 +256,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         likes = 0;
       }
     });
-   
+
   }
   public commentsCount() {
     NewWeb.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending          
@@ -274,7 +279,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
   public async liked(mode) {
     var handler = this;
     if (mode == "like") {
-     
+
       NewWeb.lists.getByTitle("LikesCountMaster").items.add({
         EmployeeNameId: User,
         LikedOn: CurrentDate,
@@ -301,7 +306,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
             var like = items.length;
             var newspan = like.toString()
             document.getElementById("likescount").textContent = newspan;
-           
+
           });
         })
       })
@@ -311,45 +316,45 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
   public showComments() {
     $(".all-commets").toggle();
     NewWeb.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
-      
+
       this.setState({
         commentitems: items,
       });
-    });  
+    });
   }
   public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
-    if(comments.toString().length == 0){
+    if (comments.toString().length == 0) {
       swal({
-        title: "Your comment is less than 1 characters!",
+        title: "Minimum 1 character is required!",
         icon: "warning",
       } as any)
-    }else{
-    const item = NewWeb.lists.getByTitle("CommentsCountMaster").items.add({
-      EmployeeNameId: User,
-      CommentedOn: CurrentDate,
-      EmployeeEmail: UserEmail,
-      ContentPage: "News",
-      Title: title,
-      ContentID: ID,
-      UserComments: comments
-    }).then(() => {
-      $("#commentedpost").hide();
-      $(".reply-tothe-post").hide();
-       NewWeb.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => {
-      
-         commentscount = items.length;
-         var newspan = commentscount.toString()
-         document.getElementById("commentscount").textContent = newspan;
-       })
-    })
+    } else {
+      const item = NewWeb.lists.getByTitle("CommentsCountMaster").items.add({
+        EmployeeNameId: User,
+        CommentedOn: CurrentDate,
+        EmployeeEmail: UserEmail,
+        ContentPage: "News",
+        Title: title,
+        ContentID: ID,
+        UserComments: comments
+      }).then(() => {
+        $("#commentedpost").hide();
+        $(".reply-tothe-post").hide();
+        NewWeb.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'News' and ContentID eq ${ID}`).top(5000).get().then((items) => {
 
+          commentscount = items.length;
+          var newspan = commentscount.toString()
+          document.getElementById("commentscount").textContent = newspan;
+        })
+      })
+
+    }
   }
-}
   public async pageviewscount(views) {
 
-     await NewWeb.lists.getByTitle("News").items.getById(ID).update({
+    await NewWeb.lists.getByTitle("News").items.getById(ID).update({
       'PageViewCount': views
     })
   }
@@ -436,8 +441,8 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         }
         if (item.SitePageID != undefined) {
           var sitepageid = item.SitePageID.Id
-        }     
-  
+        }
+
         return (
           <li className="clearfix">
             <div className="list-li-recent-news-img">
@@ -511,45 +516,45 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
 
                       {NewsDetails}
                       <div className="comments-like-view">
-                      <div className="comments-like-view-block">
-                        <ul className="comments-like-view-block">
-                        {this.state.IsLikeEnabled == true ?
-                            <li>
+                        <div className="comments-like-view-block">
+                          <ul className="comments-like-view-block">
+                            {this.state.IsLikeEnabled == true ?
+                              <li>
 
-                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
-                              
-                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
+                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")} />
+
+                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image" onClick={() => this.liked("like")} />
                                 <span id="likescount"> {likes} </span>
 
-                            </li>
-                            : <></>
-                          }
-                          {this.state.IsCommentEnabled == true &&
+                              </li>
+                              : <></>
+                            }
+                            {this.state.IsCommentEnabled == true &&
+                              <li>
+                                <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={() => this.showComments()} /> <span id="commentscount"> {commentscount} </span>
+                              </li>
+                            }
                             <li>
-                              <img src={`${this.props.siteurl}/SiteAssets/test/img/lcv_comment.svg`} alt="image" onClick={() => this.showComments()} /> <span id="commentscount"> {commentscount} </span>
+                              <img className="nopointer" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_view.svg`} alt="image" /> <span> {views} </span>
                             </li>
-                          }
-                          <li>
-                            <img className="nopointer" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_view.svg`} alt="image" /> <span> {views} </span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="reply-tothe-post all-commets">
-                        <h2> All Comments </h2>
-                        <ul>
-                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
-                        </ul>
-                      </div>
-                      {this.state.IsUserAlreadyCommented == false ?
-                        <div className="reply-tothe-post" id="commentedpost">
-                          <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
-                          <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
+                          </ul>
                         </div>
-                        :
-                        <></>
-                      }
-                    </div>
+                        <div className="reply-tothe-post all-commets">
+                          <h2> All Comments </h2>
+                          <ul>
+                            {pagecomments.length != 0 ? pagecomments : <p>No comments yet....!</p>}
+                          </ul>
+                        </div>
+                        {this.state.IsUserAlreadyCommented == false ?
+                          <div className="reply-tothe-post" id="commentedpost">
+                            <h2> Comment to this post </h2>
+                            <textarea id="comments" placeholder="Message Here" style={{ resize: "none" }} className="form-control"></textarea>
+                            <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
+                          </div>
+                          :
+                          <></>
+                        }
+                      </div>
                     </div>
 
                     <div className='col-md-4 sub-news-section'>
@@ -575,6 +580,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

@@ -11,12 +11,17 @@ import "@pnp/sp/profiles";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/webs";
-// import "@pnp/sp/site-users/web";
 import ReactTooltip from "react-tooltip";
-import ReactSearchBox from "react-search-box";
 import pnp from 'sp-pnp-js';
 import * as moment from 'moment';
 import { find } from 'office-ui-fabric-react';
+import RemoResponsive from './RemoResponsive';
+
+var metaTag = document.createElement('meta');
+metaTag.name = "viewport"
+metaTag.content = "width=device-width, initial-scale=1.0"
+document.getElementsByTagName('head')[0].appendChild(metaTag);
+
 
 setTimeout(function () {
   $('html').css("visibility", "visible");
@@ -57,6 +62,8 @@ export interface ISideNavState {
 
 let BreadCrumb = [];
 var NewWeb;
+var siteurl;
+
 
 export default class GlobalSideNav extends React.Component<ISideNavProps, ISideNavState, {}>
 
@@ -104,11 +111,12 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
 
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/SP-NativeStyle-Overriding.css?v=3.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=10.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=3.4`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.16`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.8`);
 
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css");
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css");
+
 
     this.state = {
       myMailDatas: [],
@@ -140,12 +148,11 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
 
 
   public componentDidMount() {
-
-    $('.ms-CommandBar').attr('style', 'display: none !important');
     $('#spLeftNav').attr('style', 'display: none !important');
     $("#spCommandBar").attr("style", "display: none !important");
     $("#SuiteNavWrapper").hide();
     const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
+
     this.getUnreadmailCount();
     this.getmymeetings();
     this.GetMainNavItems();
@@ -155,7 +162,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     this.setState({
       CurrentPageUrl: ActivePageUrl
     });
-
+    siteurl = this.props.siteurl.toLowerCase();
     $('.globalleftmenu-fixed-area ul li').on('click', function () {
       $(this).siblings().removeClass('active');
       $(this).siblings().removeClass('open');
@@ -168,7 +175,6 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
       var self = $(this).parent();
       self.toggleClass("active");
     });
-
 
     if (ActivePageUrl == `${this.props.siteurl}/sitepages/HomePage.aspx` || ActivePageUrl == `${this.props.siteurl}/sitepages/HomePage.aspx#` ||
       ActivePageUrl == `${this.props.siteurl}/` || ActivePageUrl == `${this.props.siteurl}#` || ActivePageUrl == `${this.props.siteurl}/` ||
@@ -365,6 +371,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
   public async GetDepartments() {
     //$(".global-qlink-main").hide();
     //$(".global-dept-main").show();
+    $(".responsi-inner-submenu").toggleClass("open");
     $(".resp-dept-submenu-mob").toggleClass("active");
     $(".resp-qlink-submenu").removeClass("active");
     $(".global-qlink-main").removeClass("open");
@@ -645,152 +652,166 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
   }
 
-  /*public appendData(ID,Title,OpenInNewTab,HasSubDept,Url) {               
-    var reactHandler = this;          
-    if(OpenInNewTab == true){
-      if(HasSubDept == true){
-        reactHandler.displayData.push(<li className="GetSubNodes"> 
-        <a href={Url} target="_blank" data-interception="off" role="button">{Title}  </a>  
-        <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-              <ul id={`${ID}-Dept-Child`}>                                                            
-                {reactHandler.state.showdataLevelTwo}
-              </ul>   
-            </div>           
-        </li>);
-        reactHandler.setState({
-          showdata : this.displayData
-        });
-      }else{
-        reactHandler.displayData.push(<li> 
-        <a href={Url} target="_blank" data-interception="off" role="button" >{Title}</a>
-        </li>);
-        reactHandler.setState({
-          showdata : this.displayData
-        });
-      }      
-      
-    }else{
-      if(HasSubDept == true){
-        reactHandler.displayData.push(<li className="GetSubNodes"> 
-        <a href={Url} data-interception="off" role="button">{Title} </a>                 
-        <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-              <ul id={`${ID}-Dept-Child`}>                                                            
-                {reactHandler.state.showdataLevelTwo}
-              </ul>   
-            </div>           
-        </li>);
-        reactHandler.setState({
-          showdata : this.displayData
-        });
-      }else{
-        reactHandler.displayData.push(<li> 
-        <a href={Url} data-interception="off" role="button"> {Title}</a>
-        </li>);
-        reactHandler.setState({
-          showdata : this.displayData
-        });
-      }
-      
-    }              
- }
- 
-public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){   
-  var reactHandler = this;          
-  if(OpenInNewTab == true){
-    if(HasSubDept == true){
-      
-      $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
-      <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
-        <div class="third-level-submenu relative">
-          <ul class="clearfix" id="${ID}-Dept-Child">                                                            
-            
-          </ul>    
-        </div>
-      </li>`);
-    }else{
-      
-      $("#"+ID+"-Dept-Child").append(`<li> 
-      <a href=${Url} target="_blank" data-interception="off" role="button" >${Title}</a>
-      </li>`);
-    }
-    reactHandler.setState({
-      showdataLevelTwo : this.displayDataLevel2
-   });  
-  }else{
-    if(HasSubDept == true){
-      
-      $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
-      <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
-        <div class="third-level-submenu relative">
-          <ul class="clearfix" id="${ID}-Dept-Child">                                                            
-            
-          </ul>    
-        </div>
-      </li>`);
-    }else{
-      
-      $("#"+ID+"-Dept-Child").append(`<li> 
-      <a href=${Url} data-interception="off" role="button"> ${Title}</a>
-      </li>`);
-    }
-    reactHandler.setState({
-      showdataLevelTwo : this.displayDataLevel2
-   });  
-  }  
-  
-}
- 
+  // public appendData(ID,Title,OpenInNewTab,HasSubDept,Url) {               
+  //     var reactHandler = this;          
+  //     if(OpenInNewTab == true){
+  //       if(HasSubDept == true){
+  //         reactHandler.displayData.push(<li className="GetSubNodes"> 
+  //         <a href={Url} target="_blank" data-interception="off" role="button">{Title}  </a>  
+  //         <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+  //             <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+  //               <ul id={`${ID}-Dept-Child`}>                                                            
+  //                 {reactHandler.state.showdataLevelTwo}
+  //               </ul>   
+  //             </div>           
+  //         </li>);
+  //         reactHandler.setState({
+  //           showdata : this.displayData
+  //         });
+  //       }else{
+  //         reactHandler.displayData.push(<li> 
+  //         <a href={Url} target="_blank" data-interception="off" role="button" >{Title}</a>
+  //         </li>);
+  //         reactHandler.setState({
+  //           showdata : this.displayData
+  //         });
+  //       }      
 
- public appendDataQLink(Title,OpenInNewTab,Url) {             
-  var reactHandler = this;      
-  if(OpenInNewTab == true){    
-    reactHandler.displayDataQlink.push(<li> 
-      <a href={`${Url}`} target="_blank" data-interception="off" role="button">{Title}</a>
-    </li>);
-  }else{
-    reactHandler.displayDataQlink.push(<li> 
-      <a href={`${Url}`} data-interception="off" role="button">{Title}</a>
-    </li>);
-  }    
-  reactHandler.setState({
-    showdataqlink : reactHandler.displayDataQlink
- });      
-}*/
+  //     }else{
+  //       if(HasSubDept == true){
+  //         reactHandler.displayData.push(<li className="GetSubNodes"> 
+  //         <a href={Url} data-interception="off" role="button">{Title} </a>                 
+  //         <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+  //             <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+  //               <ul id={`${ID}-Dept-Child`}>                                                            
+  //                 {reactHandler.state.showdataLevelTwo}
+  //               </ul>   
+  //             </div>           
+  //         </li>);
+  //         reactHandler.setState({
+  //           showdata : this.displayData
+  //         });
+  //       }else{
+  //         reactHandler.displayData.push(<li> 
+  //         <a href={Url} data-interception="off" role="button"> {Title}</a>
+  //         </li>);
+  //         reactHandler.setState({
+  //           showdata : this.displayData
+  //         });
+  //       }
+
+  //     }              
+  //  }
+
+  // public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){   
+  //   var reactHandler = this;          
+  //   if(OpenInNewTab == true){
+  //     if(HasSubDept == true){
+
+  //       $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
+  //       <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
+  //         <div class="third-level-submenu relative">
+  //           <ul class="clearfix" id="${ID}-Dept-Child">                                                            
+
+  //           </ul>    
+  //         </div>
+  //       </li>`);
+  //     }else{
+
+  //       $("#"+ID+"-Dept-Child").append(`<li> 
+  //       <a href=${Url} target="_blank" data-interception="off" role="button" >${Title}</a>
+  //       </li>`);
+  //     }
+  //     reactHandler.setState({
+  //       showdataLevelTwo : this.displayDataLevel2
+  //    });  
+  //   }else{
+  //     if(HasSubDept == true){
+
+  //       $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
+  //       <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
+  //         <div class="third-level-submenu relative">
+  //           <ul class="clearfix" id="${ID}-Dept-Child">                                                            
+
+  //           </ul>    
+  //         </div>
+  //       </li>`);
+  //     }else{
+
+  //       $("#"+ID+"-Dept-Child").append(`<li> 
+  //       <a href=${Url} data-interception="off" role="button"> ${Title}</a>
+  //       </li>`);
+  //     }
+  //     reactHandler.setState({
+  //       showdataLevelTwo : this.displayDataLevel2
+  //    });  
+  //   }  
+
+  // }
+
+
+  //  public appendDataQLink(Title,OpenInNewTab,Url) {             
+  //   var reactHandler = this;      
+  //   if(OpenInNewTab == true){    
+  //     reactHandler.displayDataQlink.push(<li> 
+  //       <a href={`${Url}`} target="_blank" data-interception="off" role="button">{Title}</a>
+  //     </li>);
+  //   }else{
+  //     reactHandler.displayDataQlink.push(<li> 
+  //       <a href={`${Url}`} data-interception="off" role="button">{Title}</a>
+  //     </li>);
+  //   }    
+  //   reactHandler.setState({
+  //     showdataqlink : reactHandler.displayDataQlink
+  //  });      
+  // }
 
   public OpenSearchPage(e, url) {
 
     var pathname = window.location.pathname.indexOf("UnifiedSearch")
-    console.log(pathname)
+
     if (e.keyCode == 13) {
       if (pathname == -1) {
         window.open(
           `${url}/SitePages/UnifiedSearch.aspx?q=${e.target.value}&env=WebView`,
           "_blank"
         )
+        e.preventDefault();
       } else {
         ""
         window.open(
           `${url}/SitePages/UnifiedSearch.aspx?q=${e.target.value}&env=WebView`,
           "_self"
         )
+        e.preventDefault();
       }
     }
 
   }
 
-  public OpenBurggerMenu() {
+  public OpenBurggerMainMenu() {
     $(".responsive-menu-wrap").addClass("open");
+    $(".main-menu").show();
+    $(".quicklink-menu").hide()
+  }
+  public OpenBurggerQuickLinkMenu() {
+    $(".responsive-menu-wrap").addClass("open");
+    $(".quicklink-menu").show();
+    $(".main-menu").hide();
   }
   public CloseBurggerMenu() {
     $(".responsive-menu-wrap").removeClass("open");
+    $(".responsi-inner-submenu").removeClass("open");
+
   }
   public OpenSearch() {
+    //  $(".search").toggleClass("open");
     $(".responsive-background").addClass("open");
     $(".search").addClass("open");
   }
-
+  public CloseSearch() {
+    $(".search").removeClass("open");
+  }
   public ShowUserDetailBlock() {
     $(".user-profile-details").toggleClass("open");
   }
@@ -906,7 +927,7 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
     const ResponsiveMainNavigations: JSX.Element[] = handler.state.MainNavItems.map(function (item, key) {
 
       if (item.OpenInNewTab == true) {
-        if (item.LinkMasterID == undefined) { } else { var LinkMasterIDTitle = item.LinkMasterID.Title }
+        if (item.LinkMasterID != undefined) { var LinkMasterIDTitle = item.LinkMasterID.Title }
         if (LinkMasterIDTitle == "DEPT_00001") {
           return (
             <li className="submenu resp-dept-submenu-mob"> <a href="#" onClick={() => handler.GetDepartments()} data-interception="off"><span>{item.Title}</span><img src={`${handler.props.siteurl}/SiteAssets/img/next.svg`} alt="image" /></a>
@@ -1006,9 +1027,8 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
               </div>
               <div className="search relative">
                 <img src={`${this.props.siteurl}/SiteAssets/img/search.png`} alt="image" />
-                <input type="text" id="txt-search" className="form-control insearch" placeholder="Search Here" autoComplete='off' onKeyDown={(e) => this.OpenSearchPage(e, this.props.siteurl)} />
-
-
+                <input type="search" id="txt-search" className="form-control insearch" placeholder="Search Here" autoComplete='off' onKeyDown={(e) => this.OpenSearchPage(e, this.props.siteurl)} />
+                <img className="res-ser-close" src={`${this.props.siteurl}/SiteAssets/img/close_resposnive.svg`} onClick={() => this.CloseSearch()} />
 
               </div>
             </div>
@@ -1016,7 +1036,7 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
               <div className="header-right-lists">
                 <ul>
                   <li className="meet-count" data-tip data-for={"React-tooltip-calendar"} data-custom-class="tooltip-custom">
-                    <a href="https://outlook.office365.com/calendar/view/month" target="_blank" data-interception="off" className="notification relative" >
+                    <a href="https://outlook.office.com/calendar/view/month" target="_blank" data-interception="off" className="notification relative" >
                       <img src={`${this.props.siteurl}/SiteAssets/img/tq1.svg`} alt="images" />
                       <span id="Meetings_count"> {this.state.MeetingsCount} </span>
                     </a>
@@ -1033,7 +1053,7 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
                     </ReactTooltip>
                   </li>
                   <li className="count-email" data-tip data-for={"React-tooltip-Email"} data-custom-class="tooltip-custom">
-                    <a href="https://outlook.office365.com/mail/inbox" target="_blank" data-interception="off" className="notification relative">
+                    <a href="https://outlook.office.com/mail/" target="_blank" data-interception="off" className="notification relative">
                       <img src={`${this.props.siteurl}/SiteAssets/img/tq3.svg`} alt="images" />
                       <span id="Emails_count"> {this.state.EmailCount} </span>
                     </a>
@@ -1057,12 +1077,18 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
                   </li>
                 </ul>
               </div>
-              {/* <div className="responsive-inner-classes">
+              {/* <div className="responsive-menu">
                 <ul>
-                  <li> <a href="#" onClick={()=>this.OpenSearch()} data-interception="off"><img src=`${this.props.siteurl}/SiteAssets/img/res_searc.svg" alt="image"/> </a></li>
-                  <li> <a href="#" onClick={()=>this.OpenBurggerMenu()} data-interception="off"><img src=`${this.props.siteurl}/SiteAssets/img/burger_menu.svg" alt="image"/> </a></li>
+                  <li className="burgermenu"> <i className="fa fa-bars" aria-hidden="true"></i> </li>                  
                 </ul>
               </div> */}
+              <div className="responsive-inner-classes">
+                <ul>
+                  <li> <a href="#" onClick={() => this.OpenSearch()} data-interception="off"><img src={`${this.props.siteurl}/SiteAssets/img/res_searc.svg`} alt="image" /> </a></li>
+                  <li> <a href="#" onClick={() => this.OpenBurggerQuickLinkMenu()} data-interception="off"><img src={`${this.props.siteurl}/SiteAssets/img/quick_link_mob.svg`} alt="image" /> </a></li>
+                  <li> <a href="#" onClick={() => this.OpenBurggerMainMenu()} data-interception="off"><img src={`${this.props.siteurl}/SiteAssets/img/burger_menu.svg`} alt="image" /> </a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </header>
@@ -1075,55 +1101,61 @@ public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){
             </nav>
           </div>
         </div>
+        {this.state.CurrentPageUrl == `${siteurl}/shared%20documents/forms/allitems.aspx` ?
+          <>
+            <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+          </>
+          :
 
+          <></>}
         {/*reponaive contents  menu */}
 
-        {/* <div className="responsive-menu-wrap"> 
+        {/* <div className="responsive-menu-wrap">
           <div className="reponsive-quick-wrap">
             <div className="main-menu">
               <ul>
                 {ResponsiveMainNavigations}
-                
+
               </ul>
             </div>
           </div>
           <div className="responsive-qiuck-close">
-              <a href="#" onClick={()=>this.CloseBurggerMenu()} data-interception="off"><i className="fa fa-close"></i></a>
+            <a href="#" onClick={() => this.CloseBurggerMenu()} data-interception="off"><i className="fa fa-close"></i></a>
           </div>
           <div className="responsive-background">
-                  
+
           </div>
         </div>
 
         <div className="responsive-notifications">
           <ul>
-            <li className="meet-count" data-tip data-for={"React-tooltip-calendar-resp"} data-custom-class="tooltip-custom"> 
+            <li className="meet-count" data-tip data-for={"React-tooltip-calendar-resp"} data-custom-class="tooltip-custom">
               <a href="https://outlook.office365.com/calendar/view/month" target="_blank" data-interception="off" className="notification relative" >
-                <img src={`${this.props.siteurl}/SiteAssets/img/rn4.svg`} alt="images"/>
+                <img src={`${this.props.siteurl}/SiteAssets/img/rn4.svg`} alt="images" />
                 <span id="Meetings_count"> {this.state.MeetingsCount} </span>
               </a>
               <ReactTooltip id={"React-tooltip-calendar-resp"} place="top" type="dark" effect="solid">
                 <span>Calendar</span>
               </ReactTooltip>
             </li>
-            <li data-tip data-for={"React-tooltip-my-team-resp"} data-custom-class="tooltip-custom"> 
+            <li data-tip data-for={"React-tooltip-my-team-resp"} data-custom-class="tooltip-custom">
               <a href={`${this.props.siteurl}/SitePages/My-Team.aspx?env=WebViewList`} data-interception="off" className="notification relative">
-                <img src={`${this.props.siteurl}/SiteAssets/img/rn1.svg`} alt="images"/>
+                <img src={`${this.props.siteurl}/SiteAssets/img/rn1.svg`} alt="images" />
               </a>
               <ReactTooltip id={"React-tooltip-my-team-resp"} place="top" type="dark" effect="solid">
                 <span>Teams</span>
               </ReactTooltip>
             </li>
-            <li className="count-email" data-tip data-for={"React-tooltip-Email-resp"} data-custom-class="tooltip-custom"> 
+            <li className="count-email" data-tip data-for={"React-tooltip-Email-resp"} data-custom-class="tooltip-custom">
               <a href="https://outlook.office365.com/mail/inbox" target="_blank" data-interception="off" className="notification relative">
-                <img src={`${this.props.siteurl}/SiteAssets/img/rn2.svg`} alt="images"/>
+                <img src={`${this.props.siteurl}/SiteAssets/img/rn2.svg`} alt="images" />
                 <span id="Emails_count"> {this.state.EmailCount} </span>
               </a>
               <ReactTooltip id={"React-tooltip-Email-resp"} place="top" type="dark" effect="solid">
                 <span>EMail</span>
               </ReactTooltip>
             </li>
-       
+
           </ul>
         </div> */}
 

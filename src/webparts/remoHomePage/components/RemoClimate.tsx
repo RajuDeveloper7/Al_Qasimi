@@ -183,15 +183,14 @@ export default class RemoClimate extends React.Component<IWeatherCurrencyProps, 
   public async GetCurrencySymbols() {
     var reactHandler = this;
     AvailableCurrencies = [];
-    await sp.web.lists.getByTitle("CurrencyMasterList").items.top(300).get().then((items)=>{
-      //url: `${this.props.siteurl}/_api/web/lists/getbytitle('CurrencyMasterList')/items?$top=300`,
-        reactHandler.setState({
-          CurrencyOptions: items
-        });
-        for (var i = 0; i < items.length; i++) {
-          AvailableCurrencies.push({ value: '' + items[i].Title + '', label: '' + items[i].Title + '' });
-    }
-  });
+    await sp.web.lists.getByTitle("CurrencyMasterList").items.top(300).get().then((items) => {
+      reactHandler.setState({
+        CurrencyOptions: items
+      });
+      for (var i = 0; i < items.length; i++) {
+        AvailableCurrencies.push({ value: '' + items[i].Title + '', label: '' + items[i].Title + '' });
+      }
+    });
   }
 
   handleChange = selectedOption => {

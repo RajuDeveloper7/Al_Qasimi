@@ -42,9 +42,6 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
   private async GetNews() {
     var reactHandler = this;
     await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter("IsActive eq 1").orderBy("Created", false).expand("Dept", "SitePageID").get().then((items) => {
-
-      //   url: `${reactHandler.props.siteurl}/_api/web/lists/getbytitle('News')/items?$select=ID,Title,Description,Created,Dept/Title,Image,Tag,DetailsPageUrl,SitePageID/Id&$filter=IsActive eq 1&$orderby=Created desc&$expand=SitePageID,Dept`, 
-
       if (items.length == 0) {
         $("#if-news-present").hide();
         $("#if-no-news-present").show();
@@ -82,15 +79,15 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
       // prevArrow: <this.SamplePrevArrow />,
       responsive: [
         {
-          breakpoint: 768,
+          breakpoint: 1024,
           settings: {
             slidesToShow: 1,
             slidesToScroll: 1,
             infinite: true,
-            dots: false,
+            dots: true,
             arrows: false,
             autoplay: false,
-            centerMode: false
+            centerMode: false,
           }
         }
       ]
@@ -106,17 +103,13 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
         Dt = "Today";
       } else {
         Dt = "" + RawPublishedDt + "";
-      } 
+      }
       if (item.Dept != undefined) {
         var depttitle = item.Dept.Title
       }
       if (item.SitePageID != undefined) {
         var sitepageid = item.SitePageID.Id
       }
-
-
-
-
       if (RawImageTxt != "" && RawImageTxt != null) {
         var ImgObj = JSON.parse(RawImageTxt);
         return (
@@ -137,13 +130,14 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
               <img src={`${reactHandler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/home_news_noimage.png`} alt="no-image-uploaded" />
             </div>
             <div className="news-whole-block-details">
-              <h4>  <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env-WebView`} data-interception="off">{item.Title}</a> </h4>
+              <h4>  <a href={`${item.DetailsPageUrl}?ItemID=${item.ID}&AppliedTag=${item.Tag}&Dept=${depttitle}&SitePageID=${sitepageid}&env=WebView`} data-interception="off">{item.Title}</a> </h4>
               <h5> <img src={`${reactHandler.props.siteurl}/SiteAssets/img/clock.svg`} alt="Time"></img> {Dt} </h5>
             </div>
           </div>
         );
       }
     });
+
     return (
       <div className={[styles.news, "m-b-15 m-b-20-news"].join(' ')} id="m-b-20-news">
         <div className="news-wrap m-b-20">

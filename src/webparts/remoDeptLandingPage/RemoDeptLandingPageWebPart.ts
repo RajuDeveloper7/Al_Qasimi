@@ -12,7 +12,7 @@ import RemoDeptLandingPage from './components/RemoDeptLandingPage';
 import { IRemoDeptLandingPageProps } from './components/IRemoDeptLandingPageProps';
 
 export interface IRemoDeptLandingPageWebPartProps {
-  description: string;
+  PageName: string;
 }
 
 export default class RemoDeptLandingPageWebPart extends BaseClientSideWebPart<IRemoDeptLandingPageWebPartProps> {
@@ -21,11 +21,12 @@ export default class RemoDeptLandingPageWebPart extends BaseClientSideWebPart<IR
     const element: React.ReactElement<IRemoDeptLandingPageProps> = React.createElement(
       RemoDeptLandingPage,
       {
-        description: this.properties.description,
-        context:this.context,
+        PageName: this.context.pageContext.web.title,
+        context: this.context,
         userid: this.context.pageContext.legacyPageContext["userId"],
         siteurl: this.context.pageContext.web.absoluteUrl,
-        PageName:this.properties.description,
+        homepage: this.context.pageContext.site.absoluteUrl
+
       }
     );
 

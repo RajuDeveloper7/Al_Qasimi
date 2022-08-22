@@ -31,7 +31,7 @@ export default class HeroBanner extends React.Component<IRemoHomePageProps, IHer
   }
 
   public componentDidMount() {
-    
+
     var reactHandler = this;
     reactHandler.GetBanner();
   }
@@ -70,7 +70,7 @@ export default class HeroBanner extends React.Component<IRemoHomePageProps, IHer
       speed: 2500,
       autoplay: true,
       slidesToShow: 1,
-      slidesToScroll: 1
+      slidesToScroll: 1,
     };
     var handler = this;
     const MAslider: JSX.Element[] = this.state.Items.map(function (item, key) {

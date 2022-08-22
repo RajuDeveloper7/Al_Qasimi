@@ -11,6 +11,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 import Slider from "react-slick";
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
 import { sp } from "@pnp/sp/presets/all";
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IRemoGalleryGridViewState {
   Images: any[];
@@ -168,21 +169,30 @@ export default class RemoGalleryGridView extends React.Component<IGalleryGridVie
   }
 
   public async ShowImages() {
+    this.setState({
+      Images: [],
+      Videos: [],
+    });
     await this.setState({ type: "Img" });
     $(".image-gallery-allimg-block").show();
     $(".video-gallery-allimg-block").hide();
-    setTimeout(() => {
-      this.GetGalleryFilesFolder("ImgBlock");
-    }, 500);
+    // setTimeout(() => {
+    this.GetGalleryFilesFolder("ImgBlock");
+    // }, 500);
   }
 
   public async ShowVideos() {
+
+    this.setState({
+      Images: [],
+      Videos: [],
+    });
     await this.setState({ type: "Vdo" });
     $(".image-gallery-allimg-block").hide();
     $(".video-gallery-allimg-block").show();
-    setTimeout(() => {
-      this.GetGalleryFilesFolder("VdoBlock");
-    }, 500);
+    // setTimeout(() => {
+    this.GetGalleryFilesFolder("VdoBlock");
+    // }, 500);
   }
   public GetImagesInsideFolder(FolderURL, Mode, key) {
     var siteurl: string;
@@ -500,6 +510,7 @@ export default class RemoGalleryGridView extends React.Component<IGalleryGridVie
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

@@ -12,6 +12,7 @@ import * as $ from 'jquery';
 import { Web } from "@pnp/sp/presets/all"
 import { sp } from 'sp-pnp-js';
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 
 export interface IJobsMasterState {
@@ -34,6 +35,7 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
         $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
 
         this.GetJobsMaster();
+        this.JobsMasterCheck();
 
     }
     public async GetJobsMaster() {
@@ -44,6 +46,16 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
             });
         });
 
+    }
+    public async JobsMasterCheck() {
+        var tdaydate = moment().format('YYYY-MM-DD')
+        var result = await sp.web.lists.getByTitle("JobsMaster").items.select("DateOfSubmission", "ID").filter(`DateOfSubmission lt '${tdaydate}'`).getAll()
+        for (var i = 0; i < result.length; i++) {
+            var id = result[i].ID
+            const itemUpdate = await sp.web.lists.getByTitle("JobsMaster").items.getById(id).update({
+                'Status': 'Expired',
+            });
+        }
     }
 
     public render(): React.ReactElement<IJobsMasterProps> {
@@ -126,15 +138,16 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
 
                                                 </tbody>
                                             </table>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
                 </section>
+                <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
             </div>
         );
     }

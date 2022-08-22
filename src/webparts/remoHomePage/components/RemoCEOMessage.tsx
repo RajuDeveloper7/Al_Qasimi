@@ -30,18 +30,18 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
   }
   private async GetCEOMessage() {
     var reactHandler = this;
-    await sp.web.lists.getByTitle("CEO Message").items.select("ID","Title","Description","Created","Name","Image","Designation","Name").filter(`IsActive eq '1'`).orderBy("Created",false).top(1).get().then((items) => { // //orderby is false -> decending        
-    
-        if (items.length == 0) {
-          $("#if-no-ceo-msg-present").show();
-          $("#if-ceo-msg-present").hide();
-        } else {
-          reactHandler.setState({
-            Items: items
-          });
-           $("#if-no-ceo-msg-present").hide();
-          $("#if-ceo-msg-present").show();
-        }
+    await sp.web.lists.getByTitle("CEO Message").items.select("ID", "Title", "Description", "Created", "Name", "Image", "Designation", "Name").filter(`IsActive eq '1'`).orderBy("Created", false).top(1).get().then((items) => { // //orderby is false -> decending        
+
+      if (items.length == 0) {
+        $("#if-no-ceo-msg-present").show();
+        $("#if-ceo-msg-present").hide();
+      } else {
+        reactHandler.setState({
+          Items: items
+        });
+        $("#if-no-ceo-msg-present").hide();
+        $("#if-ceo-msg-present").show();
+      }
     });
   }
   public render(): React.ReactElement<IRemoHomePageProps> {
@@ -66,10 +66,11 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
                 <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition" > Read more
                   <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
               </div>
+              <div className="ceo-message-right">
+                <img src={ImgObj.serverRelativeUrl} alt="no-image-uploaded" />
+              </div>
             </div>
-            <div className="ceo-message-right">
-              <img src={ImgObj.serverRelativeUrl} alt="no-image-uploaded" />
-            </div>
+
           </>
         );
       } else {
@@ -81,10 +82,11 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
                 <p> {outputText} </p>
                 <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition"> Read more <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
               </div>
+              <div className="ceo-message-right">
+                <img src={`${handler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/ceo_no_found.png`} alt="img" />
+              </div>
             </div>
-            <div className="ceo-message-right">
-              <img src={`${handler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/ceo_no_found.png`} alt="img" />
-            </div>
+
           </>
         );
       }

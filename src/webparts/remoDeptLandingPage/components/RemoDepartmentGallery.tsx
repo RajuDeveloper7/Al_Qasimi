@@ -9,12 +9,12 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/folders";
 import { sp } from "@pnp/sp";
-import { Web } from "@pnp/sp/webs";   
- 
-export interface IDepartmentGalleryState {  
-  Items:any[];
-  Galleryitems:any[];  
-  VideoItemsss:any[]; 
+import { Web } from "@pnp/sp/webs";
+
+export interface IDepartmentGalleryState {
+  Items: any[];
+  Galleryitems: any[];
+  VideoItemsss: any[];
 }
 var FolderNames = [];
 var FolderNamesExits = [];
@@ -22,7 +22,7 @@ var FolderNamesExits = [];
 var FolderNamesVideo = [];
 var FolderNamesExitsVideo = [];
 var NewWeb
-export default class DepartmentGallery extends React.Component<IRemoDeptLandingPageProps,IDepartmentGalleryState, {}> {
+export default class DepartmentGallery extends React.Component<IRemoDeptLandingPageProps, IDepartmentGalleryState, {}> {
   public constructor(props: IRemoDeptLandingPageProps, state: IDepartmentGalleryState) {
     super(props);
     this.state = {
@@ -30,33 +30,33 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
       Galleryitems: [],
       VideoItemsss: []
     };
-    NewWeb =Web(""+this.props.siteurl+"")
+    NewWeb = Web("" + this.props.siteurl + "")
   }
 
-  public componentDidMount(){          
-  
-    this.GetGalleryFilesFolder();     
+  public componentDidMount() {
+
+    this.GetGalleryFilesFolder();
   }
 
 
-  public GetGalleryFilesFolder(){    
+  public GetGalleryFilesFolder() {
     var reactHandler = this;
-    NewWeb.lists.getByTitle("Picture Gallery").items.expand("Folder","File").top(1000).orderBy("Created", false).select("ID","Title","FileRef","FileSystemObjectType","FileLeafRef","Folder/ServerRelativeUrl","Folder/Name").get().then((items)=>{                                                 
-          if(items.length != 0){
-            $("#if-gallery-present").show();
-            $("#if-no-gallery-present").hide();
-            reactHandler.setState({  
-              Galleryitems: items                                    
-            });
-          }else{
-            $("#if-gallery-present").hide();
-            $("#if-no-gallery-present").show();
-          }    
-    });  
-         
+    NewWeb.lists.getByTitle("Picture Gallery").items.expand("Folder", "File").top(1000).orderBy("Created", false).select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "Folder/ServerRelativeUrl", "Folder/Name").get().then((items) => {
+      if (items.length != 0) {
+        $("#if-gallery-present").show();
+        $("#if-no-gallery-present").hide();
+        reactHandler.setState({
+          Galleryitems: items
+        });
+      } else {
+        $("#if-gallery-present").hide();
+        $("#if-no-gallery-present").show();
+      }
+    });
+
   }
 
- 
+
 
   public findValueInArray(value, arr) {
     var result = false;
@@ -75,7 +75,7 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
 
   // public findValueInArrayVideos(value,arr){
   //   var result1 = false;
-   
+
   //   for(var j=0; j<arr.length; j++){
   //     var name = arr[j];
   //     if(name == value){
@@ -103,7 +103,7 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
         var type = Len - Dot;
         var res = filename.substring(Dot + 1, Len);
         var ext = res.toLowerCase();
-       
+
 
         var string = completeurl.split('/');
         var str2 = "Videos";
@@ -124,7 +124,7 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
                   x = x + 1;
                   return (
                     <li>
-                      <a className="relative image-hover-gal" href={reactHandler.props.siteurl + "/SitePages/Gallery-Grid-View.aspx?FolderName='" + gFolderUrl + "'&Type=Img"} data-interception="off"> <img src={`${item.File.ServerRelativeUrl}`} alt={item.File.Name} />
+                      <a className="relative image-hover-gal" href={reactHandler.props.siteurl + "/SitePages/Gallery-Grid-View.aspx?FolderName='" + gFolderUrl + "'&Type=Img&env=WebView"} data-interception="off"> <img src={`${item.File.ServerRelativeUrl}`} alt={item.File.Name} />
                         <p>{foldernameval} </p>
                       </a>
                     </li>
@@ -138,13 +138,13 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
       }
     });
     return (
-          <div id="dept-gallery-home-inner">
-           <div className="images-social">
-          <div className="row">
-            <div className="col-md-6" id="if-gallery-present">
+      <div id="dept-gallery-home-inner">
+        <div className="images-social">
+          <div className="row-dummy">
+            <div className="col-md-6-dummy" id="if-gallery-present">
               <div className="sec event-cal image-videos">
                 <div className="heading clearfix hr_gallery">
-                  <h3> <a href={`${this.props.siteurl}/SitePages/Gallery-ViewMore.aspx`} data-interception="off"> Gallery </a> </h3>
+                  <h3> <a href={`${this.props.siteurl}/SitePages/Gallery-ViewMore.aspx?env=WebView`} data-interception="off"> Gallery </a> </h3>
                   {/*<h3 className=""><a href="#" onClick={()=> this.ShowVideos()}>Videos</a> </h3>*/}
                 </div>
 
@@ -159,7 +159,7 @@ export default class DepartmentGallery extends React.Component<IRemoDeptLandingP
               </div>
             </div>
 
-            <div className="col-md-6" id="if-no-gallery-present" style={{ display: "none" }}>
+            <div className="col-md-6-dummy" id="if-no-gallery-present" style={{ display: "none" }}>
               <div className="sec event-cal image-videos">
                 <div className="heading clearfix">
                   <h3 className="images active">

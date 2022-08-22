@@ -13,6 +13,7 @@ import { Web } from "@pnp/sp/presets/all";
 import Sortable from 'sortablejs/modular/sortable.complete.esm.js';
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
 import { sp } from '@pnp/sp';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IQuickLinkManagerState {
   items: any[];
@@ -175,7 +176,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
   public async AddToMyQuickLinkPreference(ItemID, ImageSrc, HoverImageSrc, URL, index) {
 
     sp.web.lists.getByTitle("UsersQuickLinks").items.filter(`Author/Id eq ${this.props.userid}`).get().then(async (resp) => {
-      if (resp.length < 10) {
+      if (resp.length < 5) {
         if (tempFavHolderArr.indexOf(ItemID) === -1) {
           const iar: IItemAddResult = await sp.web.lists.getByTitle("UsersQuickLinks").items.add({
             SelectedQuickLinksId: ItemID,
@@ -194,16 +195,16 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
             title: "Aleady exist",
             icon: "warning",
             showConfirmButton: false,
-            timer: 1500,
+            // timer: 1500,
           } as any)
         }
       } else {
         $("#bt-qlink-adder").prop("disabled", false);
         swal({
-          title: "No space, only 10 links can be added!",
+          title: "No space, only 5 links can be added!",
           icon: "warning",
           showConfirmButton: false,
-          timer: 1500,
+          //  timer: 1500,
         } as any)
 
       }
@@ -227,7 +228,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
               title: "Deleted Successfully",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500,
+              // timer: 1500,
             } as any).then(() => {
               tempFavHolderArr = []
               this.getcurrentusersQuickLinksForEdit();
@@ -304,7 +305,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
                     <div className="heading clearfix"><div className="header-left">Added Quicklinks</div>
                       <div className="dragnddrop_text" >
                         <img src={`${this.props.siteurl}/SiteAssets/img/drap_drop.png`} alt="image" data-themekey="#" />
-                        You can drag and drop to change position...
+                        You can drag and drop to change position
                       </div>
                       <div className="header-right drap-drop-p">
                         {this.state.IsEditModeisON == false ?
@@ -352,7 +353,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
                   <div className="whole-quickis-part">
                     <div className="heading clearfix">
                       <div className="header-left">
-                        Quicklinks <span> {this.state.AvailableSpaceCount == 0 ? "Delete any quick link to add new" : `Select any ${this.state.AvailableSpaceCount} links to show in a Home page`}  </span>
+                        Quicklinks <span> {this.state.AvailableSpaceCount == 0 ? "Delete any quick link to add new" : `Select any ${this.state.AvailableSpaceCount} links to show in the Home page`}  </span>
                       </div>
                     </div>
                     <div className="section-part">
@@ -366,6 +367,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

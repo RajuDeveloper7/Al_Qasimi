@@ -44,16 +44,16 @@ export default class RemoLatestEventsandAnnouncements extends React.Component<IR
     var reactHandler = this;
     var Date = moment().toISOString();
     try {
-        await sp.web.lists.getByTitle("Announcement").items.select("Title", "Description", "Created", "ID","Expires").filter(`IsActive eq '1'and Expires ge '${tdaydate}'`).orderBy("Created", false).top(1).get().then((items) => { // //orderby is false -> decending          
-       
-          if (items.length != 0) {
-            $("#if-annc-present").show();
-            reactHandler.setState({
-              Items: items
-            });
-          } else {
-            $("#if-no-annc-present").show();
-          }
+      await sp.web.lists.getByTitle("Announcement").items.select("Title", "Description", "Created", "ID").filter(`IsActive eq '1'`).orderBy("Created", false).top(1).get().then((items) => { // //orderby is false -> decending          
+
+        if (items.length != 0) {
+          $("#if-annc-present").show();
+          reactHandler.setState({
+            Items: items
+          });
+        } else {
+          $("#if-no-annc-present").show();
+        }
       });
     } catch (err) {
       console.log("Events : " + err);
@@ -64,20 +64,20 @@ export default class RemoLatestEventsandAnnouncements extends React.Component<IR
     var reactHandler = this;
     const tdaydate = moment().format('MM-DD-YYYY');
     try {
-        await sp.web.lists.getByTitle("Events").items.select("Title","Description","EventDate","EndDate","ID").filter(`EndDate ge '${tdaydate}'`).orderBy("Created", false).top(3).get().then((items) => { // //orderby is false -> decending          
-    
-          if (items.length != 0) {
-            $("#if-events-present").show();
-            $("#if-no-events-present").hide();
-            reactHandler.setState({
-              Events: items
-            });
-          } else {
-            $("#if-events-present").hide();
-            $("#if-no-events-present").show();
-          }
-        });
-       } catch (err) {
+      await sp.web.lists.getByTitle("Events").items.select("Title", "Description", "EventDate", "EndDate", "ID").filter(`EndDate ge '${tdaydate}'`).orderBy("Created", false).top(3).get().then((items) => { // //orderby is false -> decending          
+
+        if (items.length != 0) {
+          $("#if-events-present").show();
+          $("#if-no-events-present").hide();
+          reactHandler.setState({
+            Events: items
+          });
+        } else {
+          $("#if-events-present").hide();
+          $("#if-no-events-present").show();
+        }
+      });
+    } catch (err) {
       console.log("Events : " + err);
     }
   }
@@ -100,13 +100,13 @@ export default class RemoLatestEventsandAnnouncements extends React.Component<IR
       return (
         <div className="sec gradient">
           <div className="annoy-heading">
-            <a href={`${handler.props.siteurl}/SitePages/Announcement-View-More.aspx?ItemID=${item.ID}`} data-interception='off'>
+            <a href={`${handler.props.siteurl}/SitePages/Announcement-View-More.aspx?ItemID=${item.ID}&env=WebView`} data-interception='off'>
               <h4> Announcements </h4>
             </a>
             <p> {DateofPublish}  </p>
           </div>
           <div className="ann-detibck">
-            <a href={`${handler.props.siteurl}/SitePages/Announcement-Read-More.aspx?ItemID=${item.ID}`} data-interception='off'>
+            <a href={`${handler.props.siteurl}/SitePages/Announcement-Read-More.aspx?ItemID=${item.ID}&env=WebView`} data-interception='off'>
               <h2>{item.Title} </h2>
             </a>
             <p> {outputText}</p>
@@ -130,22 +130,22 @@ export default class RemoLatestEventsandAnnouncements extends React.Component<IR
             <div className="inner-shaodw"> </div>
           </div>
           <div className="latest-eventsright" id="evocalendar">
-            <h4><a href={`${handler.props.siteurl}/SitePages/EventsViewMore.aspx?Mode=EvRM&ItemID=${item.ID}&SelectedDate=${moment(item.EventDate).format("YYYYMMDD")}`} data-interception='off' >{item.Title}</a> </h4>
+            <h4><a href={`${handler.props.siteurl}/SitePages/EventsViewMore.aspx?Mode=EvRM&ItemID=${item.ID}&SelectedDate=${moment(item.EventDate).format("YYYYMMDD")}&env=WebView`} data-interception='off' >{item.Title}</a> </h4>
             <p> {outputText}  </p>
           </div>
         </li>
       );
     });
     return (
-      <div className={ styles.eventsAnnouncements } id="events-and-anncmnts">
+      <div className={styles.eventsAnnouncements} id="events-and-anncmnts">
         <div className="latest-news-announcemnst">
           <div >
             <div className="col-md-6">
               <div className="sec event-cal" id="if-events-present">
                 <div className="heading clearfix">
-                  <h4><a href={`${this.props.siteurl}/SitePages/EventsViewMore.aspx`}>
+                  <h4><a href={`${this.props.siteurl}/SitePages/EventsViewMore.aspx?env=WebView`}>
                     Latest Events
-                    </a>
+                  </a>
                   </h4>
                   {/* <div className="prev-next">
                     <a href=""><img src={`https://remodigital.sharepoint.com/sites/Remo/SiteAssets/img/previous.svg`} alt="image" className="prev-img" /> </a>

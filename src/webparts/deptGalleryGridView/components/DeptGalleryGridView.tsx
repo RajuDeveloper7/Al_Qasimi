@@ -11,6 +11,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 import Slider from "react-slick";
 import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNav";
 import { Web } from '@pnp/sp/webs';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IGalleryGridViewState {
   Images: any[];
@@ -54,13 +55,13 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
 
 
   public componentDidMount() {
-    setTimeout(() => {
-      $('#spCommandBar').attr('style', 'display: none !important');
-      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-      // $('#webPartContainer').attr('style', 'display: none !important');
-      $('#CommentsWrapper').attr('style', 'display: none !important');
-      $('#spLeftNav').attr('style', 'display: none !important');
-    }, 2000);
+
+    $('#spCommandBar').attr('style', 'display: none !important');
+    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+    $('.ms-CommandBar').attr('style', 'display: none !important');
+    $('#CommentsWrapper').attr('style', 'display: none !important');
+    $('#spLeftNav').attr('style', 'display: none !important');
+
 
     const url: any = new URL(window.location.href);
     const Type = url.searchParams.get("Type");
@@ -173,6 +174,10 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
   }
 
   public async ShowImages() {
+    this.setState({
+      Images: [],
+      Videos: [],
+    });
     await this.setState({ type: "Img" });
     $(".image-gallery-allimg-block").show();
     $(".video-gallery-allimg-block").hide();
@@ -182,6 +187,10 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
   }
 
   public async ShowVideos() {
+    this.setState({
+      Images: [],
+      Videos: [],
+    });
     await this.setState({ type: "Vdo" });
     $(".image-gallery-allimg-block").hide();
     $(".video-gallery-allimg-block").show();
@@ -379,8 +388,8 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
                 <div className="inner-banner-contents">
                   <h1> Gallery Grid View </h1>
                   <ul className="breadcums">
-                    <li>  <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`} data-interception="off"> Home</a> </li>
-                    <li>  <a href={`${this.props.siteurl}/SitePages/Gallery-ViewMore.aspx`} data-interception="off"> Gallery Folders </a> </li>
+                    <li>  <a href={`${this.props.siteurl}/SitePages/HomePage.aspx?env=WebView`} data-interception="off"> Home</a> </li>
+                    <li>  <a href={`${this.props.siteurl}/SitePages/Gallery-ViewMore.aspx?env=WebView`} data-interception="off"> Gallery Folders </a> </li>
                     <li>  <a href="#" style={{ pointerEvents: "none" }} data-interception="off"> Grid View </a> </li>
                   </ul>
                 </div>
@@ -504,6 +513,7 @@ export default class DeptGalleryGridView extends React.Component<IDeptGalleryGri
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.homepage} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

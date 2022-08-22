@@ -13,6 +13,7 @@ import RevoCalendar from 'revo-calendar';
 import { filter } from 'lodash';
 import 'evo-calendar';
 import { sp } from '@pnp/sp';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IEventsVmState {
   Items: any[];
@@ -95,7 +96,7 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
     var handler = this;
     if (Mode == "EvVM") {
       await NewWeb.lists.getByTitle("Events").items.select("Title", "Description", "Location", "Image", "Location", "EventDate", "EndDate", "ID").orderBy("Created", false).getAll().then((items) => { // //orderby is false -> decending                  
-       
+
         for (var i = 0; i < items.length; i++) {
           eventList.push(
             { id: "" + items[i].ID + "", name: "" + items[i].Title + "", date: "" + moment(items[i].EventDate).format("MMMM/D/YYYY") + "", type: "holiday", description: "" + items[i].Description + "" }
@@ -297,6 +298,7 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
             </div>
           </div>
         </div>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

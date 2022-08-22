@@ -23,7 +23,8 @@ export default class DeptGalleryViewMoreWebPart extends BaseClientSideWebPart<ID
       {
         description: this.properties.description,
         siteurl: this.context.pageContext.web.absoluteUrl,
-        context: this.context
+        context: this.context,
+        homepage: this.context.pageContext.site.absoluteUrl,
       }
     );
 

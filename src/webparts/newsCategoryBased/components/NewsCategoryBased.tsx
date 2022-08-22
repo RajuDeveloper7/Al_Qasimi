@@ -12,6 +12,7 @@ import { Web } from "@pnp/sp/webs";
 //import { Pagination } from "@pnp/spfx-controls-react/lib/pagination";
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 //import { App } from '../components/services/App';
 
 export interface INewsCategoryBasedState {
@@ -74,7 +75,7 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
       $('#RecommendedItems').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     }, 2000);
-   
+
     var reactHandler = this;
     const url: any = new URL(window.location.href);
     const ItemID = url.searchParams.get("ItemID");
@@ -94,11 +95,11 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
 
   public async GetAvailableTags() {
     var handler = this;
-     await NewWeb.lists.getByTitle("News").fields.filter(`EntityPropertyName eq 'Tag'`).get().then((items)=>{
-        for (var i = 0; i < items[0].Choices.length; i++) {
-          handler.setState({ AvailableTags: items[0].Choices });
-        }
-        handler.GetCategoryBasedNews(handler.state.Mode, handler.state.Tag, handler.state.Department);
+    await NewWeb.lists.getByTitle("News").fields.filter(`EntityPropertyName eq 'Tag'`).get().then((items) => {
+      for (var i = 0; i < items[0].Choices.length; i++) {
+        handler.setState({ AvailableTags: items[0].Choices });
+      }
+      handler.GetCategoryBasedNews(handler.state.Mode, handler.state.Tag, handler.state.Department);
     });
   }
 
@@ -135,26 +136,26 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
 
   public async GetCategoryBasedNews(Mode, AppliedTage, Dept) {
     var reactHandler = this;
-    
+
     if (Mode == "TagBased") {
       reactHandler.setState({ CurrentPage: AppliedTage });
       var result = await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Tag eq '${AppliedTage}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get()
-     
+
       reactHandler.GetAllOtherRelatedNews(AppliedTage, 'TagBased');
     } else {
       reactHandler.setState({ CurrentPage: Dept });
       var result = await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Dept/Title eq '${Dept}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get()
-     
+
       reactHandler.GetAllOtherRelatedNews(Dept, 'DeptBased');
     }
- 
-        reactHandler.setState({
-          Items: result
-        });
-        const TotalNews: number = result.length;
-        const Count: number = TotalNews / 2;
-        const PageCount: number = parseInt(Count.toFixed());
-        reactHandler.setState({ TotalPageCount: PageCount });
+
+    reactHandler.setState({
+      Items: result
+    });
+    const TotalNews: number = result.length;
+    const Count: number = TotalNews / 2;
+    const PageCount: number = parseInt(Count.toFixed());
+    reactHandler.setState({ TotalPageCount: PageCount });
   }
 
 
@@ -163,10 +164,10 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
     var reactHandler = this;
     if (Mode == 'TagBased') {
       for (var i = 0; i < reactHandler.state.AvailableTags.length; i++) {
-         await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Tag eq '${reactHandler.state.AvailableTags[i]}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get().then((items)=>{
-            if (items.length != 0 && items[0].Tag != "" + reactHandler.state.Tag + "") {
-              reactHandler.setState({ TagBasedNews: items });
-              $('.available-depts-or-tags').append(`<li>
+        await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Tag eq '${reactHandler.state.AvailableTags[i]}'`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get().then((items) => {
+          if (items.length != 0 && items[0].Tag != "" + reactHandler.state.Tag + "") {
+            reactHandler.setState({ TagBasedNews: items });
+            $('.available-depts-or-tags').append(`<li>
                   <a href="${reactHandler.props.siteurl}/SitePages/News-CategoryBased.aspx?Mode=TagBased&Tag=${items[0].Tag}" data-interception='off' className="clearfix">  
                   <div class="vategory-news-left pull-left">
                       ${items[0].Tag}
@@ -176,15 +177,15 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
                   </div>     
                   </a>
                 </li>`);
-            }
+          }
         });
       }
     } else {
       for (var j = 0; j < reactHandler.state.AvailableDepts.length; j++) {
-        await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Dept/Id eq '${reactHandler.state.AvailableDepts[j].ID}`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get().then((items)=>{
-            if (items.length != 0 && items[0].Dept.Title != "" + reactHandler.state.Department + "") {
-              reactHandler.setState({ DeptBasedNews: items });
-              $('.available-depts-or-tags').append(`<li>
+        await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id", "TransactionItemID/Id").filter(`IsActive eq '1' and Dept/Id eq '${reactHandler.state.AvailableDepts[j].ID}`).orderBy("Created", false).expand("Dept", "SitePageID", "TransactionItemID").get().then((items) => {
+          if (items.length != 0 && items[0].Dept.Title != "" + reactHandler.state.Department + "") {
+            reactHandler.setState({ DeptBasedNews: items });
+            $('.available-depts-or-tags').append(`<li>
                   <a href="${reactHandler.props.siteurl}/SitePages/News-CategoryBased.aspx?Mode=DeptBased&Dept=${items[0].Dept.Title}" data-interception='off' class="clearfix">  
                     <div class="vategory-news-left pull-left">
                         ${items[0].Dept.Title}
@@ -194,7 +195,7 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
                     </div>     
                   </a>
                 </li>`);
-            }
+          }
         });
       }
     }
@@ -232,12 +233,12 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
         } else {
           Dt = "" + moment(RawPublishedDt, "DD/MM/YYYY").format("MMM Do, YYYY") + "";
         }
-         if (item.Dept != undefined) {
-        var depttitle = item.Dept.Title
-      }
-      if (item.SitePageID != undefined) {
-        var sitepageid = item.SitePageID.Id
-      }     
+        if (item.Dept != undefined) {
+          var depttitle = item.Dept.Title
+        }
+        if (item.SitePageID != undefined) {
+          var sitepageid = item.SitePageID.Id
+        }
 
         return (
           <li>
@@ -336,6 +337,7 @@ export default class NewsCategoryBased extends React.Component<INewsCategoryBase
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

@@ -15,7 +15,7 @@ import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNa
 import pnp from 'sp-pnp-js';
 import { IItemAddResult } from '@pnp/sp/items';
 import swal from 'sweetalert';
-
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 var User = "";
 var UserEmail = "";
 var title = "";
@@ -147,7 +147,7 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
     });
   }
   public async checkUserAlreadyCommented() {
-  await  sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Announcements' and ContentID eq ${ID} and EmployeeName/Id eq ${User}`).top(5000).get().then((items) => { // //orderby is false -> decending          
+    await sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Announcements' and ContentID eq ${ID} and EmployeeName/Id eq ${User}`).top(5000).get().then((items) => { // //orderby is false -> decending          
       if (items.length != 0) {
 
         this.setState({
@@ -186,9 +186,10 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
   }
 
   public async liked(mode) {
+
     var handler = this;
     if (mode == "like") {
-     
+
       sp.web.lists.getByTitle("LikesCountMaster").items.add({
         EmployeeNameId: User,
         LikedOn: CurrentDate,
@@ -215,7 +216,7 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
             var like = items.length;
             var newspan = like.toString()
             document.getElementById("likescount").textContent = newspan;
-           
+
           });
         })
       })
@@ -226,44 +227,44 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
   public showComments() {
     $(".all-commets").toggle();
     sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Announcements' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
-      
+
       this.setState({
         commentitems: items,
       });
-    });  
-    
-  }
-  public saveComments() {
-    
-    var handler = this;
-    var comments = $("#comments").val();
-    if(comments.toString().length == 0){
-      swal({
-        title: "Your comment is less than 1 characters!",
-        icon: "warning",
-      } as any)
-    }else{
-    const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
-      EmployeeNameId: User,
-      CommentedOn: CurrentDate,
-      EmployeeEmail: UserEmail,
-      ContentPage: "Announcements",
-      Title: title,
-      ContentID: ID,
-      UserComments: comments
-    }).then(() => {
-      $("#commentedpost").hide();
-      $(".reply-tothe-post").hide();
-       sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Announcements' and ContentID eq ${ID}`).top(5000).get().then((items) => {
-      
-         commentscount = items.length;
-         var newspan = commentscount.toString()
-         document.getElementById("commentscount").textContent = newspan;
-       })
-    })
+    });
 
   }
-}
+  public saveComments() {
+
+    var handler = this;
+    var comments = $("#comments").val();
+    if (comments.toString().length == 0) {
+      swal({
+        title: "Minimum 1 character is required!",
+        icon: "warning",
+      } as any)
+    } else {
+      const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
+        EmployeeNameId: User,
+        CommentedOn: CurrentDate,
+        EmployeeEmail: UserEmail,
+        ContentPage: "Announcements",
+        Title: title,
+        ContentID: ID,
+        UserComments: comments
+      }).then(() => {
+        $("#commentedpost").hide();
+        $(".reply-tothe-post").hide();
+        sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Announcements' and ContentID eq ${ID}`).top(5000).get().then((items) => {
+
+          commentscount = items.length;
+          var newspan = commentscount.toString()
+          document.getElementById("commentscount").textContent = newspan;
+        })
+      })
+
+    }
+  }
   public render(): React.ReactElement<IAnnouncementsRmProps> {
 
     var handler = this;
@@ -323,7 +324,7 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
       var EmpName = item.EmployeeName.Title;
       var dated = moment(item.CommentedOn).format("DD/MM/YYYY");
       var comment = item.UserComments;
-      
+
       return (
         <li>
           <div className="commentor-desc clearfix">
@@ -337,7 +338,7 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
           </div>
         </li>
       );
-   
+
     });
 
     return (
@@ -365,16 +366,16 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
                     {AnncDetails}
                   </div>
                   <div>
-                  <div className="comments-like-view">
+                    <div className="comments-like-view">
                       <div className="comments-like-view-block">
                         <ul className="comments-like-view-block">
-                        {this.state.IsLikeEnabled == true ?
+                          {this.state.IsLikeEnabled == true ?
                             <li>
 
-                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
-                              
-                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
-                                <span id="likescount"> {likes} </span>
+                              <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")} />
+
+                              <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image" onClick={() => this.liked("like")} />
+                              <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
@@ -392,25 +393,27 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
                       <div className="reply-tothe-post all-commets">
                         <h2> All Comments </h2>
                         <ul>
-                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
+                          {pagecomments.length != 0 ? pagecomments : <p>No comments yet....!</p>}
                         </ul>
                       </div>
                       {this.state.IsUserAlreadyCommented == false ?
                         <div className="reply-tothe-post" id="commentedpost">
                           <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <textarea id="comments" placeholder="Message Here" style={{ resize: "none" }} className="form-control"></textarea>
                           <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
                         </div>
                         :
                         <></>
                       }
                     </div>
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

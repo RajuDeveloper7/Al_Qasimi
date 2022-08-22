@@ -9,6 +9,7 @@ import AboutDepartment from './RemoAboutDepartment';
 import DepartmentServices from './RemoDepartmentServices';
 import DepartmentGallery from './RemoDepartmentGallery';
 import DepartmentQuickLink from './RemoDepartmentQuickLinks';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export default class RemoHomePage extends React.Component<IRemoDeptLandingPageProps, {}> {
   public componentDidMount() {
@@ -27,7 +28,7 @@ export default class RemoHomePage extends React.Component<IRemoDeptLandingPagePr
           <div className="banner-ceo-message ">
             <div className="row">
               <div className="col-md-12">
-                <AboutDepartment siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} PageName={''} />
+                <AboutDepartment siteurl={this.props.siteurl} context={this.props.context} PageName={this.props.PageName} userid={this.props.userid} homepage={this.props.homepage} />
 
               </div>
             </div>
@@ -35,20 +36,20 @@ export default class RemoHomePage extends React.Component<IRemoDeptLandingPagePr
             <div className="row">
               <div className="col-md-8">
 
-                <DepartmentServices siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} PageName={''} />
+                <DepartmentServices siteurl={this.props.siteurl} context={this.props.context} PageName={''} userid={this.props.userid} homepage={''} />
 
 
-                <DepartmentGallery siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} PageName={''} />
+                <DepartmentGallery siteurl={this.props.siteurl} context={this.props.context} PageName={''} userid={this.props.userid} homepage={''} />
 
               </div>
               <div className="col-md-4">
-                <DepartmentQuickLink siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} PageName={''} />
+                <DepartmentQuickLink siteurl={this.props.siteurl} context={this.props.context} PageName={''} userid={this.props.userid} homepage={''} />
 
               </div>
             </div>
 
           </div>
-
+          <RemoResponsive siteurl={this.props.homepage} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>
       </div>
 

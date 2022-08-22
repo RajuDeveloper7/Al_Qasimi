@@ -11,6 +11,7 @@ import "@pnp/sp/site-users/web";
 import * as $ from 'jquery';
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IRemoContentEditorState {
   Items: any[];
@@ -29,7 +30,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
       ContentEditorAdmin: false,
       Tabs: []
     }
-   
+
   }
 
   public componentDidMount() {
@@ -39,11 +40,11 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
       $('#CommentsWrapper').attr('style', 'display: none !important');
 
     }, 2000);
-   
+
     setTimeout(function () {
       $('div[data-automation-id="CanvasControl"]').attr('style', 'padding: 0px !important; margin: 0px !important');
     }, 500);
-   
+
     this.CheckPermission();
     this.Addclass();
 
@@ -55,11 +56,11 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
         $(".card-header").removeClass("active");
         $(this).addClass("active");
       });
-    }, 1000);
+    }, 1500);
   }
 
   public async CheckPermission() {
- 
+
     let groups = await sp.web.currentUser.groups();
     for (var i = 0; i < groups.length; i++) {
       if (groups[i].Title == "ContentPageEditors") {
@@ -81,20 +82,20 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
   public async GetContentEditorTabs() {
     let UserID = this.props.UserId;
     var reactHandler = this;
-    await sp.web.lists.getByTitle("Content Editor Master Category").items.select("Title","ID","AccessibleTo/Title").expand("AccessibleTo").filter(`IsActive eq 1 and AccessibleTo/Id eq ${UserID} `).get().then((items)=>{
-        reactHandler.setState({
-          Tabs: items
-        });
+    await sp.web.lists.getByTitle("Content Editor Master Category").items.select("Title", "ID", "AccessibleTo/Title").expand("AccessibleTo").filter(`IsActive eq 1 and AccessibleTo/Id eq ${UserID} `).get().then((items) => {
+      reactHandler.setState({
+        Tabs: items
+      });
     });
   }
 
   public async GetContentEditorNavigations(ID) {
     let UserID = this.props.UserId;
     var reactHandler = this;
-    await sp.web.lists.getByTitle("Content Editor Master").items.select("Title","URL","Icon","BelongsTo/Title","AccessibleTo/Title").expand("BelongsTo","AccessibleTo").orderBy("Title",true).filter(`IsActive eq 1 and BelongsTo/Id eq ${ID} and AccessibleTo/Id eq ${this.props.UserId} `).get().then((items)=>{
-        reactHandler.setState({
-          Items: items
-        });
+    await sp.web.lists.getByTitle("Content Editor Master").items.select("Title", "URL", "Icon", "BelongsTo/Title", "AccessibleTo/Title").expand("BelongsTo", "AccessibleTo").orderBy("Title", true).filter(`IsActive eq 1 and BelongsTo/Id eq ${ID} and AccessibleTo/Id eq ${this.props.UserId} `).get().then((items) => {
+      reactHandler.setState({
+        Items: items
+      });
     });
   }
 
@@ -108,7 +109,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
         return (
           <div className="card">
             <div className="card-header active">
-            
+
               <a href="#" onClick={() => reactHandler.GetContentEditorNavigations(item.Id)} className="card-link collapsed"> {item.Title} </a>
             </div>
           </div>
@@ -142,10 +143,10 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
     });
     return (
       <div className={styles.contentEditor} id="content-editor">
-         <div id="Global-Top-Header-Navigation">
+        <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>
-        {this.state.ContentEditorAdmin &&  this.state.ContentEditorAdmin == true ? (
+        {this.state.ContentEditorAdmin && this.state.ContentEditorAdmin == true ? (
           <section>
             <div className="relative container">
               <div className="section-rigth">
@@ -164,7 +165,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
                     <div className="row">
                       <div className="col-md-6">
                         <div id="accordion">
-                          
+
                           {ContentEditorTAB}
                         </div>
                       </div>
@@ -192,6 +193,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
             </div>
           </section>
         )}
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

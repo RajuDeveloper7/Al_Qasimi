@@ -14,6 +14,7 @@ import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNa
 import { sp } from '@pnp/sp';
 import pnp from 'sp-pnp-js';
 import swal from 'sweetalert';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 var User = "";
 var UserEmail = "";
@@ -58,13 +59,13 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
       $('#CommentsWrapper').attr('style', 'display: none !important');
 
     }, 2000);
-   
+
     var reactHandler = this;
     reactHandler.GetCurrentUser();
     const url: any = new URL(window.location.href);
     ItemID = url.searchParams.get("ItemID");
     reactHandler.GetBannerDetails(ItemID);
- 
+
   }
   public pagereload() {
     const nextURL = '' + this.props.siteurl + '/SitePages/Hero-Banner-ReadMore.aspx?ItemID=' + ItemID + '&mode=reload';
@@ -85,16 +86,16 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
     // } else {
 
     //   handler.pagereload();
-     
-      const item = sp.web.lists.getByTitle("ViewsCountMaster").items.add({
-        EmployeeNameId: User,
-        ViewedOn: CurrentDate,
-        EmployeeEmail: UserEmail,
-        ContentPage: "Hero-Banner",
-        Title: title,
-        ContentID: ID,
-      })
-    
+
+    const item = sp.web.lists.getByTitle("ViewsCountMaster").items.add({
+      EmployeeNameId: User,
+      ViewedOn: CurrentDate,
+      EmployeeEmail: UserEmail,
+      ContentPage: "Hero-Banner",
+      Title: title,
+      ContentID: ID,
+    })
+
   }
   public viewsCount() {
     sp.web.lists.getByTitle("ViewsCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending      
@@ -189,7 +190,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
   public async liked(mode) {
     var handler = this;
     if (mode == "like") {
-     
+
       sp.web.lists.getByTitle("LikesCountMaster").items.add({
         EmployeeNameId: User,
         LikedOn: CurrentDate,
@@ -216,7 +217,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
             var like = items.length;
             var newspan = like.toString()
             document.getElementById("likescount").textContent = newspan;
-           
+
           });
         })
       })
@@ -226,42 +227,42 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
   public showComments() {
     $(".all-commets").toggle();
     sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
-      
+
       this.setState({
         commentitems: items,
       });
-    });  
+    });
   }
   public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
-    if(comments.toString().length == 0){
+    if (comments.toString().length == 0) {
       swal({
-        title: "Your comment is less than 1 characters!",
+        title: "Minimum 1 character is required!",
         icon: "warning",
       } as any)
-    }else{
-    const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
-      EmployeeNameId: User,
-      CommentedOn: CurrentDate,
-      EmployeeEmail: UserEmail,
-      ContentPage: "Hero-Banner",
-      Title: title,
-      ContentID: ID,
-      UserComments: comments
-    }).then(() => {
-      $("#commentedpost").hide();
-      $(".reply-tothe-post").hide();
-       sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => {
-      
-         commentscount = items.length;
-         var newspan = commentscount.toString()
-         document.getElementById("commentscount").textContent = newspan;
-       })
-    })
+    } else {
+      const item = sp.web.lists.getByTitle("CommentsCountMaster").items.add({
+        EmployeeNameId: User,
+        CommentedOn: CurrentDate,
+        EmployeeEmail: UserEmail,
+        ContentPage: "Hero-Banner",
+        Title: title,
+        ContentID: ID,
+        UserComments: comments
+      }).then(() => {
+        $("#commentedpost").hide();
+        $(".reply-tothe-post").hide();
+        sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Hero-Banner' and ContentID eq ${ID}`).top(5000).get().then((items) => {
 
+          commentscount = items.length;
+          var newspan = commentscount.toString()
+          document.getElementById("commentscount").textContent = newspan;
+        })
+      })
+
+    }
   }
-}
   public render(): React.ReactElement<IHeroBannerReadMoreProps> {
     var handler = this;
     var Dte = "";
@@ -358,16 +359,16 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
                     {HeroBannerDetails}
                   </div>
                   <div>
-                  <div className="comments-like-view">
+                    <div className="comments-like-view">
                       <div className="comments-like-view-block">
                         <ul className="comments-like-view-block">
-                        {this.state.IsLikeEnabled == true ?
+                          {this.state.IsLikeEnabled == true ?
                             <li>
 
-                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
-                              
-                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
-                                <span id="likescount"> {likes} </span>
+                              <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")} />
+
+                              <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image" onClick={() => this.liked("like")} />
+                              <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
@@ -385,13 +386,13 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
                       <div className="reply-tothe-post all-commets">
                         <h2> All Comments </h2>
                         <ul>
-                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
+                          {pagecomments.length != 0 ? pagecomments : <p>No comments yet....!</p>}
                         </ul>
                       </div>
                       {this.state.IsUserAlreadyCommented == false ?
                         <div className="reply-tothe-post" id="commentedpost">
                           <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <textarea id="comments" placeholder="Message Here" style={{ resize: "none" }} className="form-control"></textarea>
                           <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
                         </div>
                         :
@@ -404,6 +405,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

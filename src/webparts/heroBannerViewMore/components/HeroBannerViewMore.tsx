@@ -11,6 +11,7 @@ import Slider from "react-slick";
 import * as moment from 'moment';
 import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNav";
 import { sp } from '@pnp/sp';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface IHeroBannerVmState {
   Items: any[];
@@ -38,10 +39,10 @@ export default class HeroBannerViewMore extends React.Component<IHeroBannerViewM
   private async GetBanner() {
     var reactHandler = this;
     const d = new Date().toISOString();
-    await sp.web.lists.getByTitle("Hero Banner").items.select("Title","Description","Created","Image","ID").filter(`IsActive eq 1 and ExpiresOn ge datetime'${d}'`).get().then((items)=>{
-        reactHandler.setState({
-          Items: items
-    });
+    await sp.web.lists.getByTitle("Hero Banner").items.select("Title", "Description", "Created", "Image", "ID").filter(`IsActive eq 1 and ExpiresOn ge datetime'${d}'`).get().then((items) => {
+      reactHandler.setState({
+        Items: items
+      });
     });
   }
   public render(): React.ReactElement<IHeroBannerViewMoreProps> {
@@ -70,7 +71,7 @@ export default class HeroBannerViewMore extends React.Component<IHeroBannerViewM
             </div>
             <a href="#" className="tags" data-interception="off"> {Dt} </a>
             <div className="ns-tag-duration ">
-             
+
               <a href={`${handler.props.siteurl}/SitePages/Hero-Banner-ReadMore.aspx?ItemID=${item.ID}`} data-interception='off' className="nw-list-main top-news-a"> {item.Title} </a>
             </div>
           </li>
@@ -84,7 +85,7 @@ export default class HeroBannerViewMore extends React.Component<IHeroBannerViewM
             </div>
             <a href="#" className="tags" data-interception="off"> {Dt} </a>
             <div className="ns-tag-duration ">
-             
+
               <a href={`${handler.props.siteurl}/SitePages/Hero-Banner-ReadMore.aspx?ItemID=${item.ID}`} data-interception='off' className="nw-list-main top-news-a"> {item.Title} </a>
             </div>
           </li>
@@ -92,11 +93,11 @@ export default class HeroBannerViewMore extends React.Component<IHeroBannerViewM
       }
     });
     return (
-      <div className={styles.heroBannerVm} id ="heroBannerVm">
-                
-          <div id="Global-Top-Header-Navigation">
-            <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
-          </div>
+      <div className={styles.heroBannerVm} id="heroBannerVm">
+
+        <div id="Global-Top-Header-Navigation">
+          <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+        </div>
         <section>
           <div className="container relative">
 
@@ -135,6 +136,7 @@ export default class HeroBannerViewMore extends React.Component<IHeroBannerViewM
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

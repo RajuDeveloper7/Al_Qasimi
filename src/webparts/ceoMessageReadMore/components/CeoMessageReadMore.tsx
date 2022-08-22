@@ -11,7 +11,8 @@ import { Web } from "@pnp/sp/webs";
 import { Markup } from 'interweave';
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNav";
-import {sp} from '@pnp/sp';
+import { sp } from '@pnp/sp';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 export interface ICeoMessageRmState {
   Items: any[];
@@ -24,7 +25,7 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
       Items: [],
       ItemID: null
     };
- 
+
   }
 
   public componentDidMount() {
@@ -35,7 +36,7 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
       $('#CommentsWrapper').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     }, 2000);
-    
+
     var reactHandler = this;
     const url: any = new URL(window.location.href);
     const ItemID = url.searchParams.get("ItemID");
@@ -132,6 +133,7 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     );
   }

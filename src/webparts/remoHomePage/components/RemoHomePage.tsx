@@ -3,8 +3,10 @@ import styles from './RemoHomePage.module.scss';
 import { IRemoHomePageProps } from './IRemoHomePageProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { SPComponentLoader } from '@microsoft/sp-loader';
-import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
 import * as $ from 'jquery';
+
+import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 import RemoHeroBanner from './RemoHeroBanner';
 import RemoCEOMessage from './RemoCEOMessage';
@@ -21,16 +23,20 @@ import RemoSocialMedia from './RemoSocialMedia';
 
 
 
+
 export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}> {
 
   public componentDidMount() {
 
-    $('#spCommandBar').attr('style', 'display: none !important');
-    $('#CommentsWrapper').attr('style', 'display: none !important');
-    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-    $(".inner-pages-nav").remove();
+    setTimeout(() => {
+      $('#spCommandBar').attr('style', 'display: none !important');
+      $('#CommentsWrapper').attr('style', 'display: none !important');
+      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+      $(".inner-pages-nav").remove();
+    }, 2000);
+
   }
-  
+
   public render(): React.ReactElement<IRemoHomePageProps> {
 
     return (
@@ -52,6 +58,7 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
               <RemoNavigations siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
 
               <div className="row section_bottom">
+
                 <div className="col-md-8">
                   <div className="events-calender">
                     <RemoMyMeetings siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
@@ -62,13 +69,13 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
 
 
                   <div className="latest-news-announcemnst" id="latest-news-announcemnst">
-                    <div className="row">
+                    <div className="row row-res">
                       <RemoLatestEventsandAnnouncements siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
                     </div>
                   </div>
                   <div id="social-and-gallery">
                     <div className="images-social">
-                      <div className="row">
+                      <div className="row row-res">
                         <RemoImagesandVideos siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
                         <RemoSocialMedia siteurl={this.props.siteurl} context={this.props.context} description={''} userid={this.props.userid} />
                       </div>
@@ -90,7 +97,7 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
 
                 </div>
               </div>
-
+              <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
             </div>
           </div>
         </section>

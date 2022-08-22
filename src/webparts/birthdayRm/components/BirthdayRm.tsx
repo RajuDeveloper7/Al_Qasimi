@@ -13,6 +13,7 @@ import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNa
 import { sp } from '@pnp/sp';
 import pnp from 'sp-pnp-js';
 import swal from 'sweetalert';
+import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
 
 var User = "";
 var UserEmail = "";
@@ -23,7 +24,7 @@ var commentscount: number;
 var views: number;
 var CurrentDate = new Date()  //moment().format("DD/MM/YYYY");
 var ItemID;
-
+var bdaydate = "raju";
 export interface IBirthdayState {
   Items: any[];
   commentitems: any[];
@@ -102,7 +103,16 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
     var reactHandler = this;
     await sp.web.lists.getByTitle("Birthday").items.select("Title", "DOB", "Name", "Picture", "Designation", "Description", "ID", "EnableComments", "EnableLikes", "Created").filter(`IsActive eq '1'and ID eq '${ItemID}'`).getAll().then((items) => { // //orderby is false -> decending          
       title = items[0].Title;
-      ID = items[0].ID
+      ID = items[0].ID;
+      var tdaydate = moment().format('MM/DD');
+      var bday = moment(items[0].DOB).format('MM/DD');
+
+      if (tdaydate == bday) {
+        bdaydate = "Today"
+      } else {
+        bdaydate = "" + moment(items[0].DOB).format('MMM DD') + "";
+      }
+
       reactHandler.setState({
         Items: items,
       });
@@ -169,9 +179,9 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
     this.getusercomments();
   }
   public getusercomments() {
-    
+
     sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
-      
+
       this.setState({
         commentitems: items,
       });
@@ -179,7 +189,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
   }
   public async liked(mode) {
     var handler = this;
-    
+
     if (mode == "like") {
       sp.web.lists.getByTitle("LikesCountMaster").items.add({
         EmployeeNameId: User,
@@ -210,27 +220,27 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
             document.getElementById("likescount").textContent = newspan;
 
           });
-      })
+        })
       })
     }
 
   }
-   public showComments() {
+  public showComments() {
     $(".all-commets").toggle();
     sp.web.lists.getByTitle("CommentsCountMaster").items.select("Title", "EmployeeName/Title", "CommentedOn", "EmployeeEmail", "ContentPage", "ContentID", "UserComments").expand("EmployeeName").filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => { // //orderby is false -> decending           
-      
+
       this.setState({
         commentitems: items,
       });
-    });  
-    
-   }
+    });
+
+  }
   public saveComments() {
     var handler = this;
     var comments = $("#comments").val();
     if (comments.toString().length == 0) {
       swal({
-        title: "Your comment is less than 1 characters!",
+        title: "Minimum 1 character is required!",
         icon: "warning",
       } as any)
     } else {
@@ -245,12 +255,12 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
       }).then(() => {
         $("#commentedpost").hide();
         $(".reply-tothe-post").hide();
-         sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => {
-        
-           commentscount = items.length;
-           var newspan = commentscount.toString()
-           document.getElementById("commentscount").textContent = newspan;
-         })
+        sp.web.lists.getByTitle("CommentsCountMaster").items.filter(`ContentPage eq 'Birthday' and ContentID eq ${ID}`).top(5000).get().then((items) => {
+
+          commentscount = items.length;
+          var newspan = commentscount.toString()
+          document.getElementById("commentscount").textContent = newspan;
+        })
       })
 
     }
@@ -276,7 +286,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
               <div className="col-md-12">
                 <div className="ceo-readmore-wrap clearfix">
                   <div className="ceo-radmore-right">
-                    <h2 className="nw-list-main"> {item.Name} </h2>
+                    <h2 className="nw-list-main birthday"> {item.Name} </h2>
                     <p>{item.Designation}</p>
                   </div>
                   <div className="mews-details-para">
@@ -299,7 +309,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
               <div className="col-md-12">
                 <div className="ceo-readmore-wrap clearfix">
                   <div className="ceo-radmore-right">
-                    <h2 className="nw-list-main"> {item.Name} </h2>
+                    <h2 className="nw-list-main birthday"> {item.Name} </h2>
                     <p>{item.Designation}</p>
                   </div>
                   <div className="mews-details-para">
@@ -313,12 +323,12 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
       }
     });
     const pagecomments: JSX.Element[] = this.state.commentitems.map(function (item, key) {
-      
+
       var EmpName = item.EmployeeName.Title;
       var dated = moment(item.CommentedOn).format("DD/MM/YYYY");
       var comment = item.UserComments;
-      
-      
+
+
       return (
         <li>
           <div className="commentor-desc clearfix">
@@ -332,7 +342,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
           </div>
         </li>
       );
-    
+
     });
     return (<>
       <div id="Birthday">
@@ -349,10 +359,10 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
 
                     {/* <!-- <div className="inner-banner-overlay"></div> --> */}
                     <div className="inner-banner-contents banner-contents">
-                      <h1> Celebrating his birthday on Today</h1>
+                      <h1> Celebrating his birthday on {bdaydate}</h1>
                       <ul className="breadcums mail-breadcums">
                         <li>  <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`}> Home </a> </li>
-                        <li>  <a href="#">Birthday Read More </a> </li>
+                        <li style={{ pointerEvents: "none" }}>  <a href="#">Birthday Read More </a> </li>
                       </ul>
                     </div>
 
@@ -368,16 +378,16 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
                 </div> */}
 
                   <div>
-                  <div className="comments-like-view">
+                    <div className="comments-like-view">
                       <div className="comments-like-view-block">
                         <ul className="comments-like-view-block">
-                        {this.state.IsLikeEnabled == true ?
+                          {this.state.IsLikeEnabled == true ?
                             <li>
 
-                                <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")}/> 
-                              
-                                <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image"  onClick={() => this.liked("like")} />
-                                <span id="likescount"> {likes} </span>
+                              <img className="like-selected" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like_selected.svg`} alt="image" onClick={() => this.liked("dislike")} />
+
+                              <img className="like-default" src={`${this.props.siteurl}/SiteAssets/test/img/lcv_like.svg`} alt="image" onClick={() => this.liked("like")} />
+                              <span id="likescount"> {likes} </span>
 
                             </li>
                             : <></>
@@ -395,13 +405,13 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
                       <div className="reply-tothe-post all-commets">
                         <h2> All Comments </h2>
                         <ul>
-                        {pagecomments.length != 0 ? pagecomments: <p>No comments yet....!</p> }
+                          {pagecomments.length != 0 ? pagecomments : <p>No comments yet....!</p>}
                         </ul>
                       </div>
                       {this.state.IsUserAlreadyCommented == false ?
                         <div className="reply-tothe-post" id="commentedpost">
                           <h2> Comment to this post </h2>
-                          <textarea id="comments" placeholder="Message Here" style={{resize:"none"}} className="form-control"></textarea>
+                          <textarea id="comments" placeholder="Message Here" style={{ resize: "none" }} className="form-control"></textarea>
                           <input type="button" className="btn btn-primary" value="Submit" onClick={() => this.saveComments()} />
                         </div>
                         :
@@ -414,6 +424,7 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
             </div>
           </div>
         </section>
+        <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
       </div>
     </>
     );

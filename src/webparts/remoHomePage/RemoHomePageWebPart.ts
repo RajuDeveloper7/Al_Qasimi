@@ -22,7 +22,7 @@ export default class RemoHomePageWebPart extends BaseClientSideWebPart<IRemoHome
       RemoHomePage,
       {
         description: this.properties.description,
-        context:this.context,
+        context: this.context,
         siteurl: this.context.pageContext.web.absoluteUrl,
         userid: this.context.pageContext.legacyPageContext["userId"]
       }
@@ -35,7 +35,7 @@ export default class RemoHomePageWebPart extends BaseClientSideWebPart<IRemoHome
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
- 
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

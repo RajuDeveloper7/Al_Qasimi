@@ -19,6 +19,7 @@ export interface IAnnouncementsRmWebPartProps {
 export default class AnnouncementsRmWebPart extends BaseClientSideWebPart<IAnnouncementsRmWebPartProps> {
 
   public render(): void {
+
     const element: React.ReactElement<IAnnouncementsRmProps> = React.createElement(
       AnnouncementsRm,
       {

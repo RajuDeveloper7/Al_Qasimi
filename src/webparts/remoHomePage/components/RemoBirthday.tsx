@@ -33,7 +33,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
       UpcomingBirthday: [],
       FirstBdayDate: "",
       LastBdayDate: "",
-      Dates:[],
+      Dates: [],
       TotalBirthday: 0
     };
 
@@ -47,22 +47,30 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
 
   public async GetBirthday() {
     var reactHandler = this;
-    var tdaydate = moment().format('MM/DD');
-    var filterString = `Expires ge '${tdaydate}'`;
+    var bdays
     await sp.web.lists.getByTitle("Birthday").items.select("Title", "DOB", "Name", "Picture", "Designation", "Description", "ID", "Created").
-      orderBy("DOB", true).filter(`IsActive eq '1' and DOB eq '${tdaydate}'`).get().then((items) => {
+      orderBy("DOB", true).filter(`IsActive eq '1'`).get().then((items) => {
 
         if (items.length != 0) {
           $("#today-bday").show();
           reactHandler.setState({
             TodayBirthday: items,
-            TotalBirthday: items.length
           });
 
+          for (var i = 0; i < items.length; i++) {
+
+            var tdaydate = moment().format('MM/DD');
+            var bdaydates = moment(items[i].DOB).format('MM/DD')
+
+            if (tdaydate == bdaydates) {
+              this.setState({ TotalBirthday: items.length })
+            }
+          }
         } else {
           $("#today-bday").hide();
           $("#upcoming-bday").show();
         }
+
       });
     reactHandler.GetUpcomingBirthday();
   }
@@ -70,28 +78,35 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
   public async GetUpcomingBirthday() {
     var reactHandler = this;
     var tdaydate = moment().format('MM/DD');
-
-
     var FutureDate1 = moment().add(1, "days").format('MM/DD');
     var FutureDate2 = moment().add(2, "days").format('MM/DD');
     var FutureDate3 = moment().add(3, "days").format('MM/DD');
-
 
     reactHandler.setState({
       FirstBdayDate: moment(FutureDate1, 'MM/DD'),
       LastBdayDate: moment(FutureDate3, 'MM/DD'),
     });
     await sp.web.lists.getByTitle("Birthday").items.select("Title", "DOB", "Name", "Picture", "Designation", "Description", "ID", "Created",).top(1000).
-      orderBy("DOB", true).filter(`IsActive eq '1' and DOB eq '${FutureDate1}' or IsActive eq '1' and DOB eq '${FutureDate2}' or IsActive eq '1' and DOB eq '${FutureDate3}'`).get().then((items) => {
+      orderBy("DOB", true).filter(`IsActive eq '1'`).get().then((items) => {
+
         reactHandler.setState({
           UpcomingBirthday: items,
-          TotalBirthday: reactHandler.state.TotalBirthday + items.length
         });
+        for (var i = 0; i < items.length; i++) {
+          var bdaydates = moment(items[i].DOB).format('MM/DD');
+
+          if (FutureDate1 == bdaydates || FutureDate2 == bdaydates || FutureDate3 == bdaydates) {
+            reactHandler.setState({
+              TotalBirthday: reactHandler.state.TotalBirthday + items.length
+            });
+          }
+        }
         reactHandler.checkBirthdayAvailability();
       });
   }
 
   public checkBirthdayAvailability() {
+
     if (this.state.TotalBirthday == 0) {
 
       $("#if-birthdays-present").hide();
@@ -119,9 +134,9 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
     const TodayBirthday: JSX.Element[] = this.state.TodayBirthday.map(function (item, key) {
 
       var Name = "";
-      let Tday1Bday = moment().format("YYYY-MM-DD");
+      let Tday1Bday = moment().format("MM-DD");
       let RawImageTxt = item.Picture;
-      let Bdaydate = moment(item.DOB).format("YYYY-MM-DD")
+      let Bdaydate = moment(item.DOB).format("MM-DD")
       var ItemId = item.ID
       if (Tday1Bday == Bdaydate) {
 
@@ -183,11 +198,14 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
             </div>
           );
         }
+      } else {
+
       }
 
       // }
     });
     const UpcomingBirthday: JSX.Element[] = this.state.UpcomingBirthday.map(function (item, key) {
+      var ItemId = item.Id
       var Name = "";
       var BdayDt = moment(item.DOB).format("DD MMM");
       let Tday1Bday = moment().format("MM/DD");
@@ -215,10 +233,9 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
                     </div>
                   </div>
                   <div className="birthday-details">
-                    <h4 data-tip data-for={"React-tooltip-title-today-" + key + ""} data-custom-class="tooltip-custom"> {Name} </h4>
-                    {/*<ReactTooltip id={"React-tooltip-title-today-"+key+""} place="top" type="dark" effect="solid">
-                                  <span>{Name}</span>
-                                </ReactTooltip>*/}
+                    <a href={`${reactHandler.props.siteurl}/SitePages/birthday.aspx?ItemID=` + ItemId + ""} data-interception='off'>
+                      <h4 data-tip data-for={"React-tooltip-title-today-" + key + ""} data-custom-class="tooltip-custom"> {Name} </h4>
+                    </a>
                     <p data-tip data-for={"React-tooltip-Desig-today-" + key + ""} data-custom-class="tooltip-custom"> {item.Designation}  </p>
                     {/*<ReactTooltip id={"React-tooltip-Desig-today-"+key+""} place="top" type="dark" effect="solid">
                                   <span>{item.Designation}</span>
