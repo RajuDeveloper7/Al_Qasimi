@@ -111,8 +111,8 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
 
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/SP-NativeStyle-Overriding.css?v=3.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.16`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.8`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.18`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.10`);
 
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css");
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css");
@@ -153,6 +153,8 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     $("#SuiteNavWrapper").hide();
     const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
 
+
+
     this.getUnreadmailCount();
     this.getmymeetings();
     this.GetMainNavItems();
@@ -162,7 +164,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     this.setState({
       CurrentPageUrl: ActivePageUrl
     });
-    siteurl = this.props.siteurl.toLowerCase();
+
     $('.globalleftmenu-fixed-area ul li').on('click', function () {
       $(this).siblings().removeClass('active');
       $(this).siblings().removeClass('open');
@@ -1101,13 +1103,15 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
             </nav>
           </div>
         </div>
-        {this.state.CurrentPageUrl == `${siteurl}/shared%20documents/forms/allitems.aspx` ?
-          <>
-            <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
-          </>
-          :
+        {
 
-          <></>}
+          this.state.CurrentPageUrl.indexOf("allitems") != -1 ?
+            <>
+              <RemoResponsive siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+            </>
+            :
+
+            <></>}
         {/*reponaive contents  menu */}
 
         {/* <div className="responsive-menu-wrap">

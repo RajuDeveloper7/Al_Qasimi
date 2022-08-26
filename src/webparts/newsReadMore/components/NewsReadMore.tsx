@@ -51,8 +51,8 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       spfxContext: this.props.context
     });
 
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.0`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.0`);
+    // SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.0`);
+    // SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.0`);
 
     this.state = {
       Items: [],
@@ -491,7 +491,7 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       );
     });
     return (
-      <div className={styles.newsReadMore} id="newsReadMore">
+      <div className="newsReadMore" id="newsReadMore">
         {/* <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={''} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div> */}
