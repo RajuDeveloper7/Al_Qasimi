@@ -51,9 +51,6 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       spfxContext: this.props.context
     });
 
-    // SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.0`);
-    // SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.0`);
-
     this.state = {
       Items: [],
       TagBasedMoreNews: [],
@@ -73,12 +70,13 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
   }
 
   public componentDidMount() {
-
-    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-    $('#spCommandBar').attr('style', 'display: none !important');
-    $('#spLeftNav').attr('style', 'display: none !important');
-    $('#CommentsWrapper').attr('style', 'display: none !important');
-
+    setTimeout(() => {
+      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+      $('#spCommandBar').attr('style', 'display: none !important');
+      $('#spLeftNav').attr('style', 'display: none !important');
+      $('#CommentsWrapper').attr('style', 'display: none !important');
+      $('#newsRm').show();
+    }, 1000);
 
     var reactHandler = this;
     reactHandler.GetCurrentUser();
@@ -152,6 +150,9 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
         reactHandler.setState({
           IsCommentEnabled: true
         })
+      } else {
+        $(".all-commets").remove();
+        $("#commentedpost").remove();
       }
       reactHandler.AddViews();
       reactHandler.checkUserAlreadyLiked();
@@ -491,9 +492,9 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
       );
     });
     return (
-      <div className="newsReadMore" id="newsReadMore">
+      <div className="newsReadMore" id="newsRm" style={{ display: "none" }}>
         {/* <div id="Global-Top-Header-Navigation">
-          <GlobalSideNav siteurl={''} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+          <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div> */}
         <section>
           <div className='container relative'>

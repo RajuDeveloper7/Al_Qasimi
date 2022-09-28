@@ -14,6 +14,7 @@ import { filter } from 'lodash';
 import 'evo-calendar';
 import { sp } from '@pnp/sp';
 import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
+import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
 
 export interface IEventsVmState {
   Items: any[];
@@ -39,12 +40,14 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
   }
 
   public componentDidMount() {
-    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-    $('#spCommandBar').attr('style', 'display: none !important');
-    $('#CommentsWrapper').attr('style', 'display: none !important');
-    $('#RecommendedItems').attr('style', 'display: none !important');
-    $('.ms-CommandBar').attr('style', 'display: none !important');
-
+    setTimeout(() => {
+      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+      $('#spCommandBar').attr('style', 'display: none !important');
+      $('#CommentsWrapper').attr('style', 'display: none !important');
+      $('#RecommendedItems').attr('style', 'display: none !important');
+      $('.ms-CommandBar').attr('style', 'display: none !important');
+      $('#eventsvm').show();
+    }, 1000)
     var handler = this;
     $('#calendar').on('selectDate', function (event, newDate, oldDate) {
       let SelectedDate = moment(newDate, "MM/DD/YYYY").format("DD/MM/YYYY")
@@ -62,7 +65,6 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
       this.setState({ Mode: "EvVM", Date: moment().format('MMMM DD, YYYY') });
       handler.GetEvents(tdaydateAdd, 'EvVM');
     }
-
   }
 
 
@@ -235,10 +237,12 @@ export default class EventsVm extends React.Component<IEventsViewMoreProps, IEve
     });
 
     return (
-      <div className={styles.eventsVm} id="eventsvm">
+      <div className={styles.eventsVm} id="eventsvm" style={{ display: "none" }}>
+
         {/* <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div> */}
+
         <div className="container relative">
           <div className="section-rigth">
             <div className="inner-banner-header relative m-b-20">

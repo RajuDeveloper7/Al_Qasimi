@@ -111,8 +111,8 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
 
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/SP-NativeStyle-Overriding.css?v=3.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=11.18`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.10`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=1.0`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.16`);
 
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css");
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css");
@@ -151,9 +151,8 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     $('#spLeftNav').attr('style', 'display: none !important');
     $("#spCommandBar").attr("style", "display: none !important");
     $("#SuiteNavWrapper").hide();
+
     const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
-
-
 
     this.getUnreadmailCount();
     this.getmymeetings();
@@ -486,95 +485,97 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
 
   public appendData(ID, Title, OpenInNewTab, HasSubDept, Url) {
     var reactHandler = this;
-    if (OpenInNewTab == true) {
-      if (HasSubDept == true) {
+    if (reactHandler.displayData.length < Title.length && reactHandler.displayDataResponsive.length < Title.length) {
+      if (OpenInNewTab == true) {
+        if (HasSubDept == true) {
 
-        reactHandler.displayData.push(<li className="GetSubNodes">
-          <a href={Url} target="_blank" data-interception="off" role="button">{Title}  </a>
-          <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-          <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-            <ul id={`${ID}-Dept-Child`}>
-              {reactHandler.state.showdataLevelTwo}
-            </ul>
-          </div>
-        </li>);
+          reactHandler.displayData.push(<li className="GetSubNodes">
+            <a href={Url} target="_blank" data-interception="off" role="button">{Title}  </a>
+            <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+              <ul id={`${ID}-Dept-Child`}>
+                {reactHandler.state.showdataLevelTwo}
+              </ul>
+            </div>
+          </li>);
 
-        //For Responsive
-        reactHandler.displayDataResponsive.push(<li className="GetSubNodes">
-          <a href={Url} target="_blank" data-interception="off" role="button"><span>{Title}</span>  </a>
-          <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-          <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-            <ul id={`${ID}-Dept-Child`}>
-              {reactHandler.state.showdataLevelTwoResponsive}
-            </ul>
-          </div>
-        </li>);
+          //For Responsive
+          reactHandler.displayDataResponsive.push(<li className="GetSubNodes">
+            <a href={Url} target="_blank" data-interception="off" role="button"><span>{Title}</span>  </a>
+            <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+              <ul id={`${ID}-Dept-Child`}>
+                {reactHandler.state.showdataLevelTwoResponsive}
+              </ul>
+            </div>
+          </li>);
 
 
-        reactHandler.setState({
-          showdata: this.displayData,
-          showdataResponsive: this.displayDataResponsive
-        });
+          reactHandler.setState({
+            showdata: this.displayData,
+            showdataResponsive: this.displayDataResponsive
+          });
+
+        } else {
+          reactHandler.displayData.push(<li>
+            <a href={Url} target="_blank" data-interception="off" role="button" >{Title}</a>
+          </li>);
+
+          //For Responsive
+          reactHandler.displayDataResponsive.push(<li>
+            <a href={Url} target="_blank" data-interception="off" role="button" ><span>{Title}</span></a>
+          </li>);
+
+          reactHandler.setState({
+            showdata: this.displayData,
+            showdataResponsive: this.displayDataResponsive
+          });
+        }
 
       } else {
-        reactHandler.displayData.push(<li>
-          <a href={Url} target="_blank" data-interception="off" role="button" >{Title}</a>
-        </li>);
+        if (HasSubDept == true) {
+          reactHandler.displayData.push(<li className="GetSubNodes">
+            <a href={Url} data-interception="off" role="button">{Title} </a>
+            <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+              <ul id={`${ID}-Dept-Child`}>
+                {reactHandler.state.showdataLevelTwo}
+              </ul>
+            </div>
+          </li>);
 
-        //For Responsive
-        reactHandler.displayDataResponsive.push(<li>
-          <a href={Url} target="_blank" data-interception="off" role="button" ><span>{Title}</span></a>
-        </li>);
+          //For Responsive
+          reactHandler.displayDataResponsive.push(<li className="GetSubNodes">
+            <a href={Url} data-interception="off" role="button">{Title} </a>
+            <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
+            <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
+              <ul id={`${ID}-Dept-Child`}>
+                {reactHandler.state.showdataLevelTwoResponsive}
+              </ul>
+            </div>
+          </li>);
 
-        reactHandler.setState({
-          showdata: this.displayData,
-          showdataResponsive: this.displayDataResponsive
-        });
+          reactHandler.setState({
+            showdata: this.displayData,
+            showdataResponsive: this.displayDataResponsive
+          });
+        } else {
+          reactHandler.displayData.push(<li>
+            <a href={Url} data-interception="off" role="button"> {Title}</a>
+          </li>);
+
+          //For Responsive
+          reactHandler.displayDataResponsive.push(<li>
+            <a href={Url} data-interception="off" role="button"><span> {Title}</span></a>
+          </li>);
+
+          reactHandler.setState({
+            showdata: this.displayData,
+            showdataResponsive: this.displayDataResponsive
+          });
+        }
+
       }
-
-    } else {
-      if (HasSubDept == true) {
-        reactHandler.displayData.push(<li className="GetSubNodes">
-          <a href={Url} data-interception="off" role="button">{Title} </a>
-          <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-          <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-            <ul id={`${ID}-Dept-Child`}>
-              {reactHandler.state.showdataLevelTwo}
-            </ul>
-          </div>
-        </li>);
-
-        //For Responsive
-        reactHandler.displayDataResponsive.push(<li className="GetSubNodes">
-          <a href={Url} data-interception="off" role="button">{Title} </a>
-          <a href="#" className="inner-deptdd" onClick={() => reactHandler.GetSubNodes(ID, Title, "NavMain", " ")} data-interception="off"><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-          <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-            <ul id={`${ID}-Dept-Child`}>
-              {reactHandler.state.showdataLevelTwoResponsive}
-            </ul>
-          </div>
-        </li>);
-
-        reactHandler.setState({
-          showdata: this.displayData,
-          showdataResponsive: this.displayDataResponsive
-        });
-      } else {
-        reactHandler.displayData.push(<li>
-          <a href={Url} data-interception="off" role="button"> {Title}</a>
-        </li>);
-
-        //For Responsive
-        reactHandler.displayDataResponsive.push(<li>
-          <a href={Url} data-interception="off" role="button"><span> {Title}</span></a>
-        </li>);
-
-        reactHandler.setState({
-          showdata: this.displayData,
-          showdataResponsive: this.displayDataResponsive
-        });
-      }
-
     }
   }
 
@@ -654,119 +655,6 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
   }
 
-  // public appendData(ID,Title,OpenInNewTab,HasSubDept,Url) {               
-  //     var reactHandler = this;          
-  //     if(OpenInNewTab == true){
-  //       if(HasSubDept == true){
-  //         reactHandler.displayData.push(<li className="GetSubNodes"> 
-  //         <a href={Url} target="_blank" data-interception="off" role="button">{Title}  </a>  
-  //         <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-  //             <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-  //               <ul id={`${ID}-Dept-Child`}>                                                            
-  //                 {reactHandler.state.showdataLevelTwo}
-  //               </ul>   
-  //             </div>           
-  //         </li>);
-  //         reactHandler.setState({
-  //           showdata : this.displayData
-  //         });
-  //       }else{
-  //         reactHandler.displayData.push(<li> 
-  //         <a href={Url} target="_blank" data-interception="off" role="button" >{Title}</a>
-  //         </li>);
-  //         reactHandler.setState({
-  //           showdata : this.displayData
-  //         });
-  //       }      
-
-  //     }else{
-  //       if(HasSubDept == true){
-  //         reactHandler.displayData.push(<li className="GetSubNodes"> 
-  //         <a href={Url} data-interception="off" role="button">{Title} </a>                 
-  //         <a href="#" onClick={() => reactHandler.GetSubNodes(ID,Title,"NavMain"," ")}><i className="fa fa-caret-down" aria-hidden="true" ></i></a>
-  //             <div className="third-level-submenu relative" id={`${ID}-Dept-Child-parent`}>
-  //               <ul id={`${ID}-Dept-Child`}>                                                            
-  //                 {reactHandler.state.showdataLevelTwo}
-  //               </ul>   
-  //             </div>           
-  //         </li>);
-  //         reactHandler.setState({
-  //           showdata : this.displayData
-  //         });
-  //       }else{
-  //         reactHandler.displayData.push(<li> 
-  //         <a href={Url} data-interception="off" role="button"> {Title}</a>
-  //         </li>);
-  //         reactHandler.setState({
-  //           showdata : this.displayData
-  //         });
-  //       }
-
-  //     }              
-  //  }
-
-  // public appendDataLevelTwo(ID,Title,OpenInNewTab,HasSubDept,Url){   
-  //   var reactHandler = this;          
-  //   if(OpenInNewTab == true){
-  //     if(HasSubDept == true){
-
-  //       $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
-  //       <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
-  //         <div class="third-level-submenu relative">
-  //           <ul class="clearfix" id="${ID}-Dept-Child">                                                            
-
-  //           </ul>    
-  //         </div>
-  //       </li>`);
-  //     }else{
-
-  //       $("#"+ID+"-Dept-Child").append(`<li> 
-  //       <a href=${Url} target="_blank" data-interception="off" role="button" >${Title}</a>
-  //       </li>`);
-  //     }
-  //     reactHandler.setState({
-  //       showdataLevelTwo : this.displayDataLevel2
-  //    });  
-  //   }else{
-  //     if(HasSubDept == true){
-
-  //       $("#"+ID+"-Dept-Child").append(`<li class="GetSubNodesLevelTwo"> 
-  //       <a href=${Url} target="_blank" data-interception="off" role="button">${Title}</a> <i class="fa fa-caret-down" aria-hidden="true""></i>        
-  //         <div class="third-level-submenu relative">
-  //           <ul class="clearfix" id="${ID}-Dept-Child">                                                            
-
-  //           </ul>    
-  //         </div>
-  //       </li>`);
-  //     }else{
-
-  //       $("#"+ID+"-Dept-Child").append(`<li> 
-  //       <a href=${Url} data-interception="off" role="button"> ${Title}</a>
-  //       </li>`);
-  //     }
-  //     reactHandler.setState({
-  //       showdataLevelTwo : this.displayDataLevel2
-  //    });  
-  //   }  
-
-  // }
-
-
-  //  public appendDataQLink(Title,OpenInNewTab,Url) {             
-  //   var reactHandler = this;      
-  //   if(OpenInNewTab == true){    
-  //     reactHandler.displayDataQlink.push(<li> 
-  //       <a href={`${Url}`} target="_blank" data-interception="off" role="button">{Title}</a>
-  //     </li>);
-  //   }else{
-  //     reactHandler.displayDataQlink.push(<li> 
-  //       <a href={`${Url}`} data-interception="off" role="button">{Title}</a>
-  //     </li>);
-  //   }    
-  //   reactHandler.setState({
-  //     showdataqlink : reactHandler.displayDataQlink
-  //  });      
-  // }
 
   public OpenSearchPage(e, url) {
 
@@ -801,11 +689,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     $(".quicklink-menu").show();
     $(".main-menu").hide();
   }
-  public CloseBurggerMenu() {
-    $(".responsive-menu-wrap").removeClass("open");
-    $(".responsi-inner-submenu").removeClass("open");
 
-  }
   public OpenSearch() {
     //  $(".search").toggleClass("open");
     $(".responsive-background").addClass("open");
@@ -1040,6 +924,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
                   <li className="meet-count" data-tip data-for={"React-tooltip-calendar"} data-custom-class="tooltip-custom">
                     <a href="https://outlook.office.com/calendar/view/month" target="_blank" data-interception="off" className="notification relative" >
                       <img src={`${this.props.siteurl}/SiteAssets/img/tq1.svg`} alt="images" />
+                      <span id="today-date"> {moment().format("D")} </span>
                       <span id="Meetings_count"> {this.state.MeetingsCount} </span>
                     </a>
                     <ReactTooltip id={"React-tooltip-calendar"} place="bottom" type="dark" effect="solid">

@@ -145,7 +145,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
         if (RawImageTxt != "" && RawImageTxt != null) {
           var ImgObj = JSON.parse(RawImageTxt);
           return (
-            <div className="sec">
+            <div >
               <div className="heading clearfix" id="spotlight-title" >
 
                 <span id="highlights-type" > Birthday </span>
@@ -173,7 +173,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
         else {
           {/* var ImgObj = JSON.parse(RawImageTxt);   */ }
           return (
-            <div className="sec">
+            <div >
               <div className="heading clearfix" id="spotlight-title" >
 
                 <span id="highlights-type" > Birthday </span>
@@ -218,7 +218,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           if (RawImageTxt != "" && RawImageTxt != null) {
             var ImgObj = JSON.parse(RawImageTxt);
             return (
-              <div className="sec">
+              <div >
                 <div className="heading" id="spotlight-title">
 
                   <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
@@ -248,7 +248,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           else {
             var ImgObj = JSON.parse(RawImageTxt);
             return (
-              <div className="sec">
+              <div >
                 <div className="heading" id="spotlight-title">
 
                   <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
@@ -264,14 +264,10 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
                     </div>
                   </div>
                   <div className="birthday-details">
-                    <h4 data-tip data-for={"React-tooltip-title-today-" + key + ""} data-custom-class="tooltip-custom"> {Name} </h4>
-                    {/*<ReactTooltip id={"React-tooltip-title-today-"+key+""} place="top" type="dark" effect="solid">
-                                  <span>{Name}</span>
-                                </ReactTooltip>*/}
+                    <a href={`${reactHandler.props.siteurl}/SitePages/birthday.aspx?ItemID=` + ItemId + ""} data-interception='off'>
+                      <h4 data-tip data-for={"React-tooltip-title-today-" + key + ""} data-custom-class="tooltip-custom"> {Name} </h4>
+                    </a>
                     <p data-tip data-for={"React-tooltip-Desig-today-" + key + ""} data-custom-class="tooltip-custom"> {item.Designation}  </p>
-                    {/*<ReactTooltip id={"React-tooltip-Desig-today-"+key+""} place="top" type="dark" effect="solid">
-                                  <span>{item.Designation}</span>
-                              </ReactTooltip> */}
                   </div>
                 </div>
               </div>
@@ -285,15 +281,20 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
       <div className={styles.highlights} id="bday-highlights">
         <div className="birthday-wrap m-b-20" id="if-birthdays-present">
           <div id="today-bday" style={{ display: "none" }}>
-            <Slider {...settings} className='hero-banner-container-wrap' >
-              {TodayBirthday}
-              {UpcomingBirthday}
-            </Slider>
+            <div className="sec">
+              <Slider {...settings} className='hero-banner-container-wrap' >
+
+                {TodayBirthday}
+                {UpcomingBirthday}
+              </Slider>
+            </div>
           </div>
           <div id="upcoming-bday" style={{ display: "none" }}>
-            <Slider {...settings} className='hero-banner-container-wrap' >
-              {UpcomingBirthday}
-            </Slider>
+            <div className="sec">
+              <Slider {...settings} className='hero-banner-container-wrap' >
+                {UpcomingBirthday}
+              </Slider>
+            </div>
           </div>
         </div>
         <div className="birthday-wrap m-b-20" id="if-no-birthdays-present" style={{ display: "none" }} >

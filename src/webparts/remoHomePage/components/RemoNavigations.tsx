@@ -4,11 +4,11 @@ import { IRemoHomePageProps } from './IRemoHomePageProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import * as $ from 'jquery';
 import { Web } from "@pnp/sp/webs";
-import { sp } from "@pnp/sp";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/webs";
 import "@pnp/sp/site-users/web";
+import { sp } from "@pnp/sp/presets/all";
 import ReactTooltip from "react-tooltip";
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import * as moment from 'moment';
@@ -86,7 +86,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   public async GetMainNavItems() {
     var reactHandler = this;
 
-    await NewWeb.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(6).expand("LinkMasterID").get().then((items) => {
+    await sp.web.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(6).expand("LinkMasterID").get().then((items) => {
 
       reactHandler.setState({
         MainNavItems: items
@@ -128,7 +128,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     $(".main-mavigation").addClass("submenu");
     $('#meetingroom').off('click');
     try {
-      NewWeb.lists.getByTitle("DepartmentsMaster").items.select("Title", "ID", "URL", "HasSubDepartment", "OpenInNewTab", "PlaceDepartmentUnder/Title", "PlaceDepartmentUnder/Id").filter(`IsActive eq '1'`).orderBy("Order0", true).expand("PlaceDepartmentUnder/Id", "PlaceDepartmentUnder").get().then((items) => {
+      sp.web.lists.getByTitle("DepartmentsMaster").items.select("Title", "ID", "URL", "HasSubDepartment", "OpenInNewTab", "PlaceDepartmentUnder/Title", "PlaceDepartmentUnder/Id").filter(`IsActive eq '1'`).orderBy("Order0", true).expand("PlaceDepartmentUnder/Id", "PlaceDepartmentUnder").get().then((items) => {
         reactHandler.setState({
           DeptandQuickLinksItems: items
         });
@@ -163,7 +163,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
     $(".main-mavigation").siblings().removeClass("submenu");
     $(".main-mavigation").addClass("submenu");
     try {
-      NewWeb.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).get().then((items) => {
+      sp.web.lists.getByTitle("Quick Links").items.select("Title", "Image", "ImageHover", "OpenInNewTab", "Order", "URL").filter(`IsActive eq 1`).orderBy("Order0", true).get().then((items) => {
 
         reactHandler.setState({
           QuickLinkItems: items
@@ -225,6 +225,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
 
   public appendData(ID, Title, OpenInNewTab, HasSubDept, Url) {
     var reactHandler = this;
+
     if (OpenInNewTab == true) {
       if (HasSubDept == true) {
         reactHandler.displayData.push(<li>
@@ -248,6 +249,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
         </li>);
       }
     }
+
     reactHandler.setState({
       showdata: reactHandler.displayData
     });
@@ -255,7 +257,6 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
 
   public appendDataQLink(Title, OpenInNewTab, Url, HoverOffImage, HoverOnImage, Centernav) {
     var reactHandler = this;
-    console.log(Centernav);
 
     if (Centernav != "" && Centernav != null) {
       console.log("center nav image present");

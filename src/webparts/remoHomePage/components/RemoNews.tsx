@@ -25,6 +25,9 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
 
   constructor(props: IRemoHomePageProps, state: INewsState) {
     super(props);
+    sp.setup({
+      spfxContext: this.props.context
+    });
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.state = {
@@ -41,7 +44,7 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
   }
   private async GetNews() {
     var reactHandler = this;
-    await NewWeb.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter("IsActive eq 1").orderBy("Created", false).expand("Dept", "SitePageID").get().then((items) => {
+    await sp.web.lists.getByTitle("News").items.select("ID", "Title", "Description", "Created", "Dept/Title", "Image", "Tag", "DetailsPageUrl", "SitePageID/Id").filter("IsActive eq 1").orderBy("Created", false).expand("Dept", "SitePageID").get().then((items) => {
       if (items.length == 0) {
         $("#if-news-present").hide();
         $("#if-no-news-present").show();
@@ -77,20 +80,20 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
       slidesToScroll: 2,
       // nextArrow: <this.SampleNextArrow />,
       // prevArrow: <this.SamplePrevArrow />,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            infinite: true,
-            dots: true,
-            arrows: false,
-            autoplay: false,
-            centerMode: false,
-          }
-        }
-      ]
+      // responsive: [
+      //   {
+      //     breakpoint: 1024,
+      //     settings: {
+      //       slidesToShow: 2,
+      //       slidesToScroll: 1,
+      //       infinite: true,
+      //       dots: true,
+      //       arrows: false,
+      //       autoplay: false,
+      //       centerMode: false,
+      //     }
+      //   }
+      // ]
     };
     var viewall = `${this.props.siteurl}/SitePages/NewsViewMore.aspx?env=WebView`;
     var reactHandler = this;

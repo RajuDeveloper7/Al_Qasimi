@@ -35,7 +35,8 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $('#CommentsWrapper').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-    }, 2000);
+      $("#ceoMessageReadMore").show();
+    }, 1500);
 
     var reactHandler = this;
     const url: any = new URL(window.location.href);
@@ -100,7 +101,7 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
       }
     });
     return (
-      <div className={styles.ceoMessageReadMore} id="ceoMessageReadMore">
+      <div className={styles.ceoMessageReadMore} id="ceoMessageReadMore" style={{ display: "none" }}>
         <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>

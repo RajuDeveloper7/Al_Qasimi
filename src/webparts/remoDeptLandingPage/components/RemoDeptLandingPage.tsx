@@ -10,21 +10,27 @@ import DepartmentServices from './RemoDepartmentServices';
 import DepartmentGallery from './RemoDepartmentGallery';
 import DepartmentQuickLink from './RemoDepartmentQuickLinks';
 import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
+import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNav';
 
 export default class RemoHomePage extends React.Component<IRemoDeptLandingPageProps, {}> {
   public componentDidMount() {
-    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-    $('#spCommandBar').attr('style', 'display: none !important');
-    $('#spLeftNav').attr('style', 'display: none !important');
-    $('#CommentsWrapper').attr('style', 'display: none !important');
-    $('.ms-CommandBar').attr('style', 'display: none !important');
+    setTimeout(() => {
+      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+      $('#spCommandBar').attr('style', 'display: none !important');
+      $('#spLeftNav').attr('style', 'display: none !important');
+      $('#CommentsWrapper').attr('style', 'display: none !important');
+      $('.ms-CommandBar').attr('style', 'display: none !important');
+      $("#Dept-Homepage").show();
+    }, 1000);
   }
   public render(): React.ReactElement<IRemoDeptLandingPageProps> {
 
     return (
-      <div>
-        <div className="container home_pg relative" id="Dept-Homepage">
-
+      <div id="Dept-Homepage" style={{ display: "none" }}>
+        {/* <div id="Global-Top-Header-Navigation">
+          <GlobalSideNav siteurl={this.props.homepage} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
+        </div> */}
+        <div className="container home_pg relative" >
           <div className="banner-ceo-message ">
             <div className="row">
               <div className="col-md-12">

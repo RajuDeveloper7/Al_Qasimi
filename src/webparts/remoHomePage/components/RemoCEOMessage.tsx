@@ -14,8 +14,6 @@ import { Web } from "@pnp/sp/presets/all";
 export interface ICeoMessageState {
   Items: any[];
 }
-
-
 export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, ICeoMessageState, {}> {
   public constructor(props: IRemoHomePageProps, state: ICeoMessageState) {
     super(props);
@@ -27,6 +25,8 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
   public componentDidMount() {
 
     this.GetCEOMessage();
+    // this.DynamicHeight();
+
   }
   private async GetCEOMessage() {
     var reactHandler = this;
@@ -42,10 +42,23 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
         $("#if-no-ceo-msg-present").hide();
         $("#if-ceo-msg-present").show();
       }
+
     });
+
+  }
+  public DynamicHeight() {
+    setTimeout(() => {
+      var ceotitleheight = $("#ceo-title-dynamic").height();
+      var herobannerheight = $("#myCarousel").height();
+      var total = ceotitleheight - herobannerheight + 109;
+      var pheight = Math.round(Math.abs(total))
+      $(".ceo-message-left p").css("height", "" + pheight + "")
+    }, 2000);
   }
   public render(): React.ReactElement<IRemoHomePageProps> {
     var handler = this;
+
+
     const CEOMessage: JSX.Element[] = this.state.Items.map(function (item, key) {
       let dummyElement = document.createElement("DIV");
       var Date = moment(item.Created).format("DD/MM/YYYY");
@@ -57,21 +70,21 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
       if (RawImageTxt != "" && RawImageTxt != null) {
         var ImgObj = JSON.parse(RawImageTxt);
         return (
-          <>
-            <div className="section-part clearfix">
-              <div className="ceo-message-left">
-                <h4> {item.Name} </h4>
-                <h6>{Date}</h6>
-                <p> {outputText} </p>
-                <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition" > Read more
-                  <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
-              </div>
-              <div className="ceo-message-right">
-                <img src={ImgObj.serverRelativeUrl} alt="no-image-uploaded" />
-              </div>
-            </div>
 
-          </>
+          <div className="section-part clearfix">
+            <div className="ceo-message-left">
+              <h4> {item.Name} </h4>
+              <p> {outputText} </p>
+              <h6>{Date}</h6>
+              <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition" > Read more
+                <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
+            </div>
+            <div className="ceo-message-right">
+              <img src={ImgObj.serverRelativeUrl} alt="no-image-uploaded" />
+            </div>
+          </div>
+
+
         );
       } else {
         return (
@@ -92,24 +105,22 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
       }
     });
     return (
-      <div >
 
-        <div className="col-md-4">
-          <div className="sec relative" id="if-ceo-msg-present">
-            <div className="heading" id="ceo-title-dynamic">
-
-            </div>
-            {CEOMessage}
+      <div className="col-md-4">
+        <div className="sec relative" id="if-ceo-msg-present">
+          <div className="heading" id="ceo-title-dynamic">
+            {/* CEO's Message */}
           </div>
-          <div className="sec shadoww relative" id="if-no-ceo-msg-present" style={{ display: "none" }}>
-            <div className="heading">
-              CEO's Message
-            </div>
-            <img className="err-img" src={`${handler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/ContentEmpty.png`} alt="ceoimg"></img>
-          </div>
+          {CEOMessage}
         </div>
-
+        <div className="sec shadoww relative" id="if-no-ceo-msg-present" style={{ display: "none" }}>
+          <div className="heading">
+            CEO's Message
+          </div>
+          <img className="err-img" src={`${handler.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/ContentEmpty.png`} alt="ceoimg"></img>
+        </div>
       </div>
+
     );
   }
 }

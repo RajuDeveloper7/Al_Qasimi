@@ -38,25 +38,13 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $('#spCommandBar').attr('style', 'display: none !important');
       $('#CommentsWrapper').attr('style', 'display: none !important');
-
-    }, 2000);
-
-    setTimeout(function () {
       $('div[data-automation-id="CanvasControl"]').attr('style', 'padding: 0px !important; margin: 0px !important');
-    }, 500);
+      $('#content-editor').show();
+    }, 1500);
+
 
     this.CheckPermission();
-    this.Addclass();
 
-  }
-
-  public Addclass() {
-    setTimeout(() => {
-      $("#accordion .card .card-header").on('click', function () {
-        $(".card-header").removeClass("active");
-        $(this).addClass("active");
-      });
-    }, 1500);
   }
 
   public async CheckPermission() {
@@ -101,7 +89,12 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
 
   public render(): React.ReactElement<IContentEditorProps> {
 
-
+    $(document).ready(function () {
+      $("#accordion .card .card-header").on('click', function () {
+        $(".card-header").removeClass("active");
+        $(this).addClass("active");
+      });
+    })
     var reactHandler = this;
 
     const ContentEditorTAB: JSX.Element[] = this.state.Tabs.map(function (item, key) {
@@ -142,7 +135,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
       }
     });
     return (
-      <div className={styles.contentEditor} id="content-editor">
+      <div className={styles.contentEditor} id="content-editor" style={{ display: "none" }}>
         <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>
@@ -186,7 +179,7 @@ export default class RemoContentEditor extends React.Component<IContentEditorPro
           <section id="access-denied-block" style={{ display: "none" }}>
             <div className="result-succ-mess">
               <h3>Access Denied</h3>
-              <img src={`${this.props.siteurl}/SiteAssets/img/Access_denied.png`} alt="image" data-themekey="#" />
+              <img src={`${this.props.siteurl}/SiteAssets/img/Not_sync.png`} alt="image" data-themekey="#" />
               <h4> You don't have enough permission to access this!</h4>{" "}
               <p>Please contact your Administrator</p>
               <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`} data-interception="off"> Go Back</a>

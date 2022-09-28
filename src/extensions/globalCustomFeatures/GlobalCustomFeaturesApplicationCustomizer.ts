@@ -16,6 +16,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import { Web } from "@pnp/sp/presets/all";
+import RemoHomePage from '../../webparts/remoHomePage/components/RemoHomePage';
 
 const LOG_SOURCE: string = 'GlobalCustomFeaturesApplicationCustomizer';
 
@@ -40,32 +41,16 @@ export default class GlobalCustomFeaturesApplicationCustomizer
     const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
     const siteurl = this.context.pageContext.site.absoluteUrl;
 
-    // if (ActivePageUrl == `${siteurl}/sitepages/homepage.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/unifiedsearch.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/hero-banner-readmore.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/hero-banner-vmore.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/ceo-read-more.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/workspace-home.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/workspace-inner.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/content-editor.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/jobs-master.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/jobs-read-more.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/birthday.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/newsviewmore.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/eventsviewmore.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/announcement-view-more.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/announcement-read-more.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/manage-quick-links.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/gallery-view-more.aspx` ||
-    //     ActivePageUrl == `${siteurl}/sitepages/gallery-grid-view.aspx`
+    // if (ActivePageUrl.indexOf("sitepages") == -1) {
 
-    //   ) {
+    // } else if (ActivePageUrl == `${siteurl}sitepages/forms/byauthor.aspx`) {
 
+    // } else {
     $('html').css("visibility", "hidden");
     sessionStorage.setItem("spfx-debug", "");
     this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);
     return Promise.resolve<void>();
-    //  }
+    // }
 
   }
 

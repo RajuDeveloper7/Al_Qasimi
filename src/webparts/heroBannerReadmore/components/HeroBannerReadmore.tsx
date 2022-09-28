@@ -121,9 +121,12 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
         })
       }
       if (items[0].EnableComments == true) {
-        this.setState({
+        reactHandler.setState({
           IsCommentEnabled: true
         })
+      } else {
+        $(".all-commets").remove();
+        $("#commentedpost").remove();
       }
       reactHandler.AddViews();
       reactHandler.checkUserAlreadyLiked();
@@ -335,7 +338,7 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
       );
     });
     return (
-      <div className={styles.heroBannerReadMore} id="heroBannerReadMore">
+      <div className={styles.heroBannerReadMore} id="heroBannerRm">
         <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>

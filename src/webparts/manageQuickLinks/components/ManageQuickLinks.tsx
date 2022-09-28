@@ -53,7 +53,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
       $('#spCommandBar').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $('#CommentsWrapper').attr('style', 'display: none !important');
-    }, 2000);
+    }, 1000);
 
     this.getcurrentusersQuickLinksForEdit();
     this.GetAllQuickLinks();
@@ -268,7 +268,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
 
         return (
           <li>
-            <a href="#" data-interception="off">   <img src={`${ImgObjHover.serverRelativeUrl}`} alt="image" />
+            <a href={item.URL.Url} data-interception="off">   <img src={`${ImgObjHover.serverRelativeUrl}`} alt="image" />
               <h5> {item.Title} </h5>
               <div className="add-quicklinks" id={item.ID}>
                 <img src={`${reactHandler.props.siteurl}/SiteAssets/img/add_quick.png`} alt="image"
@@ -321,19 +321,7 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
 
                       </div>
                     </div>
-                    {/* <div className="heading clearfix">
-                      <div className="header-left">
-                        Added Quicklinks
-                      </div>
-                      <div className="header-right drap-drop-p">
-                        <img src={`${this.props.siteurl}/SiteAssets/img/drap_drop.png`} alt="image" />  You can drag and drop to change position...
-                        {this.state.IsEditModeisON == false ?
-                          <a href="#" className='editor-mode-enabler mode-edit-on' onClick={() => this.EnableEditMode(this.state.CurrentlyOpened)}>Edit Mode</a>
-                          :
-                          <a href="#" className='editor-mode-enabler mode-edit-off' onClick={() => this.ExitEditMode(this.state.CurrentlyOpened)}>Exit Edit Mode</a>
-                        }
-                      </div>
-                    </div> */}
+
                     <div className="section-part">
                       <ul className="qq-links-part clearfix my-qlink-block" id="quicklink-tab-area">
                         {this.state.IsMyQuickLinksEmpty == false ?

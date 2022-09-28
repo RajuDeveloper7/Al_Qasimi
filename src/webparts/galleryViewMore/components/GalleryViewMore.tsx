@@ -6,7 +6,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/folders";
-import "@pnp/sp/files/folder";
+import "@pnp/sp/files";
 import * as $ from 'jquery';
 import { Item, Items } from '@pnp/sp/items';
 import { SPComponentLoader } from '@microsoft/sp-loader';
@@ -14,6 +14,8 @@ import Slider from "react-slick";
 import { Web } from "@pnp/sp/webs";
 import GlobalSideNav from "../../../extensions/globalCustomFeatures/GlobalSideNav";
 import RemoResponsive from '../../../extensions/globalCustomFeatures/RemoResponsive';
+import { sp } from "@pnp/sp/presets/all";
+
 
 
 export interface IGalleryVmState {
@@ -24,6 +26,9 @@ export interface IGalleryVmState {
   nav2;
   FolderURL: string;
   Mode: string;
+  Images: any[];
+  Videos: any[];
+  SliderIsOpen: boolean;
 }
 
 var FolderNames = [];
@@ -32,13 +37,32 @@ var FolderNamesExits = [];
 var FolderNamesVideo = [];
 var FolderNamesExitsVideo = [];
 
+
 let ImgArr = [];
 export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IGalleryVmState, {}> {
   slider2: any;
   slider1: any;
   public lightGallery: any;
+  private displayDataImages;
+  private displayDataVideos;
   public constructor(props: IGalleryViewMoreProps, state: IGalleryVmState) {
+
     super(props);
+    this.displayDataImages = [];
+    this.displayDataImages = [];
+    this.appendDataImages = this.appendDataImages.bind(this);
+    this.appendDataVideos = this.appendDataVideos.bind(this);
+    sp.setup({
+      ie11: false,
+      sp: {
+        headers: {
+          Accept: "application/json; odata=verbose",
+          "Content-Type": "application/json;odata=verbose",
+        }
+      },
+      spfxContext: this.props.context
+    });
+
     this.state = {
       Galleryitems: [],
       VideoItemsss: [],
@@ -46,7 +70,10 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
       nav1: null,
       nav2: null,
       FolderURL: "",
-      Mode: ""
+      Mode: "",
+      Images: [],
+      Videos: [],
+      SliderIsOpen: false
     };
   }
 
@@ -58,83 +85,174 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
     }, 2000);
 
-
-    document.getElementsByClassName('slick-track')
     this.GetGalleryFilesFolder();
     this.GetGalleryFilesFolderVideos();
-    $(".img-galler-section-cls ul li").on("click", function () {
-      $(this).siblings().removeClass("active");
-      $(this).addClass("active");
-    });
 
     this.setState({
       nav1: this.slider1,
       nav2: this.slider2
     });
-    // this.CloseLightBox();
   }
 
   public GetGalleryFilesFolder() {
     ImgArr = [];
     var reactHandler = this;
-    $.ajax({
-      url: `${reactHandler.props.siteurl}/_api/Web/Lists/getByTitle('Picture Gallery')/items?$expand=Folder,File&$top=1000&$orderby=Created desc&$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,Folder/ServerRelativeUrl,Folder/Name`,// URL to fetch data from sharepoint Picture Library                
-      method: "GET",
-      async: false,
-      headers: {
-        "accept": "application/json;odata=verbose",
-        "content-type": "application/json;odata=verbose"
-      },
-      success: function (resultData) {
-        if (resultData.d.results.length != 0) {
-          reactHandler.setState({
-            Galleryitems: resultData.d.results
-          });
+    sp.web.lists.getByTitle('Picture Gallery').items
+      .select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "Folder/ServerRelativeUrl", "Folder/Name")
+      .expand("Folder", "File").orderBy("Created", false).top(1000)
+      .get().then((items) => {
 
-          //for(var i = 0; i < ImgArr.length; i++){
-          ImgArr.push(resultData.d.results);
-          //}
+        if (items.length != 0) {
+          // reactHandler.setState({
+          //   Galleryitems: items,
+          // });
+          ImgArr.push(items);
+          for (var i = 0; i < items.length; i++) {
+
+            if (items[i].FileSystemObjectType == 1) {
+
+            }
+            if (items[i].FileSystemObjectType != 1) {
+
+              var filename = items[i].File.Name;
+              var filename = items[i].FileLeafRef;
+              var completeurl = items[i].FileRef;
+              var Len = filename.length;
+              var Dot = filename.lastIndexOf(".");
+              var type = Len - Dot;
+              var res = filename.substring(Dot + 1, Len);
+              var ext = res.toLowerCase();
+
+              var string = completeurl.split('/');
+              var str2 = "Videos";
+              if (string.indexOf(str2) == -1) {
+                if (ext != "mp4" && ext != "mov" && ext != "wmv" && ext != "flv" && ext != "mov" && ext != "avi" && ext != "avchd" && ext != "webm" && ext != "mkv") {
+                  var foldernameval = string[string.length - 2];
+                  var gFolderUrl = (completeurl).replace(filename, '');
+
+                  FolderNames.push(foldernameval);
+                  if (reactHandler.findValueInArray(foldernameval, FolderNamesExits)) {
+
+                  }
+                  else {
+                    if (reactHandler.findValueInArray(foldernameval, FolderNames)) {
+
+                      FolderNamesExits.push(foldernameval);
+                    }
+                    var fileref = items[i].FileRef
+                    var fileleafref = items[i].FileLeafRef
+
+                    reactHandler.appendDataImages(fileref, fileleafref, foldernameval, gFolderUrl)
+
+                  }
+                }
+              }
+
+            }
+          }
         } else {
           $("#if-gallery-present").hide();
           $("#if-no-gallery-present").show();
         }
-      },
-      error: function (error) {
-        console.log(JSON.stringify(error));
-      }
-    });
+      });
+
   }
   public GetGalleryFilesFolderVideos() {
     ImgArr = [];
     var reactHandler = this;
-    $.ajax({
-      url: `${reactHandler.props.siteurl}/_api/Web/Lists/getByTitle('Picture Gallery')/items?$expand=Folder,File&$top=1000&$orderby=Created desc&$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,Folder/ServerRelativeUrl,Folder/Name`,// URL to fetch data from sharepoint Picture Library                
-      method: "GET",
-      async: false,
-      headers: {
-        "accept": "application/json;odata=verbose",
-        "content-type": "application/json;odata=verbose"
-      },
-      success: function (resultData) {
-        if (resultData.d.results.length != 0) {
-          reactHandler.setState({
-            VideoItemsss: resultData.d.results
-          });
+    sp.web.lists.getByTitle('Picture Gallery').items
+      .select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "Folder/ServerRelativeUrl", "Folder/Name")
+      .expand("Folder", "File").orderBy("Created", false).top(1000)
+      .get().then((items) => {
 
-          //for(var i = 0; i < ImgArr.length; i++){
-          ImgArr.push(resultData.d.results);
-          //}
+        if (items.length != 0) {
+          // reactHandler.setState({
+          //   VideoItemsss: items
+          // });
+          ImgArr.push(items);
+          for (var i = 0; i < items.length; i++) {
+
+            if (items[i].FileSystemObjectType == 1) {
+
+            }
+            if (items[i].FileSystemObjectType != 1) {
+
+              var filename = items[i].File.Name;
+              var filename = items[i].FileLeafRef;
+              var completeurl = items[i].FileRef;
+              var Len = filename.length;
+              var Dot = filename.lastIndexOf(".");
+              var type = Len - Dot;
+              var res = filename.substring(Dot + 1, Len);
+              var ext = res.toLowerCase();
+
+              var string = completeurl.split('/');
+              var str2 = "Videos";
+              if (string.indexOf(str2) != -1) {
+                var foldernamevalVideo = string[string.length - 3];
+
+                var gFolderUrl = (completeurl).replace(filename, '');
+
+                if (reactHandler.findValueInArray(foldernamevalVideo, FolderNamesExits)) {
+
+                  $("#vid").remove();
+                }
+                else {
+
+                  if (ext == "mp4" || ext == "mov" || ext == "wmv" || ext == "flv" || ext == "mov" || ext == "avi" || ext == "avchd" || ext == "webm" || ext == "mkv") {
+
+                    FolderNamesExits.push(foldernamevalVideo);
+                    reactHandler.appendDataVideos(items[i].FileRef, foldernamevalVideo, gFolderUrl)
+
+
+                  }
+                }
+              }
+            }
+          }
         } else {
           $("#if-gallery-present").hide();
           $("#if-no-gallery-present").show();
         }
-      },
-      error: function (error) {
-        console.log(JSON.stringify(error));
-      }
-    });
-  }
+      });
 
+  }
+  public appendDataImages(fileref, fileleafref, foldernameval, gFolderUrl) {
+    var reactHandler = this
+    reactHandler.displayDataImages.push(
+      <li onClick={() => reactHandler.GetImagesInsideFolder(gFolderUrl, "Image")} >
+        <a href="#" data-interception="off">
+          <div className='gallery-vm'>
+            <img src={`${fileref}`} alt={fileleafref} data-interception="off" />
+          </div>
+          <p>{foldernameval} </p>
+        </a>
+      </li>
+    );
+    reactHandler.setState({
+      Images: reactHandler.displayDataImages
+    })
+  }
+  public appendDataVideos(fileref, foldernamevalVideo, gFolderUrl) {
+    var reactHandler = this
+    reactHandler.displayDataVideos.push(
+      <li onClick={() => reactHandler.GetImagesInsideFolder(gFolderUrl, "Video")}>
+        <a href="#">
+          <div className='gallery-vm'>
+            <video className="lg-video-object lg-html5" controls >
+              <source src={`${fileref}`} type="video/mp4" data-interception="off" />
+
+            </video>
+          </div>
+          <p>{foldernamevalVideo} </p>
+        </a>
+      </li>
+    );
+
+    reactHandler.setState({
+      Videos: reactHandler.displayDataVideos
+    })
+  }
   public findValueInArray(value, arr) {
     var result = false;
 
@@ -163,22 +281,11 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
     return result1;
   }
 
-  /*public ShowImages(){
-    $(".img-block-area").show();
-    $(".vdo-block-area").hide();    
-  }
+  public GetImagesInsideFolder(FolderURL, Mode) {
 
-  public ShowVideos(){
-    $(".img-block-area").hide();
-    $(".vdo-block-area").show();    
-    this.GetGalleryVideoFilesFolder();
-  }*/
-
-  public async GetImagesInsideFolder(FolderURL, Mode) {
-
+    var result;
     var siteurl: string;
-    this.setState({ FolderURL: FolderURL });
-    $(".lightbox").addClass("open");
+    this.setState({ FolderURL: FolderURL, SliderIsOpen: true });
 
     var reactHandler = this;
     reactHandler.setState({ Mode: Mode });
@@ -186,7 +293,8 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
       $("#trigger-image").hide();
       $("#trigger-video").show();
 
-      siteurl = `${reactHandler.props.siteurl}/_api/Web/GetFolderByServerRelativeUrl('${FolderURL}')?$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,File/ServerRelativeUrl,File/Name&$expand=Folders,Files`;
+      result = sp.web.getFolderByServerRelativeUrl(FolderURL).select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "File/ServerRelativeUrl", "File/Name").expand("Folders", "Files").files
+
     } else if (Mode == "Video") {
       $("#trigger-video").hide();
       $("#trigger-image").show();
@@ -195,36 +303,28 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
       if (string.indexOf(str2) != -1) {
 
         $("#trigger-image").hide();
-        siteurl = `${reactHandler.props.siteurl}/_api/Web/GetFolderByServerRelativeUrl('${FolderURL}')?$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,File/ServerRelativeUrl,File/Name&$expand=Folders,Files`;
+
+        result = sp.web.getFolderByServerRelativeUrl(FolderURL).select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "File/ServerRelativeUrl", "File/Name").expand("Folders", "Files").files
 
       }
       else {
-        siteurl = `${reactHandler.props.siteurl}/_api/Web/GetFolderByServerRelativeUrl('${FolderURL}/Videos')?$select=ID,Title,FileRef,FileSystemObjectType,FileLeafRef,File/ServerRelativeUrl,File/Name&$expand=Folders,Files`;
+        result = sp.web.getFolderByServerRelativeUrl(`${FolderURL}Videos`).select("ID", "Title", "FileRef", "FileSystemObjectType", "FileLeafRef", "File/ServerRelativeUrl", "File/Name").expand("Folders", "Files").files
+
       }
     }
 
-
     this.ShowHideVideos(FolderURL, Mode);
-    $.ajax({
-      async: false,
-      url: siteurl,// URL to fetch data from sharepoint Picture Library                
-      method: "GET",
-      headers: {
-        "accept": "application/json;odata=verbose",
-        "content-type": "application/json;odata=verbose"
-      },
-      success: async function (resultData) {
 
-        reactHandler.setState({
-          FolderItems: resultData.d.Files.results
-        });
+    result.get().then(async (items) => {
 
-      },
-      error: function (error) {
-        console.log(JSON.stringify(error));
+      reactHandler.setState({
+        FolderItems: items
 
-      }
-    });
+      });
+      $(".lightbox").addClass("open");
+    })
+
+
   }
   public ShowHideVideos(FolderURL, Mode) {
 
@@ -235,34 +335,22 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
     reactHandler.setState({ Mode: Mode });
     var FolderPath = FolderURL.replace(/[']/g, '');
     var FolderServerRelativeUrl = "" + FolderPath + "/Videos";
+    try {
+      sp.web.getFolderByServerRelativeUrl(FolderServerRelativeUrl).files.get().then((items) => {
 
-    $.ajax({
-      async: false,
-      url: `${reactHandler.props.siteurl}/_api/Web/GetFolderByServerRelativeUrl('${FolderServerRelativeUrl}')?$expand=Folders,Files`,// URL to fetch data from sharepoint Picture Library                
-      method: "GET",
-      headers: {
-        "accept": "application/json;odata=verbose",
-        "content-type": "application/json;odata=verbose"
-      },
-      success: async function (resultData) {
-
-        if (resultData.d.Files.results.length == 0) {
+        if (items.length == 0) {
           $("#trigger-video").hide();
         }
-
-      },
-      error: function (error) {
-        console.log(JSON.stringify(error));
-
-        $("#trigger-video").hide();
-      }
-    });
+      })
+    } catch (err) {
+      $("#trigger-video").hide();
+      console.log(err);
+    }
   }
   public CloseLightBox() {
 
     $(".lightbox").removeClass("open");
-    // this.GetGalleryFilesFolder(); 
-    location.reload();
+    this.setState({ SliderIsOpen: false, FolderItems: [] })
 
   }
 
@@ -295,117 +383,7 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
     var x = 1;
     let y = 1;
 
-    const Images: JSX.Element[] = this.state.Galleryitems.map(function (item, key) {
 
-
-      if (item.FileSystemObjectType == 1) {
-
-      }
-      if (item.FileSystemObjectType != 1) {
-
-        var filename = item.File.Name;
-        var filename = item.FileLeafRef;
-        var completeurl = item.FileRef;
-        var Len = filename.length;
-        var Dot = filename.lastIndexOf(".");
-        var type = Len - Dot;
-        var res = filename.substring(Dot + 1, Len);
-        var ext = res.toLowerCase();
-
-        var string = completeurl.split('/');
-        var str2 = "Videos";
-        if (string.indexOf(str2) == -1) {
-          if (ext != "mp4" && ext != "mov" && ext != "wmv" && ext != "flv" && ext != "mov" && ext != "avi" && ext != "avchd" && ext != "webm" && ext != "mkv") {
-            var foldernameval = string[string.length - 2];
-            var gFolderUrl = (completeurl).replace(filename, '');
-
-            FolderNames.push(foldernameval);
-            if (reactHandler.findValueInArray(foldernameval, FolderNamesExits)) {
-
-            }
-            else {
-              if (reactHandler.findValueInArray(foldernameval, FolderNames)) {
-
-                FolderNamesExits.push(foldernameval);
-              }
-
-              return (
-                <li onClick={() => reactHandler.GetImagesInsideFolder(gFolderUrl, "Image")} >
-                  <a href="#" data-interception="off">
-                    <div className='gallery-vm'>
-                      <img src={`${item.FileRef}`} alt={item.FileLeafRef} data-interception="off" />
-                    </div>
-                    <p>{foldernameval} </p>
-                  </a>
-                </li>
-
-              );
-            }
-          }
-
-
-        }
-
-
-      }
-    });
-    const OnlyVideos: JSX.Element[] = this.state.VideoItemsss.map(function (item, key) {
-      if (item.FileSystemObjectType == 1) {
-
-      }
-      if (item.FileSystemObjectType != 1) {
-
-        var filename = item.File.Name;
-        var filename = item.FileLeafRef;
-        var completeurl = item.FileRef;
-        var Len = filename.length;
-        var Dot = filename.lastIndexOf(".");
-        var type = Len - Dot;
-        var res = filename.substring(Dot + 1, Len);
-        var ext = res.toLowerCase();
-
-
-
-        var string = completeurl.split('/');
-        var str2 = "Videos";
-        if (string.indexOf(str2) != -1) {
-
-          var foldernamevalVideo = string[string.length - 3];
-
-
-          var gFolderUrl = (completeurl).replace(filename, '');
-
-
-
-          if (reactHandler.findValueInArray(foldernamevalVideo, FolderNamesExits)) {
-
-
-          }
-          else {
-
-            if (ext == "mp4" || ext == "mov" || ext == "wmv" || ext == "flv" || ext == "mov" || ext == "avi" || ext == "avchd" || ext == "webm" || ext == "mkv") {
-
-              FolderNamesExits.push(foldernamevalVideo);
-              return (
-                <li onClick={() => reactHandler.GetImagesInsideFolder(gFolderUrl, "Video")}>
-                  <a href="#">
-                    {/* <img src={`${item.FileRef}`} data-interception="off"/> */}
-                    <div className='gallery-vm'>
-                      <video className="lg-video-object lg-html5" controls >
-                        <source src={`${item.FileRef}`} type="video/mp4" data-interception="off" />
-
-                      </video>
-                    </div>
-                    <p>{foldernamevalVideo} </p>
-                  </a>
-                </li>
-              );
-            }
-          }
-        }
-      }
-
-    });
 
     const MAslider2: JSX.Element[] = this.state.FolderItems.map(function (item, key) {
 
@@ -428,13 +406,14 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
       } else if (Mode == "Video") {
         return (
           <li><a href="#" data-interception="off">
-            <video className="lg-video-object lg-html5">
-              <source src={`${item.ServerRelativeUrl}`} type="video/mp4" />
+            <video className="lg-video-object lg-html5" src={`${item.ServerRelativeUrl}`}>
+              {/* <source src={`${item.ServerRelativeUrl}`} type="video/mp4" /> */}
             </video>
           </a></li>
         );
       }
     });
+
     return (
       <div className={styles.galleryVm} id="galleryVm">
         <div id="Global-Top-Header-Navigation">
@@ -460,8 +439,14 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
                       <div className="col-md-12">
                         <div className="section-part clearfix">
                           <ul className="clearfix img-block-area">
-                            {Images}
-                            {OnlyVideos}
+
+                            <div id="img">
+                              {this.state.Images}
+                            </div>
+                            <div id="vid">
+                              {this.state.Videos}
+                            </div>
+
                           </ul>
 
                         </div>
@@ -487,80 +472,78 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
                 </ul>
               </div>
               <div className="lightbox-contents-body">
-                <Slider {...settings}
-                  asNavFor={this.state.nav2}
-                  ref={slider => (this.slider1 = slider)}
-                >
-                  {this.state.FolderItems && this.state.FolderItems.map(function (item, key) {
-                    if (reactHandler.state.Mode == "Image") {
-                      var filename = item.Name;
-                      var completeurl = item.ServerRelativeUrl;
-                      var Len = filename.length;
-                      var Dot = filename.lastIndexOf(".");
-                      var type = Len - Dot;
-                      var res = filename.substring(Dot + 1, Len);
-                      var ext = res.toLowerCase();
-                      if (ext != "mp4" && ext != "mov" && ext != "wmv" && ext != "flv" && ext != "mov" && ext != "avi" && ext != "avchd" && ext != "webm" && ext != "mkv") {
+                {this.state.SliderIsOpen == true &&
+                  <Slider {...settings}
+                    asNavFor={this.state.nav2}
+                    ref={slider => (this.slider1 = slider)}
+                  >
+                    {this.state.FolderItems && this.state.FolderItems.map(function (item, key) {
+                      if (reactHandler.state.Mode == "Image") {
+                        var filename = item.Name;
+                        var completeurl = item.ServerRelativeUrl;
+                        console.log(item.ServerRelativeUrl)
+                        var Len = filename.length;
+                        var Dot = filename.lastIndexOf(".");
+                        var type = Len - Dot;
+                        var res = filename.substring(Dot + 1, Len);
+                        var ext = res.toLowerCase();
+                        if (ext != "mp4" && ext != "mov" && ext != "wmv" && ext != "flv" && ext != "mov" && ext != "avi" && ext != "avchd" && ext != "webm" && ext != "mkv") {
 
+
+                          return (
+                            <>
+                              <img src={`${item.ServerRelativeUrl}`} style={{ width: '900px' }} alt="image" />
+                              <h4 style={{ color: '#ffffff' }}>{item.Name}</h4>
+                            </>
+                          );
+                        }
+                      } else if (reactHandler.state.Mode == "Video") {
 
                         return (
                           <>
-                            <img src={`${item.ServerRelativeUrl}`} style={{ width: '900px' }} alt="image" />
+                            <video className="lg-video-object lg-html5" src={`${item.ServerRelativeUrl}`} style={{ width: '810px' }} controls >
+                              {/* <source src={`${item.ServerRelativeUrl}`} type="video/mp4" /> */}
+                            </video>
                             <h4 style={{ color: '#ffffff' }}>{item.Name}</h4>
                           </>
                         );
                       }
-                    } else if (reactHandler.state.Mode == "Video") {
-                      return (
-                        <>
-                          <video className="lg-video-object lg-html5" style={{ width: '810px' }} controls>
-                            <source src={`${item.ServerRelativeUrl}`} type="video/mp4" />
-                          </video>
-                          <h4 style={{ color: '#ffffff' }}>{item.Name}</h4>
-                        </>
-                      );
-                    }
-                  })}
-                </Slider>
+                    })}
+                  </Slider>
+                }
               </div>
               <div className="lightbox-conent-thumbnails">
                 <ul className="clearfix">
-                  <Slider
-                    asNavFor={this.state.nav1}
-                    ref={slider => (this.slider2 = slider)}
-                    slidesToShow={4}
-                    swipeToSlide={true}
-                    focusOnSelect={true}
-                    infinite={false}
-                    autoplay={false}
-                    arrows={false}
-                    centerMode={false}
-                    responsive={[
-                      {
-                        breakpoint: 1000,
-                        settings: {
-                          // slidesToShow: 3,
-                          // slidesToScroll: 1,
-                          // infinite: false,
-                          // dots: false,
-                          // arrows: false,
-                          // autoplay: false,
-                          // centerMode: false
-                          //  asNavFor: this.state.nav1,
-                          slidesToShow: 4,
-                          swipeToSlide: true,
-                          focusOnSelect: true,
-                          infinite: false,
-                          autoplay: false,
-                          arrows: false,
-                          centerMode: false
+                  {this.state.SliderIsOpen == true &&
+                    <Slider
+                      asNavFor={this.state.nav1}
+                      ref={slider => (this.slider2 = slider)}
+                      slidesToShow={4}
+                      swipeToSlide={true}
+                      focusOnSelect={true}
+                      infinite={false}
+                      autoplay={false}
+                      arrows={false}
+                      centerMode={false}
+                      responsive={[
+                        {
+                          breakpoint: 1000,
+                          settings: {
+                            slidesToShow: 4,
+                            swipeToSlide: true,
+                            focusOnSelect: true,
+                            infinite: false,
+                            autoplay: false,
+                            arrows: false,
+                            centerMode: false
+                          }
                         }
+                      ]
                       }
-                    ]
-                    }
-                  >
-                    {MAslider2}
-                  </Slider>
+                    >
+                      {MAslider2}
+                    </Slider>
+                  }
                 </ul>
               </div>
               <div className="lightbox-close">

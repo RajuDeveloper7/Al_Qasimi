@@ -117,7 +117,6 @@ export default class RemoResponsive extends React.Component<IResponsiveProps, IR
 
         const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
         this.getUnreadmailCount();
-        this.getmymeetings();
         this.GetMainNavItems();
         this.GetQuickLinks();
         this.GetCurrentUserDetails();
@@ -138,6 +137,8 @@ export default class RemoResponsive extends React.Component<IResponsiveProps, IR
             var self = $(this).parent();
             self.toggleClass("active");
         });
+
+
 
 
     }
@@ -187,25 +188,6 @@ export default class RemoResponsive extends React.Component<IResponsiveProps, IR
             )
     }
 
-    public getmymeetings() {
-        this.serviceProvider.
-            getmymeetingscount()
-            .then(
-                (result: any[]): void => {
-                    this.setState({ myMeetingsDatas: result });
-                    var myMeetingscount = this.state.myMeetingsDatas.length;
-                    if (this.state.myMeetingsDatas.length > 0) {
-                        this.setState({ MeetingsCount: myMeetingscount });
-                        if (this.state.myMeetingsDatas.length > 999) {
-                            $(".meet-count").addClass("more");
-                        }
-                    } else {
-                        this.setState({ MeetingsCount: "0" });
-                        $("#Meetings_count").hide();
-                    }
-                }
-            )
-    }
 
     public async GetMainNavItems() {
         var reactHandler = this;
@@ -557,9 +539,13 @@ export default class RemoResponsive extends React.Component<IResponsiveProps, IR
         $(".main-menu").hide();
     }
     public CloseBurggerMenu() {
+
         $(".responsive-menu-wrap").removeClass("open");
-        $(".responsi-inner-submenu").removeClass("open");
         $(".dep-res").removeClass("active-submenu");
+        $(".resp-dept-submenu-mob").removeClass("active");
+        $(".responsi-inner-submenu").removeClass("open");
+
+
     }
     public OpenSearch() {
         $(".responsive-background").addClass("open");
@@ -698,7 +684,7 @@ export default class RemoResponsive extends React.Component<IResponsiveProps, IR
                         </div>
                     </div>
                     <div className="responsive-qiuck-close">
-                        <a href="#" onClick={() => this.CloseBurggerMenu()} data-interception="off"><i className="fa fa-close"></i></a>
+                        <a href="#" onClick={this.CloseBurggerMenu} onTouchStart={this.CloseBurggerMenu} data-interception="off"><i className="fa fa-close"></i></a>
                     </div>
                     <div className="responsive-background">
 

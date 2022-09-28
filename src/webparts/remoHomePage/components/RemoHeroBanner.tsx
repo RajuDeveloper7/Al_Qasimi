@@ -2,10 +2,10 @@ import * as React from 'react';
 import styles from './RemoHomePage.module.scss';
 import { IRemoHomePageProps } from './IRemoHomePageProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-import { sp } from '@pnp/sp';
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
+import { sp } from "@pnp/sp/presets/all";
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import * as $ from 'jquery';
 import * as moment from 'moment';
@@ -114,26 +114,22 @@ export default class HeroBanner extends React.Component<IRemoHomePageProps, IHer
       }
     });
     return (
-      <div >
-        <div >
-          <div className="col-md-8">
-            <div id="myCarousel" className="carousel slide" data-ride="carousel">
-              {/* <!-- Indicators --> */}
-              {/* <ol className="carousel-indicators">
+      <div className="col-md-8">
+        <div id="myCarousel" className="carousel slide" data-ride="carousel">
+          {/* <!-- Indicators --> */}
+          {/* <ol className="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" className="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
               </ol> */}
-              <div className="carousel-inner">
-                <div id="if-Banner-Exist" className='hero-banner-container-wrap'>
-                  <Slider {...settings} className='hero-banner-container-wrap' >
-                    {MAslider}
-                  </Slider>
-                </div>
-                <div id="if-Banner-not-Exist" className="background" style={{ display: "none" }}>
-                  <img className="err-img" src={`${this.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/If_no_Content_to_show.png`} alt="no-image-uploaded" />
-                </div>
-              </div>
+          <div className="carousel-inner">
+            <div id="if-Banner-Exist" className='hero-banner-container-wrap'>
+              <Slider {...settings} className='hero-banner-container-wrap' >
+                {MAslider}
+              </Slider>
+            </div>
+            <div id="if-Banner-not-Exist" className="background" style={{ display: "none" }}>
+              <img className="err-img" src={`${this.props.siteurl}/SiteAssets/img/Error%20Handling%20Images/If_no_Content_to_show.png`} alt="no-image-uploaded" />
             </div>
           </div>
         </div>
