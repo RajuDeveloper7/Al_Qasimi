@@ -25,7 +25,6 @@ const LOG_SOURCE: string = 'GlobalCustomFeaturesApplicationCustomizer';
  * it will be deserialized into the BaseExtension.properties object.
  * You can define an interface to describe it.
  */
-
 export interface IGlobalCustomFeaturesApplicationCustomizerProperties {
   // This is an example; replace with your own property
   Top: string;
@@ -37,23 +36,25 @@ export default class GlobalCustomFeaturesApplicationCustomizer
   extends BaseApplicationCustomizer<IGlobalCustomFeaturesApplicationCustomizerProperties> {
   private _topPlaceholder: PlaceholderContent | undefined;
   @override
+
   public onInit(): Promise<void> {
-    const ActivePageUrl = (window.location.href.split('?') ? window.location.href.split('?')[0] : window.location.href).toLowerCase();
-    const siteurl = this.context.pageContext.site.absoluteUrl;
 
-    // if (ActivePageUrl.indexOf("sitepages") == -1) {
 
-    // } else if (ActivePageUrl == `${siteurl}sitepages/forms/byauthor.aspx`) {
 
-    // } else {
-    $('html').css("visibility", "hidden");
+    $(window).on('load', function () {
+      $('html').css("visibility", "hidden");
+    })
     sessionStorage.setItem("spfx-debug", "");
+
     this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);
+
+
+
+    //this.context.application.navigatedEvent.add(this, this._renderPlaceHolders);
     return Promise.resolve<void>();
     // }
 
   }
-
 
 
   private _renderPlaceHolders(): void {
@@ -65,6 +66,7 @@ export default class GlobalCustomFeaturesApplicationCustomizer
         PlaceholderName.Top,
         { onDispose: this._onDispose }
       );
+
       // The extension should not assume that the expected placeholder is available.  
       if (!this._topPlaceholder) {
         console.error("The expected placeholder (Top) was not found.");

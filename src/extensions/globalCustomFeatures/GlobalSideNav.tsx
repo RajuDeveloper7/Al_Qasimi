@@ -14,19 +14,24 @@ import "@pnp/sp/webs";
 import ReactTooltip from "react-tooltip";
 import pnp from 'sp-pnp-js';
 import * as moment from 'moment';
-import { find } from 'office-ui-fabric-react';
+import { find, htmlElementProperties } from 'office-ui-fabric-react';
 import RemoResponsive from './RemoResponsive';
+
+
+// if (window.location.href.indexOf("AllItems") != -1) {
+//   $('html').css("visibility", "visible");
+//   $('html').addClass('loading-in-progress');
+// } else {
+//setTimeout(function () {
+$('html').css("visibility", "visible");
+$('html').addClass('loading-in-progress');
+//}, 1000);
+// }
 
 var metaTag = document.createElement('meta');
 metaTag.name = "viewport"
 metaTag.content = "width=device-width, initial-scale=1.0"
 document.getElementsByTagName('head')[0].appendChild(metaTag);
-
-
-setTimeout(function () {
-  $('html').css("visibility", "visible");
-  $('html').addClass('loading-in-progress');
-}, 1200);
 
 export interface ISideNavProps {
   siteurl: string;
@@ -111,7 +116,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
     });
 
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/SP-NativeStyle-Overriding.css?v=3.1`);
-    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=1.0`);
+    SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/style.css?v=1.7`);
     SPComponentLoader.loadCss(`${this.props.siteurl}/SiteAssets/css/Responsive.css?v=4.16`);
 
     SPComponentLoader.loadCss("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css");
@@ -923,7 +928,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
                 <ul>
                   <li className="meet-count" data-tip data-for={"React-tooltip-calendar"} data-custom-class="tooltip-custom">
                     <a href="https://outlook.office.com/calendar/view/month" target="_blank" data-interception="off" className="notification relative" >
-                      <img src={`${this.props.siteurl}/SiteAssets/img/tq1.svg`} alt="images" />
+                      <img src={`${this.props.siteurl}/SiteAssets/img/calender.svg`} alt="images" />
                       <span id="today-date"> {moment().format("D")} </span>
                       <span id="Meetings_count"> {this.state.MeetingsCount} </span>
                     </a>
@@ -933,7 +938,7 @@ export default class GlobalSideNav extends React.Component<ISideNavProps, ISideN
                   </li>
                   <li data-tip data-for={"React-tooltip-my-team"} data-custom-class="tooltip-custom">
                     <a href={`https://teams.microsoft.com`} data-interception="off" target="_blank" className="notification relative">
-                      <img src={`${this.props.siteurl}/SiteAssets/img/tq2.svg`} alt="images" />
+                      <img src={`${this.props.siteurl}/SiteAssets/img/teams.svg`} alt="images" />
                     </a>
                     <ReactTooltip id={"React-tooltip-my-team"} place="bottom" type="dark" effect="solid">
                       <span>Teams</span>

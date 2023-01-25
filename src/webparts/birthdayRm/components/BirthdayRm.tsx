@@ -126,8 +126,8 @@ export default class BirthdayRm extends React.Component<IBirthdayRmProps, IBirth
           IsCommentEnabled: true
         })
       } else {
-        $(".all-commets").remove();
-        $("#commentedpost").remove();
+        $(".all-commets").hide();
+        $("#commentedpost").hide();
       }
       reactHandler.AddViews();
       reactHandler.checkUserAlreadyLiked();

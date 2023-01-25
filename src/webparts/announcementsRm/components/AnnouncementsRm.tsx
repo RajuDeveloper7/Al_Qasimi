@@ -126,8 +126,8 @@ export default class AnnouncementsRm extends React.Component<IAnnouncementsRmPro
           IsCommentEnabled: true
         })
       } else {
-        $(".all-commets").remove();
-        $("#commentedpost").remove();
+        $(".all-commets").hide();
+        $("#commentedpost").hide();
       }
 
       reactHandler.AddViews();

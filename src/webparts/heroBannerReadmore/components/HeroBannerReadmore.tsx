@@ -125,8 +125,8 @@ export default class HeroBannerRm extends React.Component<IHeroBannerReadMorePro
           IsCommentEnabled: true
         })
       } else {
-        $(".all-commets").remove();
-        $("#commentedpost").remove();
+        $(".all-commets").hide();
+        $("#commentedpost").hide();
       }
       reactHandler.AddViews();
       reactHandler.checkUserAlreadyLiked();

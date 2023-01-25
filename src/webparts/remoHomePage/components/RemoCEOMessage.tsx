@@ -25,7 +25,7 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
   public componentDidMount() {
 
     this.GetCEOMessage();
-    // this.DynamicHeight();
+    //  this.DynamicHeight();
 
   }
   private async GetCEOMessage() {
@@ -74,8 +74,9 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
           <div className="section-part clearfix">
             <div className="ceo-message-left">
               <h4> {item.Name} </h4>
-              <p> {outputText} </p>
               <h6>{Date}</h6>
+              <p> {outputText} </p>
+
               <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition" > Read more
                 <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
             </div>
@@ -92,6 +93,7 @@ export default class RemoCEOMessage extends React.Component<IRemoHomePageProps, 
             <div className="section-part relative clearfix">
               <div className="ceo-message-left">
                 <h4> {item.Name} </h4>
+                <h6>{Date}</h6>
                 <p> {outputText} </p>
                 <a href={handler.props.siteurl + `/SitePages/CEO-Read-More.aspx?ItemID=${item.ID}`} data-interception="off" className="readmore transition"> Read more <img src={`${handler.props.siteurl}/SiteAssets/img/right_arrow.svg`} className="transition" alt="image" />  </a>
               </div>

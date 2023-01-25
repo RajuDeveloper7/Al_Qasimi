@@ -270,11 +270,12 @@ export default class NewQuickLinkManager extends React.Component<IManageQuickLin
           <li>
             <a href={item.URL.Url} data-interception="off">   <img src={`${ImgObjHover.serverRelativeUrl}`} alt="image" />
               <h5> {item.Title} </h5>
-              <div className="add-quicklinks" id={item.ID}>
-                <img src={`${reactHandler.props.siteurl}/SiteAssets/img/add_quick.png`} alt="image"
-                  onClick={() => reactHandler.AddToMyQuickLinkPreference(item.ID, ImgObj.serverRelativeUrl, ImgObjHover.serverRelativeUrl, item.URL.Url, key + 1)} />
-              </div>
             </a>
+            <div className="add-quicklinks" id={item.ID}>
+              <img src={`${reactHandler.props.siteurl}/SiteAssets/img/add_quick.png`} alt="image"
+                onClick={() => reactHandler.AddToMyQuickLinkPreference(item.ID, ImgObj.serverRelativeUrl, ImgObjHover.serverRelativeUrl, item.URL.Url, key + 1)} />
+            </div>
+
           </li>
         );
       }

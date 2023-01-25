@@ -47,7 +47,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
 
   public async GetBirthday() {
     var reactHandler = this;
-    var bdays
+
     await sp.web.lists.getByTitle("Birthday").items.select("Title", "DOB", "Name", "Picture", "Designation", "Description", "ID", "Created").
       orderBy("DOB", true).filter(`IsActive eq '1'`).get().then((items) => {
 
@@ -145,7 +145,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
         if (RawImageTxt != "" && RawImageTxt != null) {
           var ImgObj = JSON.parse(RawImageTxt);
           return (
-            <div >
+            <>
               <div className="heading clearfix" id="spotlight-title" >
 
                 <span id="highlights-type" > Birthday </span>
@@ -167,13 +167,13 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
 
                 </div>
               </div>
-            </div>
+            </>
           );
         }
         else {
           {/* var ImgObj = JSON.parse(RawImageTxt);   */ }
           return (
-            <div >
+            <>
               <div className="heading clearfix" id="spotlight-title" >
 
                 <span id="highlights-type" > Birthday </span>
@@ -195,7 +195,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
 
                 </div>
               </div>
-            </div>
+            </>
           );
         }
       } else {
@@ -218,7 +218,7 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           if (RawImageTxt != "" && RawImageTxt != null) {
             var ImgObj = JSON.parse(RawImageTxt);
             return (
-              <div >
+              <>
                 <div className="heading" id="spotlight-title">
 
                   <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
@@ -242,13 +242,13 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
                               </ReactTooltip> */}
                   </div>
                 </div>
-              </div>
+              </>
             );
           }
           else {
             var ImgObj = JSON.parse(RawImageTxt);
             return (
-              <div >
+              <>
                 <div className="heading" id="spotlight-title">
 
                   <span id="highlights-type" className="clearfix" style={{ cursor: "default" }}> Upcoming Birthday </span>
@@ -270,7 +270,8 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
                     <p data-tip data-for={"React-tooltip-Desig-today-" + key + ""} data-custom-class="tooltip-custom"> {item.Designation}  </p>
                   </div>
                 </div>
-              </div>
+              </>
+
             );
           }
         }
@@ -283,7 +284,6 @@ export default class RemoBirthday extends React.Component<IRemoHomePageProps, IB
           <div id="today-bday" style={{ display: "none" }}>
             <div className="sec">
               <Slider {...settings} className='hero-banner-container-wrap' >
-
                 {TodayBirthday}
                 {UpcomingBirthday}
               </Slider>

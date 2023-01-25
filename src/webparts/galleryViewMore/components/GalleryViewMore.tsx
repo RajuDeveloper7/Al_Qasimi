@@ -49,7 +49,7 @@ export default class GalleryVm extends React.Component<IGalleryViewMoreProps, IG
 
     super(props);
     this.displayDataImages = [];
-    this.displayDataImages = [];
+    this.displayDataVideos = [];
     this.appendDataImages = this.appendDataImages.bind(this);
     this.appendDataVideos = this.appendDataVideos.bind(this);
     sp.setup({

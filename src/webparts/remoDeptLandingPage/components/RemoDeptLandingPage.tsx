@@ -14,14 +14,16 @@ import GlobalSideNav from '../../../extensions/globalCustomFeatures/GlobalSideNa
 
 export default class RemoHomePage extends React.Component<IRemoDeptLandingPageProps, {}> {
   public componentDidMount() {
+
+    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+    $('#spCommandBar').attr('style', 'display: none !important');
+    $('#spLeftNav').attr('style', 'display: none !important');
+    $('#CommentsWrapper').attr('style', 'display: none !important');
+    $('.ms-CommandBar').attr('style', 'display: none !important');
     setTimeout(() => {
-      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
-      $('#spCommandBar').attr('style', 'display: none !important');
-      $('#spLeftNav').attr('style', 'display: none !important');
-      $('#CommentsWrapper').attr('style', 'display: none !important');
-      $('.ms-CommandBar').attr('style', 'display: none !important');
       $("#Dept-Homepage").show();
-    }, 1000);
+
+    }, 1700);
   }
   public render(): React.ReactElement<IRemoDeptLandingPageProps> {
 

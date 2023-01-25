@@ -207,7 +207,7 @@ export default class RemoRecentFiles extends React.Component<IRemoHomePageProps,
                 <img src={FileTypeImg} alt="images" />
                 <div className="recent-files-block clearfix">
                   <div className="recent-files-wrap-left">
-                    <h4> {item.name} </h4>
+                    <h4 className="name-resp"> {item.name} </h4>
                     <h5> {extension} </h5>
                   </div>
                   <div className="recent-files-wrap-right">

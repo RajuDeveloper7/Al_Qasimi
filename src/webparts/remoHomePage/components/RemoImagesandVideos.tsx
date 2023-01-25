@@ -52,7 +52,7 @@ export default class RemoImagesandVideos extends React.Component<IRemoHomePagePr
         $("#if-gallery-present").hide();
         $("#if-no-gallery-present").show();
       }
-      //reactHandler.calculateDynamicHeight();              
+
     })
   }
 
@@ -71,20 +71,6 @@ export default class RemoImagesandVideos extends React.Component<IRemoHomePagePr
     return result;
   }
 
-
-
-  // public findValueInArrayVideos(value,arr){
-  //   var result1 = false;
-
-  //   for(var j=0; j<arr.length; j++){
-  //     var name = arr[j];
-  //     if(name == value){
-  //       result1 = true;
-  //       break;
-  //     }
-  //   }
-  //   return result1;
-  // }
   public render(): React.ReactElement<IRemoHomePageProps> {
     var reactHandler = this;
     let x: number = 1;
@@ -109,7 +95,7 @@ export default class RemoImagesandVideos extends React.Component<IRemoHomePagePr
 
         var str2 = "Videos";
         if (string.indexOf(str2) != -1) {
-          //console.log(str2 + " found");
+
         } else {
           if (ext != "mp4" && ext != "mov" && ext != "wmv" && ext != "flv" && ext != "mov" && ext != "avi" && ext != "avchd" && ext != "webm" && ext != "mkv") {
             var foldernameval = string[string.length - 2];

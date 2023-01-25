@@ -36,7 +36,7 @@ export default class CeoMessageRm extends React.Component<ICeoMessageReadMorePro
       $('#CommentsWrapper').attr('style', 'display: none !important');
       $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $("#ceoMessageReadMore").show();
-    }, 1500);
+    }, 1000);
 
     var reactHandler = this;
     const url: any = new URL(window.location.href);

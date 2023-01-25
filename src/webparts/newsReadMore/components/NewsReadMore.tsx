@@ -151,8 +151,8 @@ export default class NewsRm extends React.Component<INewsReadMoreProps, INewsRmS
           IsCommentEnabled: true
         })
       } else {
-        $(".all-commets").remove();
-        $("#commentedpost").remove();
+        $(".all-commets").hide();
+        $("#commentedpost").hide();
       }
       reactHandler.AddViews();
       reactHandler.checkUserAlreadyLiked();

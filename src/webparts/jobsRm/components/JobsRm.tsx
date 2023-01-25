@@ -59,7 +59,7 @@ export default class JobsRm extends React.Component<IJobsRmProps, IJobsRMState, 
               <h1> We are hiring {JobTitle} </h1>
               <ul className="breadcums">
                 <li> <a href={`${reactHandler.props.siteurl}/SitePages/HomePage.aspx`}> Home </a> </li>
-                <li> <a href="#"> Jobs </a> </li>
+                <li> <a href="#" style={{ pointerEvents: 'none' }}> Jobs </a> </li>
               </ul>
             </div>
 

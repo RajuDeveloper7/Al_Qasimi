@@ -29,19 +29,20 @@ export default class RemoHomePage extends React.Component<IRemoHomePageProps, {}
   public componentDidMount() {
 
     $(".inner-pages-nav").remove();
+    $('#spCommandBar').attr('style', 'display: none !important');
+    $('#CommentsWrapper').attr('style', 'display: none !important');
+    $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
+
     setTimeout(() => {
-      $('#spCommandBar').attr('style', 'display: none !important');
-      $('#CommentsWrapper').attr('style', 'display: none !important');
-      $('div[data-automation-id="pageHeader"]').attr('style', 'display: none !important');
       $("#HomePage").show();
-    }, 1000);
+    }, 500);
 
   }
 
   public render(): React.ReactElement<IRemoHomePageProps> {
 
     return (
-      <div className={styles.remoHomePage} id="HomePage" style={{ display: "none" }}>
+      <div id="HomePage" style={{ display: "none" }}>
         <div id="Global-Top-Header-Navigation">
           <GlobalSideNav siteurl={this.props.siteurl} context={this.props.context} currentWebUrl={''} CurrentPageserverRequestPath={''} />
         </div>

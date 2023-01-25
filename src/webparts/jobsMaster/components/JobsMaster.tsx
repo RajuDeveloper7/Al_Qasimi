@@ -112,7 +112,7 @@ export default class JobsMaster extends React.Component<IJobsMasterProps, IJobsM
                                     <h1> We are hiring </h1>
                                     <ul className="breadcums">
                                         <li> <a href={`${this.props.siteurl}/SitePages/HomePage.aspx`}> Home </a> </li>
-                                        <li> <a href="#"> Jobs </a> </li>
+                                        <li> <a href="#" style={{ pointerEvents: 'none' }}> Jobs </a> </li>
                                     </ul>
                                 </div>
                             </div>

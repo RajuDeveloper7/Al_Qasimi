@@ -86,7 +86,7 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
   public async GetMainNavItems() {
     var reactHandler = this;
 
-    await sp.web.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(6).expand("LinkMasterID").get().then((items) => {
+    await sp.web.lists.getByTitle("Navigations").items.select("Title", "URL", "OpenInNewTab", "LinkMasterID/Title", "LinkMasterID/Id", "HoverOnIcon", "HoverOffIcon").filter("IsActive eq 1").orderBy("Order0", true).top(8).expand("LinkMasterID").get().then((items) => {
 
       reactHandler.setState({
         MainNavItems: items
@@ -145,11 +145,11 @@ export default class RemoNavigations extends React.Component<IRemoHomePageProps,
           reactHandler.appendData(ID, Title, OpenInNewTab, HasSubDept, Url);
           //   }
         }
-        $(".submenu-clear-wrap").show()
-        $(".submenu-wrap-lists ul li").on("click", function () {
-          $(this).siblings().removeClass('active');
-          $(this).addClass('active');
-        });
+        // $(".submenu-clear-wrap").show()
+        // $(".submenu-wrap-lists ul li").on("click", function () {
+        //   $(this).siblings().removeClass('active');
+        //   $(this).addClass('active');
+        // });
       });
     } catch (err) {
       console.log("Navigation Department Link : " + err);

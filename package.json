@@ -1,5 +1,5 @@
 {
-  "name": "remo-intranet-portal",
+  "name": "al-qasimi-intranet-portal",
   "version": "0.0.1",
   "private": true,
   "main": "lib/index.js",
@@ -47,6 +47,7 @@
     "react": "16.8.5",
     "react-datepicker": "^4.8.0",
     "react-dom": "16.8.5",
+    "react-image-video-lightbox": "^3.0.0",
     "react-select": "^4.3.0",
     "react-slick": "^0.29.0",
     "react-slick-carousel": "^0.14.9",

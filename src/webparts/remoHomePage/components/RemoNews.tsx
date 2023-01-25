@@ -57,6 +57,7 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
       } else {
         reactHandler.setState({ ItemCount: 2 });
       }
+      items.length <= 2 && $(".prev-next").hide();
       reactHandler.setState({
         Items: items
       });
@@ -151,6 +152,7 @@ export default class RemoNews extends React.Component<IRemoHomePageProps, INewsS
                   News
                 </a>
               </h4>
+
               <div className="prev-next">
                 <a href="#" onClick={this.previous} ><img src={`${this.props.siteurl}/SiteAssets/img/previous.svg`} alt="image" className="prev-img" /> </a>
                 <a href="#" onClick={this.next}><img src={`${this.props.siteurl}/SiteAssets/img/next-2.svg`} alt="image" className="next-img" /> </a>
